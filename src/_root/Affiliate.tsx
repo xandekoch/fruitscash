@@ -1,5 +1,3 @@
-import React from 'react'
-
 const Affiliate = () => {
   return (
     <>
@@ -24,8 +22,7 @@ const Affiliate = () => {
           <a
             id="depCopiaCodigo"
             href="javascript:void(0);"
-            onclick="if (!window.__cfRLUnblockHandlers) return false; copyToClipboard(this,'https://fruitsmoney.com/join/1386676')"
-            type="submit"
+            onClick={() => {}}
             className="primary-button dark w-button"
           >
             Copiar link de afiliado

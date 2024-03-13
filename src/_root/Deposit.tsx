@@ -5,7 +5,6 @@ const Deposit = () => {
         <div className="minting-container w-container">
           <img
             src="/public/assets/deposit/deposit.gif"
-            loading="lazy"
             width={240}
             alt="Roboto #6340"
             className="mint-card-image"
@@ -18,7 +17,7 @@ const Deposit = () => {
           <form
             id="f-eWallet-payout"
             action="https://fruitsmoney.com/panel/e-wallet/deposit"
-            onsubmit="if (!window.__cfRLUnblockHandlers) return false; return false;"
+            onSubmit={() => {}}
             method="post"
           >
             <input
@@ -36,7 +35,7 @@ const Deposit = () => {
                   name="name"
                   id="name"
                   placeholder="Seu Nome completo"
-                  required=""
+                  required
                 />
               </div>
               <h4 className="rarity-heading">CPF</h4>
@@ -48,7 +47,7 @@ const Deposit = () => {
                   name="pix"
                   id="pix"
                   placeholder="Seu número de CPF"
-                  required=""
+                  required
                 />
               </div>
               <h4 className="rarity-heading">Valor para depósito</h4>
@@ -60,7 +59,7 @@ const Deposit = () => {
                   name="valuedeposit"
                   id="valuedeposit"
                   placeholder="Depósito minimo de R$20,00"
-                  required=""
+                  required
                 />
               </div>
             </div>
@@ -72,7 +71,7 @@ const Deposit = () => {
               >
                 DEPOSITAR R$20
                 <br />
-                <font color="yellow">(Ganhe + R$20)</font>
+                <span style={{ color: "yellow" }}>(Ganhe + R$20)</span>
               </a>
               <a
                 href="javascript:$('#valuedeposit').val(30);$('label.val').addClass('ativo');"
@@ -81,7 +80,7 @@ const Deposit = () => {
               >
                 DEPOSITAR R$30
                 <br />
-                <font color="yellow">(Ganhe + R$30)</font>
+                <span style={{ color: "yellow" }}>(Ganhe + R$30)</span>
               </a>
               <br />
               <br />
@@ -92,7 +91,7 @@ const Deposit = () => {
               >
                 DEPOSITAR R$50
                 <br />
-                <font color="yellow">(Ganhe + R$50)</font>
+                <span style={{ color: "yellow" }}>(Ganhe + R$50)</span>
               </a>
               <a
                 href="javascript:$('#valuedeposit').val(100);$('label.val').addClass('ativo');"
@@ -101,7 +100,7 @@ const Deposit = () => {
               >
                 DEPOSITAR R$100
                 <br />
-                <font color="yellow">(Ganhe + R$100)</font>
+                <span style={{ color: "yellow" }}>(Ganhe + R$100)</span>
               </a>
               <br />
               <br />
@@ -127,7 +126,6 @@ const Deposit = () => {
           <div className="w-layout-grid grid-2">
             <img
               src="/public/assets/deposit/money.png"
-              loading="lazy"
               width={240}
               alt="Roboto #6340"
               className="mint-card-image v2"

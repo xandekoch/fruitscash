@@ -1,6 +1,4 @@
-import React from 'react'
-import { Faq, HeroHome, Mint, Rarity } from '../components'
-import ValidatePix from '../components/ValidatePix'
+import { Faq, Mint, Rarity } from '../components'
 
 const Play = () => {
   return (
@@ -59,7 +57,7 @@ const Play = () => {
                   step={1}
                   name="bet"
                   id="bet"
-                  required=""
+                  required
                   defaultValue={5}
                 />
               </div>

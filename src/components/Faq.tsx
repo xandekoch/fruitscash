@@ -1,21 +1,23 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 const Faq = () => {
   useEffect(() => {
     const handleScroll = () => {
       const images = document.querySelectorAll('.faq-img');
-      
+  
       images.forEach(img => {
-        const rect = img.getBoundingClientRect();
-        const isInViewport = rect.top >= 0 && rect.bottom <= window.innerHeight;
-        img.style.opacity = isInViewport ? '1' : '0'; // Altera a opacidade baseado na visibilidade
-        img.style.transition = 'opacity 0.8s ease'; // Adiciona a transição suave
+        if (img instanceof HTMLElement) {
+          const rect = img.getBoundingClientRect();
+          const isInViewport = rect.top >= 0 && rect.bottom <= window.innerHeight;
+          img.style.opacity = isInViewport ? '1' : '0'; // Altera a opacidade baseado na visibilidade
+          img.style.transition = 'opacity 0.8s ease'; // Adiciona a transição suave
+        }
       });
     };
-
+  
     window.addEventListener('scroll', handleScroll);
     handleScroll(); // Verifica o estado inicial ao carregar a página
-
+  
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
@@ -29,7 +31,7 @@ const Faq = () => {
           <div className="question first">
             <img
               src="/public/assets/home/60f8d0c642c4405fe15e5ee0_80s Pop.svg"
-              loading="lazy"
+              
               width={110}
               alt=""
             />
@@ -45,7 +47,7 @@ const Faq = () => {
           <div className="question">
             <img
               src="/public/assets/home/60fa0061a0450e3b6f52e12f_Body.svg"
-              loading="lazy"
+              
               width={90}
               alt=""
             />
@@ -61,7 +63,7 @@ const Faq = () => {
           <div className="question">
             <img
               src="/public/assets/home/61070a430f976c13396eee00_Gradient Shades.svg"
-              loading="lazy"
+              
               width={120}
               alt=""
             />
@@ -77,7 +79,7 @@ const Faq = () => {
           <div className="question">
             <img
               src="/public/assets/home/60fa004b7690e70dded91f9a_light.svg"
-              loading="lazy"
+              
               width={80}
               alt=""
             />
@@ -91,7 +93,7 @@ const Faq = () => {
           <div className="question">
             <img
               src="/public/assets/home/60f8d0c69b41fe00d53e8807_Helmet.svg"
-              loading="lazy"
+              
               width={90}
               alt=""
             />
@@ -130,7 +132,7 @@ const Faq = () => {
           <div className="question">
             <img
               src="/public/assets/home/60f8d0c6aa527d780201899a_Ear.svg"
-              loading="lazy"
+              
               width={72}
               alt=""
             />
@@ -144,7 +146,7 @@ const Faq = () => {
           <div className="question last">
             <img
               src="/public/assets/home/60f8d0c657c9a88fe4b40335_Exploded Head.svg"
-              loading="lazy"
+              
               width={72}
               alt=""
             />
@@ -181,7 +183,7 @@ const Faq = () => {
         <div className="faq-left">
           <img
             src="/public/assets/home/60f988c7c856f076b39f8fa4_head 04.svg"
-            loading="eager"
+            
             width="238.5"
             alt=""
             className="faq-img"
@@ -189,7 +191,7 @@ const Faq = () => {
           />
           <img
             src="/public/assets/home/60f988c9402afc1dd3f629fe_head 26.svg"
-            loading="eager"
+            
             width={234}
             alt=""
             className="faq-img _1"
@@ -197,7 +199,7 @@ const Faq = () => {
           />
           <img
             src="/public/assets/home/60f988c9bc584ead82ad8416_head 29.svg"
-            loading="lazy"
+            
             width={234}
             alt=""
             className="faq-img _2"
@@ -205,7 +207,7 @@ const Faq = () => {
           />
           <img
             src="/public/assets/home/60f988c913f0ba744c9aa13e_head 27.svg"
-            loading="lazy"
+            
             width={234}
             alt=""
             className="faq-img _3"
@@ -213,7 +215,7 @@ const Faq = () => {
           />
           <img
             src="/public/assets/home/60f988c9d3d37e14794eca22_head 25.svg"
-            loading="lazy"
+            
             width={234}
             alt=""
             className="faq-img _1"
@@ -221,7 +223,7 @@ const Faq = () => {
           />
           <img
             src="/public/assets/home/60f988c98b7854f0327f5394_head 24.svg"
-            loading="lazy"
+            
             width={234}
             alt=""
             className="faq-img _2"
@@ -229,7 +231,7 @@ const Faq = () => {
           />
           <img
             src="/public/assets/home/60f988c82f5c199c4d2f6b9f_head 05.svg"
-            loading="lazy"
+            
             width={234}
             alt=""
             className="faq-img _3"
@@ -239,7 +241,7 @@ const Faq = () => {
         <div className="faq-right">
           <img
             src="/public/assets/home/60f988c88b7854b5127f5393_head 23.svg"
-            loading="eager"
+            
             width="238.5"
             alt=""
             className="faq-img"
@@ -247,7 +249,7 @@ const Faq = () => {
           />
           <img
             src="/public/assets/home/60f988c8bf76d754b9c48573_head 12.svg"
-            loading="eager"
+            
             width={234}
             alt=""
             className="faq-img _1"
@@ -255,7 +257,7 @@ const Faq = () => {
           />
           <img
             src="/public/assets/home/60f988c8f2b58f55b60d858f_head 21.svg"
-            loading="lazy"
+            
             width={234}
             alt=""
             className="faq-img _2"
@@ -263,7 +265,7 @@ const Faq = () => {
           />
           <img
             src="/public/assets/home/60f988c8e83a994a38909bc4_head 22.svg"
-            loading="lazy"
+            
             width={234}
             alt=""
             className="faq-img _3"
@@ -271,7 +273,7 @@ const Faq = () => {
           />
           <img
             src="/public/assets/home/60f988c8a97a7c125d72046d_head 20.svg"
-            loading="lazy"
+            
             width={234}
             alt=""
             className="faq-img _1"
@@ -279,7 +281,7 @@ const Faq = () => {
           />
           <img
             src="/public/assets/home/60f988c8fbbbfe5fc68169e0_head 14.svg"
-            loading="lazy"
+            
             width={234}
             alt=""
             className="faq-img _2"
@@ -287,7 +289,7 @@ const Faq = () => {
           />
           <img
             src="/public/assets/home/60f988c88b7854b35e7f5390_head 18.svg"
-            loading="lazy"
+            
             width={234}
             alt=""
             className="faq-img _3"
@@ -297,7 +299,7 @@ const Faq = () => {
         <div className="faq-bottom">
           <img
             src="/public/assets/home/60f988c8ba5339712b3317c0_head 16.svg"
-            loading="lazy"
+            
             width={234}
             alt=""
             className="faq-img _3"
@@ -305,7 +307,7 @@ const Faq = () => {
           />
           <img
             src="/public/assets/home/60f988c86e8603bce1c16a98_head 17.svg"
-            loading="lazy"
+            
             width={234}
             alt=""
             className="faq-img"
@@ -313,7 +315,7 @@ const Faq = () => {
           />
           <img
             src="/public/assets/home/60f988c889b7b12755035f2f_head 19.svg"
-            loading="lazy"
+            
             width={234}
             alt=""
             className="faq-img _1"
@@ -323,7 +325,7 @@ const Faq = () => {
         <div className="faq-top">
           <img
             src="/public/assets/home/60f988c8a97a7ccf6f72046a_head 11.svg"
-            loading="eager"
+            
             width={234}
             alt=""
             className="faq-img _3"
@@ -331,7 +333,7 @@ const Faq = () => {
           />
           <img
             src="/public/assets/home/60f988c7fbbbfed6f88169df_head 02.svg"
-            loading="eager"
+            
             width={234}
             alt=""
             className="faq-img"
@@ -339,7 +341,7 @@ const Faq = () => {
           />
           <img
             data-cfsrc="https://fruitsmoney.com/assets/images/60f8dbc385822360571c62e0_icon-256w.png"
-            loading="eager"
+            
             width={234}
             alt=""
             className="faq-img _1"

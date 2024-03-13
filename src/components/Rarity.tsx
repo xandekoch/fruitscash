@@ -1,5 +1,3 @@
-import React from 'react'
-
 const Rarity = () => {
   return (
     <div id="rarity" className="rarity-section wf-section">

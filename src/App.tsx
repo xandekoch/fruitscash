@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import AuthLayout from './_auth/AuthLayout';
 import SignupForm from './_auth/SignupForm';
 import SigninForm from './_auth/Signinform';
@@ -15,8 +15,7 @@ import RecoverPassword from './_auth/RecoverPassword';
 
 const App = () => {
   console.log('App')
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  console.log(isAuthenticated)
+  const [isAuthenticated, /* setIsAuthenticated */] = useState(true);
 
   return (
     <main className='App'>

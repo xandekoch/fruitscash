@@ -1,5 +1,3 @@
-import React from 'react'
-
 const Mint = () => {
   return (
     <>
@@ -7,7 +5,7 @@ const Mint = () => {
         <div className="minting-container w-container">
           <img
             data-cfsrc="https://fruitsmoney.com/assets/images/money.png"
-            loading="lazy"
+            
             width={240}
             alt=""
             className="mint-card-image"
@@ -36,21 +34,21 @@ const Mint = () => {
         <div className="center-image-block">
           <img
             src="/public/assets/home/60f8c4536d62687b8a9cee75_row 01.svg"
-            loading="eager"
+            
             alt=""
           />
         </div>
         <div className="center-image-block _2">
           <img
             src="/public/assets/home/60f8c453ca9716f569e837ee_row 02.svg"
-            loading="eager"
+            
             alt=""
           />
         </div>
         <div className="center-image-block _2">
           <img
             src="/public/assets/home/60f8c453bf76d73ecbc14a1d_row 03.svg"
-            loading="eager"
+            
             alt=""
             className="image-3"
           />

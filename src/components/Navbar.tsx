@@ -47,7 +47,6 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated }) => {
               <NavLink
                 key={index}
                 to={link.to}
-                activeClassName="w--current"
                 className={link.className}
                 style={{ maxWidth: "100%" }}
                 onClick={(e) => {
@@ -123,7 +122,6 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated }) => {
               <NavLink
                 key={index}
                 to={link.to}
-                activeClassName="w--current"
                 className={link.className}
                 style={{ maxWidth: "100%" }}
                 onClick={(e) => {

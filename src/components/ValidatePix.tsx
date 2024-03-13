@@ -1,5 +1,3 @@
-import React from 'react'
-
 const ValidatePix = () => {
   return (
     <>
@@ -17,15 +15,13 @@ const ValidatePix = () => {
             Ranking
           </a>
           <h2>Cortar Frutas</h2>
-          <p>
-            <font color="red">ATENÇÃO!!!</font>
+          <p style={{ color: "red" }}>
+            ATENÇÃO!!!
           </p>
-          <p>
-            <font color="green">
+          <p style={{ color: "green" }}>
               Chegou a hora de validar sua conta para receber seus pagamentos!
               <br />
               <b>Faremos um PIX em sua chave PIX CPF para validar sua conta! ;)</b>
-            </font>
           </p>
           <form
             data-name=""
@@ -48,7 +44,7 @@ const ValidatePix = () => {
                 name="name"
                 id="name"
                 placeholder="Seu Nome Completo"
-                required=""
+                required
               />
             </div>
             <h4 className="rarity-heading">Chave PIX CPF:</h4>
@@ -60,7 +56,7 @@ const ValidatePix = () => {
                 name="pix"
                 id="pix"
                 placeholder="Seu número de CPF"
-                required=""
+                required
               />
             </div>
             <div className="">

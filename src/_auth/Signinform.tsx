@@ -5,11 +5,16 @@ const SigninForm = () => {
   console.log('Signin')
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // Chame a função createAccount com o email e a senha
     createAccount(email, password);
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -26,18 +31,17 @@ const SigninForm = () => {
             <form
               id="f-user-login"
               action="https://fruitsmoney.com/panel/login"
-              onsubmit="if (!window.__cfRLUnblockHandlers) return false; return false;"
+              onSubmit={handleSubmit}
             >
               <input
                 type="hidden"
                 name="_token"
-                defaultValue="x3wykOsoe9lZjsjmVQjklByoXeg2NJnNE0kwmSR3"
               />
               <div className="properties">
                 <h4 className="rarity-heading">E-mail</h4>
                 <div className="rarity-row roboto-type2">
                   <input
-                    type="e-mail"
+                    type="email"
                     className="large-input-field w-input"
                     maxLength={256}
                     name="email"
@@ -50,7 +54,7 @@ const SigninForm = () => {
                 <h4 className="rarity-heading">Senha</h4>
                 <div className="rarity-row roboto-type2">
                   <input
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     className="large-input-field w-input"
                     maxLength={256}
                     name="password"
@@ -64,7 +68,7 @@ const SigninForm = () => {
                 <br />
                 <input
                   type="checkbox"
-                  onclick="if (!window.__cfRLUnblockHandlers) return false; myFunction()"
+                  onClick={togglePasswordVisibility}
                 />{" "}
                 Mostrar senha
               </div>

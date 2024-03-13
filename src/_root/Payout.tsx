@@ -1,5 +1,3 @@
-import React from 'react'
-
 const Payout = () => {
   return (
     <>
@@ -7,7 +5,6 @@ const Payout = () => {
         <div className="minting-container w-container">
           <img
             src="/public/assets/payout/with.gif"
-            loading="lazy"
             width={240}
             alt="Roboto #6340"
             className="mint-card-image"
@@ -19,7 +16,7 @@ const Payout = () => {
           <form
             id="f-eWallet-payout2"
             action="https://fruitsmoney.com/panel/e-wallet/payout"
-            onsubmit="if (!window.__cfRLUnblockHandlers) return false; return false;"
+            onSubmit={() => {}}
             method="post"
           >
             <input
@@ -37,7 +34,7 @@ const Payout = () => {
                   name="name"
                   id="name"
                   placeholder="Nome do Destinatario"
-                  required=""
+                  required
                 />
               </div>
               <h4 className="rarity-heading">Chave PIX CPF:</h4>
@@ -49,7 +46,7 @@ const Payout = () => {
                   name="pix"
                   id="pix"
                   placeholder="Seu número de CPF"
-                  required=""
+                  required
                 />
               </div>
               <h4 className=" rarity-heading">
@@ -62,7 +59,7 @@ const Payout = () => {
                   name="value"
                   id="value"
                   placeholder="Saque minimo de R$50,00"
-                  required=""
+                  required
                 />
               </div>
             </div>
@@ -88,7 +85,6 @@ const Payout = () => {
         <div className="minting-container w-container">
           <img
             src="/public/assets/payout/withdraw.gif"
-            loading="lazy"
             width={240}
             alt="Robopet 6340"
             className="mint-card-image"
@@ -128,7 +124,6 @@ const Payout = () => {
           <div className="w-layout-grid grid-2">
             <img
               src="/public/assets/payout/money2.png"
-              loading="lazy"
               width={240}
               alt="Roboto #6340"
               className="mint-card-image v2"

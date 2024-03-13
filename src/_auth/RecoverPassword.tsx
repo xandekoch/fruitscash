@@ -1,6 +1,9 @@
-import React from 'react'
-
 const RecoverPassword = () => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log('Formulário de recuperação de senha enviado');
+  };
+
   return (
     <section id="hero" className="hero-section dark wf-section">
       <div className="minting-container w-container">
@@ -14,7 +17,7 @@ const RecoverPassword = () => {
           className="login__form"
           id="f-user-recovery"
           action="https://fruitsmoney.com/panel/recovery"
-          onsubmit="if (!window.__cfRLUnblockHandlers) return false; return false;"
+          onSubmit={handleSubmit}
         >
           <input
             type="hidden"
