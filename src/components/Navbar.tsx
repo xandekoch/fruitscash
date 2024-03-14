@@ -1,13 +1,31 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom';
 import { authenticatedNavLinks, unAuthenticatedNavLinks } from '../constants';
 import { useAuth } from '../context/AuthProvider';
 
 
 const Navbar = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
   const { isAuthenticated, setIsAuthenticated } = useAuth();
+  const navRef = useRef<HTMLDivElement>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    // Função para fechar a navbar quando clicar fora dela
+    const handleClickOutside = (event: MouseEvent) => {
+      if (navRef.current && !navRef.current.contains(event.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+
+    // Adiciona o event listener quando a navbar é montada
+    document.addEventListener('mousedown', handleClickOutside);
+
+    // Remove o event listener quando a navbar é desmontada
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -83,12 +101,12 @@ const Navbar = () => {
               aria-expanded="false"
             >
               <div className="" style={{ WebkitUserSelect: "text" }}>
-                <a
-                  href="/deposit"
+                <NavLink
+                  to="/deposit"
                   className="menu-button w-nav-dep nav w-button"
                 >
                   DEPOSITAR
-                </a>
+                </NavLink>
               </div>
             </div>
           )}
@@ -115,6 +133,7 @@ const Navbar = () => {
           style={{ display: 'block', height: menuOpen ? '1500px' : '0' }}
         >
           <nav
+            ref={navRef}
             role="navigation"
             className="nav-menu w-nav-menu"
             style={{
