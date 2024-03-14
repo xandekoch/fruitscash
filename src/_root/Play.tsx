@@ -1,6 +1,7 @@
 import { Faq, Mint, Rarity } from '../components'
 
 const Play = () => {
+  console.log('Play')
   return (
     <>
       <div
@@ -27,7 +28,7 @@ const Play = () => {
         />
         <div className="minting-container w-container">
           <a className="escudo">
-            <img src="/public/assets/play/trophy.gif" />
+            <img src="/assets/play/trophy.gif" />
           </a>
           <h2>Cortar Frutas</h2>
           <p>

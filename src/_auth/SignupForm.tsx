@@ -4,7 +4,7 @@ import AdvPayment from '../components/AdvPayment';
 import { Link } from 'react-router-dom';
 
 const SignupForm = () => {
-  console.log('Signup')
+  console.log('SignupForm')
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -24,7 +24,7 @@ const SignupForm = () => {
         <section id="hero" className="hero-section dark wf-section">
           <div className="minting-container w-container">
             <img
-              src="/public/assets/cadastro/asset.png"
+              src="/assets/cadastro/asset.png"
               width={240}
               alt="Roboto #6340"
               className="mint-card-image"

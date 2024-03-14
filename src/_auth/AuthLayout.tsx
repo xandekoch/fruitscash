@@ -1,18 +1,14 @@
 import { Outlet } from 'react-router-dom'
 import { Navbar, Footer } from '../components';
 
-interface AuthLayoutProps {
-  isAuthenticated: boolean;
-}
-
-const AuthLayout: React.FC<AuthLayoutProps> = ({ isAuthenticated }) => {
-  console.log('Auth')
+const AuthLayout = () => {
+  console.log('AuthLayout')
 
   return (
     <div id="AuthLayout">
-      <Navbar isAuthenticated={isAuthenticated} />
+      <Navbar />
       <section className='OutletAuth'>
-        <Outlet />
+        <Outlet  />
       </section>
       <Footer />
     </div>

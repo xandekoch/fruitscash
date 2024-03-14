@@ -1,4 +1,5 @@
 const RecoverPassword = () => {
+  console.log('RecoverPassword')
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log('Formulário de recuperação de senha enviado');

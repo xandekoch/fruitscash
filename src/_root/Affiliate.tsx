@@ -1,10 +1,11 @@
 const Affiliate = () => {
+  console.log('Affiliate')
   return (
     <>
       <section id="hero" className="hero-section dark wf-section">
         <div className="minting-container w-container">
           <img
-            src="/public/assets/affiliate/affiliate.gif"
+            src="/assets/affiliate/affiliate.gif"
             loading="lazy"
             width={240}
             alt="Roboto #6340"
@@ -106,7 +107,7 @@ const Affiliate = () => {
         <div className="minting-container left w-container">
           <div className="w-layout-grid grid-2">
             <img
-              src="/public/assets/affiliate/work.png"
+              src="/assets/affiliate/work.png"
               loading="lazy"
               width={240}
               alt="Roboto #6340"

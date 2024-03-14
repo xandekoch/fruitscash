@@ -11,7 +11,7 @@ const ValidatePix = () => {
         <div className="minting-container w-container">
           <a href="https://fruitsmoney.com/panel/ranking" className="escudo">
             Ranking
-            <img src="/public/assets/play/trophy.gif" />
+            <img src="/assets/play/trophy.gif" />
             Ranking
           </a>
           <h2>Cortar Frutas</h2>

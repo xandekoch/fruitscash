@@ -1,16 +1,22 @@
 import React, { useState } from 'react';
-import { createAccount } from '../lib/spring/api';
+// import { login } from '../lib/spring/api';
+import { useAuth } from '../context/AuthProvider';
+import { useNavigate } from 'react-router-dom';
 
 const SigninForm = () => {
-  console.log('Signin')
+  console.log('SigninForm')
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const { /* isAuthenticated, */ setIsAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // Chame a função createAccount com o email e a senha
-    createAccount(email, password);
+    setIsAuthenticated(true);
+    console.log(email, password)
+    navigate('/')
   };
 
   const togglePasswordVisibility = () => {

@@ -1,16 +1,22 @@
-import React, { useState } from 'react'
-import { NavLink } from 'react-router-dom';
+import { useState } from 'react'
+import { NavLink, useNavigate } from 'react-router-dom';
 import { authenticatedNavLinks, unAuthenticatedNavLinks } from '../constants';
+import { useAuth } from '../context/AuthProvider';
 
-interface NavbarProps {
-  isAuthenticated: boolean;
-}
 
-const Navbar: React.FC<NavbarProps> = ({ isAuthenticated }) => {
+const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const { isAuthenticated, setIsAuthenticated } = useAuth();
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
+  };
+
+  const handleLogout = () => {
+    // Fazer logout e atualizar o estado isAuthenticated para false
+    setIsAuthenticated(false);
+    navigate('/')
   };
 
   return (
@@ -23,21 +29,20 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated }) => {
         className="navbar w-nav navbar-mobile"
       >
         <div className="container w-container">
-          <a
-            href="/"
+          <NavLink
+            to="/"
             aria-current="page"
             className="brand w-nav-brand"
             aria-label="home"
           >
             <img
-              src="/public/assets/home/logoapple.png"
-              loading="lazy"
+              src="/assets/home/logoapple.png"
               height={28}
               alt=""
               className="image-6"
             />
             <div className="nav-link logo">FruitsMoney</div>
-          </a>
+          </NavLink>
           <nav
             role="navigation"
             className="nav-menu w-nav-menu"
@@ -52,7 +57,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated }) => {
                 onClick={(e) => {
                   if (link.label === "Sair") {
                     e.preventDefault(); // Evita o redirecionamento padrão
-                    console.log('saiu'); // Chama a função de logout
+                    handleLogout();
                   }
                 }}
               >
@@ -127,7 +132,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated }) => {
                 onClick={(e) => {
                   if (link.label === "Sair") {
                     e.preventDefault(); // Evita o redirecionamento padrão
-                    console.log('saiu'); // Chama a função de logout
+                    handleLogout();
                   }
                 }}
               >

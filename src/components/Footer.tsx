@@ -17,7 +17,7 @@ const Footer = () => {
         <div className="follow-test">
           <a href="home" target="_blank">
             <img
-              src="/public/assets/home/telegram.webp"
+              src="/assets/home/telegram.webp"
               width="40px"
               height="40px"
             />

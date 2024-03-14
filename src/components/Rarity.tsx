@@ -26,7 +26,7 @@ const Rarity = () => {
         <div>Dragão</div>
       </div>
       <img
-        src="/public/assets/home/60f9aca9b5309615808c507e_rarity.svg"
+        src="/assets/home/60f9aca9b5309615808c507e_rarity.svg"
         loading="lazy"
         alt=""
         className="rarity-image"

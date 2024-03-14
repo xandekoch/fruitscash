@@ -1,10 +1,11 @@
 const Payout = () => {
+  console.log('Payout')
   return (
     <>
       <section id="hero" className="hero-section dark wf-section">
         <div className="minting-container w-container">
           <img
-            src="/public/assets/payout/with.gif"
+            src="/assets/payout/with.gif"
             width={240}
             alt="Roboto #6340"
             className="mint-card-image"
@@ -84,7 +85,7 @@ const Payout = () => {
       <div id="rarity" className="rarity-section wf-section">
         <div className="minting-container w-container">
           <img
-            src="/public/assets/payout/withdraw.gif"
+            src="/assets/payout/withdraw.gif"
             width={240}
             alt="Robopet 6340"
             className="mint-card-image"
@@ -123,7 +124,7 @@ const Payout = () => {
         <div className="minting-container left w-container">
           <div className="w-layout-grid grid-2">
             <img
-              src="/public/assets/payout/money2.png"
+              src="/assets/payout/money2.png"
               width={240}
               alt="Roboto #6340"
               className="mint-card-image v2"

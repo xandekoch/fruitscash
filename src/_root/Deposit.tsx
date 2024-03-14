@@ -1,10 +1,11 @@
 const Deposit = () => {
+  console.log('Deposit')
   return (
     <>
       <section id="hero" className="hero-section dark wf-section">
         <div className="minting-container w-container">
           <img
-            src="/public/assets/deposit/deposit.gif"
+            src="/assets/deposit/deposit.gif"
             width={240}
             alt="Roboto #6340"
             className="mint-card-image"
@@ -125,7 +126,7 @@ const Deposit = () => {
         <div className="minting-container left w-container">
           <div className="w-layout-grid grid-2">
             <img
-              src="/public/assets/deposit/money.png"
+              src="/assets/deposit/money.png"
               width={240}
               alt="Roboto #6340"
               className="mint-card-image v2"

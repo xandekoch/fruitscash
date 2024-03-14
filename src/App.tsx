@@ -1,28 +1,28 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import AuthLayout from './_auth/AuthLayout';
 import SignupForm from './_auth/SignupForm';
 import SigninForm from './_auth/Signinform';
-import RootLayout from './_root/RootLayout';
+import RecoverPassword from './_auth/RecoverPassword';
 import Home from './_auth/Home';
 import Terms from './_auth/Terms';
+import RootLayout from './_root/RootLayout';
 import Play from './_root/Play';
 import Affiliate from './_root/Affiliate';
 import Payout from './_root/Payout';
 import Deposit from './_root/Deposit';
 import '/public/assets/page.css';
-import { useState } from 'react';
-import RecoverPassword from './_auth/RecoverPassword';
+import { useAuth } from './context/AuthProvider';
 
 const App = () => {
   console.log('App')
-  const [isAuthenticated, /* setIsAuthenticated */] = useState(true);
+  const { isAuthenticated } = useAuth();
 
   return (
     <main className='App'>
       <Routes>     
         {!isAuthenticated ? (
           // Rotas públicas - login/cadastro
-          <Route path='/' element={<AuthLayout isAuthenticated={isAuthenticated} />}>
+          <Route path='/' element={<AuthLayout />}>
           <Route index element={<Home />} />
           <Route path='/sign-up' element={<SignupForm />} />
           <Route path='/sign-in' element={<SigninForm />} />
@@ -31,7 +31,7 @@ const App = () => {
         </Route>
         ) : (
           // Rotas privadas - apenas quando estiver logado
-          <Route path='/' element={<RootLayout isAuthenticated={isAuthenticated} />}>
+          <Route path='/' element={<RootLayout />}>
             <Route index element={<Play />} />
             <Route path='/deposit' element={<Deposit />} />
             <Route path='/affiliate' element={<Affiliate />} />
@@ -39,6 +39,8 @@ const App = () => {
             <Route path='/terms' element={<Terms />} />
           </Route>
         )}
+        {/* Rota de redirecionamento */}
+        {/* <Route path="*" element={<Navigate to="/" />} /> */}
       </Routes>
     </main>
   );
