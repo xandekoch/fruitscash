@@ -13,7 +13,11 @@ const Navbar = () => {
   useEffect(() => {
     // Função para fechar a navbar quando clicar fora dela
     const handleClickOutside = (event: MouseEvent) => {
-      if (navRef.current && !navRef.current.contains(event.target as Node)) {
+      if (
+        navRef.current &&
+        !navRef.current.contains(event.target as Node) &&
+        !event.target.closest('.menu-button')
+      ) {
         setMenuOpen(false);
       }
     };
@@ -152,6 +156,8 @@ const Navbar = () => {
                   if (link.label === "Sair") {
                     e.preventDefault(); // Evita o redirecionamento padrão
                     handleLogout();
+                  } else {
+                    toggleMenu();
                   }
                 }}
               >
@@ -161,6 +167,7 @@ const Navbar = () => {
             <NavLink
               to={isAuthenticated ? "/deposit" : "/sign-up"}
               className="button nav w-button"
+              onClick={toggleMenu}
             >
               {isAuthenticated ? "Depositar" : "Cadastrar"}
             </NavLink>
