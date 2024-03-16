@@ -1,3 +1,4 @@
+import { NavLink } from 'react-router-dom';
 import { Mint, Rarity, Faq } from '../components';
 
 const Home = () => {
@@ -80,12 +81,12 @@ const Home = () => {
             className="image"
             src="https://fruitsmoney.com/assets/images/orange.png"
           />
-          <a
-            href="/sign-in"
+          <NavLink
+            to={'sign/in'}
             className="primary-button hero w-button"
           >
             JOGAR AGORA
-          </a>
+          </NavLink>
           <div className="hero-price">
             <strong>
               Rodadas de boas vindas disponível <br />

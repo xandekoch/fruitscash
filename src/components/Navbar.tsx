@@ -15,8 +15,9 @@ const Navbar = () => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
         navRef.current &&
+        event.target &&
         !navRef.current.contains(event.target as Node) &&
-        !event.target.closest('.menu-button')
+        !((event.target as Element).closest('.menu-button'))
       ) {
         setMenuOpen(false);
       }
