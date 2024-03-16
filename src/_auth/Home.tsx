@@ -82,7 +82,7 @@ const Home = () => {
             src="https://fruitsmoney.com/assets/images/orange.png"
           />
           <NavLink
-            to={'sign/in'}
+            to={'sign-in'}
             className="primary-button hero w-button"
           >
             JOGAR AGORA
