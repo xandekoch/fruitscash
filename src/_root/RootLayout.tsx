@@ -1,18 +1,18 @@
 import { Outlet } from 'react-router-dom'
 import { Footer, Navbar } from '../components';
 
-const RootLayout = () => {
+const RootLayout = ({ showNavbarAndFooter }: any) => {
   console.log('RootLayout')
   
   return (
     <div id='  RootLayout'>
-      <Navbar />
+      {showNavbarAndFooter && <Navbar />}
 
       <section className="OutletRoot">
-        <Outlet />
+      <Outlet />
       </section>
 
-      < Footer />
+      {showNavbarAndFooter && <Footer />}
     </div>
   )
 }

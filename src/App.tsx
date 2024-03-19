@@ -12,10 +12,13 @@ import Payout from './_root/Payout';
 import Deposit from './_root/Deposit';
 import '/public/assets/page.css';
 import { useAuth } from './context/AuthProvider';
+import Game from './_root/Game';
+import { useState } from 'react';
 
 const App = () => {
   console.log('App')
   const { isAuthenticated } = useAuth();
+  const [showNavbarAndFooter, setShowNavbarAndFooter] = useState(true);
 
   return (
     <main className='App'>
@@ -31,12 +34,13 @@ const App = () => {
         </Route>
         ) : (
           // Rotas privadas - apenas quando estiver logado
-          <Route path='/' element={<RootLayout />}>
-            <Route index element={<Play />} />
+          <Route path='/' element={<RootLayout showNavbarAndFooter={showNavbarAndFooter} />}>
+            <Route index element={<Play setShowNavbarAndFooter={setShowNavbarAndFooter} />} />
             <Route path='/deposit' element={<Deposit />} />
             <Route path='/affiliate' element={<Affiliate />} />
             <Route path='/payout' element={<Payout />} />
             <Route path='/terms' element={<Terms />} />
+            <Route path='/game' element={<Game />} />
           </Route>
         )}
         {/* Rota de redirecionamento */}
