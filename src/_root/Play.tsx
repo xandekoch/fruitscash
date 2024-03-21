@@ -2,15 +2,29 @@ import { useState } from 'react';
 import { Faq, Mint, Rarity } from '../components'
 import Game from './Game';
 
-const Play = ({ setShowNavbarAndFooter }: any) => {
-  console.log('Play')
+declare global {
+  interface Window {
+    ReceiveScore: (score: string) => void;
+  }
+}
 
+const Play = ({ setShowNavbarAndFooter }: any) => {
+  console.log('Play');
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  const handleFullscreen = () => {
-    setIsFullscreen(!isFullscreen)
+  // Defina a função ReceiveScore aqui
+  window.ReceiveScore = (score: string) => {
+    console.log("Score recebido:", score);
+    setTimeout(() => {
+      setIsFullscreen(false);
+      setShowNavbarAndFooter(true);
+    }, 2500);
+  };
+
+  const handleSubmit = () => {
+    setIsFullscreen(true);
     setShowNavbarAndFooter(false);
-    console.log('navFooter False')
+    console.log('navFooter False');
   };
 
   return (
@@ -53,17 +67,10 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
                 valor, e é melhor não deixar ela cair, #ficadica!
               </p>
               <form
-                data-name=""
                 id="play"
                 method="post"
                 aria-label="Form"
-                action="https://fruitsmoney.com/panel/bet"
               >
-                <input
-                  type="hidden"
-                  name="_token"
-                  defaultValue="rs0NjEuqkXGgeEJ89DZxdaa10YB4YwIUji93IrLd"
-                />
                 <div className="properties">
                   <h4 className="rarity-heading">Valor de entrada</h4>
                   <div className="rarity-row roboto-type2">
@@ -82,9 +89,8 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
                 </div>
                 <div className="">
                   <input
-                    onClick={handleFullscreen}
+                    onClick={handleSubmit}
                     type="submit"
-                    defaultValue="Cortar"
                     value="Cortar"
                     className="primary-button w-button"
                   />
@@ -98,17 +104,10 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
                 id="test"
                 method="post"
                 aria-label="Form"
-                action="https://fruitsmoney.com/panel/gratis"
               >
-                <input
-                  type="hidden"
-                  name="_token"
-                  defaultValue="rs0NjEuqkXGgeEJ89DZxdaa10YB4YwIUji93IrLd"
-                />
                 <div className="">
                   <input
                     type="submit"
-                    defaultValue="Testar"
                     value="Testar"
                     className="primary-button w-button"
                   />

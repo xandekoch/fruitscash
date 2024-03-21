@@ -1,14 +1,7 @@
 import { useEffect, useState } from "react";
 import { Unity, useUnityContext } from "react-unity-webgl";
 
-function Game() {
-  const { unityProvider } = useUnityContext({
-    loaderUrl: "/Build/Frutinha.loader.js",
-    dataUrl: "/Build/Frutinha.data",
-    frameworkUrl: "/Build/Frutinha.framework.js",
-    codeUrl: "/Build/Frutinha.wasm",
-  });
-
+const Game = () => {
   const [isLandscape, setIsLandscape] = useState(
     window.innerWidth > window.innerHeight
   );
@@ -31,7 +24,17 @@ function Game() {
 
   const aspectRatio = 9 / 16; // Proporção desejada
 
+  const { unityProvider, sendMessage } = useUnityContext({
+    loaderUrl: "/Build/Frutinha.loader.js",
+    dataUrl: "/Build/Frutinha.data",
+    frameworkUrl: "/Build/Frutinha.framework.js",
+    codeUrl: "/Build/Frutinha.wasm",
+  });
+
+  sendMessage("Game Manager", "SetGoal", 0.5);
+
   return (
+    <>
     <Unity
       unityProvider={unityProvider}
       className="unity-canvas"
@@ -41,9 +44,8 @@ function Game() {
         objectFit: "contain" // Manter a proporção de 16:9
       }}
     />
+    </>
   );
 }
 
 export default Game;
-
-// devicePixelRatio={window.devicePixelRatio}
