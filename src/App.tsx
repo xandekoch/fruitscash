@@ -40,7 +40,7 @@ const App = () => {
             <Route path='/affiliate' element={<Affiliate />} />
             <Route path='/payout' element={<Payout />} />
             <Route path='/terms' element={<Terms />} />
-            <Route path='/game' element={<Game />} />
+            <Route path='/game' element={<Game betAmount={5} />} />
           </Route>
         )}
         {/* Rota de redirecionamento */}

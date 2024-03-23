@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-// import { login } from '../lib/spring/api';
 import { useAuth } from '../context/AuthProvider';
+import { login } from '../lib/spring/api';
 import { useNavigate } from 'react-router-dom';
 
 const SigninForm = () => {
@@ -8,15 +8,31 @@ const SigninForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const { /* isAuthenticated, */ setIsAuthenticated } = useAuth();
+  const { authenticate } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Chame a função createAccount com o email e a senha
-    setIsAuthenticated(true);
-    console.log(email, password)
-    navigate('/')
+
+    try {
+      // Realiza o login
+      const session = await login(email, password);
+
+      // Verifica se a sessão foi obtida com sucesso
+      if (session) {
+        // Autentica o usuário localmente
+        authenticate(session);
+
+        // Redireciona para a página principal
+        navigate('/');
+      } else {
+        // Exibe uma mensagem de erro ao usuário
+        console.error('Erro ao realizar o login');
+      }
+    } catch (error) {
+      // Exibe uma mensagem de erro ao usuário
+      console.error('Erro ao realizar o login:', error);
+    }
   };
 
   const togglePasswordVisibility = () => {

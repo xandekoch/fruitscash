@@ -6,7 +6,7 @@ import { useAuth } from '../context/AuthProvider';
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, setIsAuthenticated } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
   const navRef = useRef<HTMLDivElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -37,9 +37,8 @@ const Navbar = () => {
   };
 
   const handleLogout = () => {
-    // Fazer logout e atualizar o estado isAuthenticated para false
-    setIsAuthenticated(false);
-    navigate('/')
+    logout();
+    navigate('/');
   };
 
   return (
@@ -81,6 +80,7 @@ const Navbar = () => {
                   if (link.label === "Sair") {
                     e.preventDefault(); // Evita o redirecionamento padrão
                     handleLogout();
+                    navigate('/');
                   }
                 }}
               >
@@ -157,6 +157,7 @@ const Navbar = () => {
                   if (link.label === "Sair") {
                     e.preventDefault(); // Evita o redirecionamento padrão
                     handleLogout();
+                    navigate('/');
                   } else {
                     toggleMenu();
                   }

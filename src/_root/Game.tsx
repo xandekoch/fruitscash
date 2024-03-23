@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Unity, useUnityContext } from "react-unity-webgl";
 
-const Game = () => {
+const Game = ({ betAmount }: {betAmount: number}) => {
   const [isLandscape, setIsLandscape] = useState(
     window.innerWidth > window.innerHeight
   );
@@ -31,7 +31,11 @@ const Game = () => {
     codeUrl: "/Build/Frutinha.wasm",
   });
 
-  sendMessage("Game Manager", "SetGoal", 0.5);
+  useEffect(() => {
+    if (unityProvider) {
+      sendMessage("Game Manager", "SetGoal", betAmount * 1.5);
+    }
+  }, [unityProvider, sendMessage]);
 
   return (
     <>

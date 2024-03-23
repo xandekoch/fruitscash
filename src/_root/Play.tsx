@@ -11,6 +11,7 @@ declare global {
 const Play = ({ setShowNavbarAndFooter }: any) => {
   console.log('Play');
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [betAmount, setBetAmount] = useState(5);
 
   // Defina a função ReceiveScore aqui
   window.ReceiveScore = (score: string) => {
@@ -31,7 +32,7 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
     <>
       {isFullscreen ? (
         <div className="fullscreen-overlay" style={{ background: "black" }}>
-          <Game />
+          <Game betAmount={betAmount} />
         </div>
       ) : (
         <>
@@ -84,6 +85,8 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
                       id="bet"
                       required
                       defaultValue={5}
+                      value={betAmount} // Valor atual do estado do formulário
+                      onChange={(event) => setBetAmount(parseInt(event.target.value))} // Atualiza o estado quando o valor muda
                     />
                   </div>
                 </div>
