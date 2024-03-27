@@ -1,5 +1,36 @@
+import { sendDeposit } from '../lib/spring/api';
+import { getUserIdFromSession } from '../context/AuthProvider';
+import { useState } from 'react';
+import Notification from '../components/Notification';
+
 const Deposit = () => {
-  console.log('Deposit')
+  console.log('Deposit');
+
+  const [valuedeposit, setValuedeposit] = useState('');
+
+  const handleDepositClick = (amount: string) => {
+    setValuedeposit(amount);
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const cpf = formData.get('cpf') as string;
+    const fullName = formData.get('name') as string;
+    const wdValue = parseFloat((formData.get('valuedeposit') as string).replace(',', '.'));
+    const userId = getUserIdFromSession();
+
+    try {
+      if (userId) {
+        await sendDeposit({ cpf, fullName, wdValue, userModelId: userId });
+        console.log('Depósito enviado com sucesso');
+      }
+    } catch (error) {
+      console.error('Erro ao enviar o depósito:', error);
+    }
+  };
+
   return (
     <>
       <section id="hero" className="hero-section dark wf-section">
@@ -11,21 +42,8 @@ const Deposit = () => {
             className="mint-card-image"
           />
           <h2>Depósito</h2>
-          <p>
-            PIX: depósitos instantâneos com uma pitada de diversão e muita
-            praticidade. <br />
-          </p>
-          <form
-            id="f-eWallet-payout"
-            action="https://fruitsmoney.com/panel/e-wallet/deposit"
-            onSubmit={() => {}}
-            method="post"
-          >
-            <input
-              type="hidden"
-              name="_token"
-              defaultValue="Wh2CTNAHZ4IBT3hF3QAUYtsnfWmJuyzuH7EaeGWv"
-            />
+          <p>PIX: depósitos instantâneos com uma pitada de diversão e muita praticidade.</p>
+          <form id="f-eWallet-payout" onSubmit={handleSubmit} method="post">
             <div className="properties">
               <h4 className="rarity-heading">Nome</h4>
               <div className="rarity-row roboto-type2">
@@ -45,8 +63,8 @@ const Deposit = () => {
                   type="text"
                   className="large-input-field w-input cpf-mask"
                   maxLength={14}
-                  name="pix"
-                  id="pix"
+                  name="cpf"
+                  id="cpf"
                   placeholder="Seu número de CPF"
                   required
                 />
@@ -59,50 +77,56 @@ const Deposit = () => {
                   maxLength={256}
                   name="valuedeposit"
                   id="valuedeposit"
-                  placeholder="Depósito minimo de R$20,00"
+                  placeholder="Depósito mínimo de R$20,00"
+                  value={valuedeposit}
+                  onChange={(e) => setValuedeposit(e.target.value)}
                   required
                 />
               </div>
             </div>
             <div className="">
-              <a
-                href="javascript:$('#valuedeposit').val(20);$('label.val').addClass('ativo');"
+            <button
+                type="button"
                 className="button nav w-button"
                 style={{ width: "45%" }}
+                onClick={() => handleDepositClick("20")}
               >
                 DEPOSITAR R$20
                 <br />
                 <span style={{ color: "yellow" }}>(Ganhe + R$20)</span>
-              </a>
-              <a
-                href="javascript:$('#valuedeposit').val(30);$('label.val').addClass('ativo');"
+              </button>
+              <button
+                type="button"
                 className="button nav w-button"
                 style={{ width: "45%" }}
+                onClick={() => handleDepositClick("30")}
               >
                 DEPOSITAR R$30
                 <br />
                 <span style={{ color: "yellow" }}>(Ganhe + R$30)</span>
-              </a>
+              </button>
               <br />
               <br />
-              <a
-                href="javascript:$('#valuedeposit').val(50);$('label.val').addClass('ativo');"
+              <button
+                type="button"
                 className="button nav w-button"
                 style={{ width: "45%" }}
+                onClick={() => handleDepositClick("50")}
               >
                 DEPOSITAR R$50
                 <br />
                 <span style={{ color: "yellow" }}>(Ganhe + R$50)</span>
-              </a>
-              <a
-                href="javascript:$('#valuedeposit').val(100);$('label.val').addClass('ativo');"
+              </button>
+              <button
+                type="button"
                 className="button nav w-button"
                 style={{ width: "45%" }}
+                onClick={() => handleDepositClick("100")}
               >
                 DEPOSITAR R$100
                 <br />
                 <span style={{ color: "yellow" }}>(Ganhe + R$100)</span>
-              </a>
+              </button>
               <br />
               <br />
               <input
@@ -155,6 +179,7 @@ const Deposit = () => {
           </div>
         </div>
       </div>
+      <Notification />
     </>
   )
 }

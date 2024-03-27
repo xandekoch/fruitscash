@@ -1,5 +1,27 @@
+import { getUserIdFromSession } from "../context/AuthProvider";
+import { backendConfig } from "../lib/spring/config";
+
 const Affiliate = () => {
   console.log('Affiliate')
+  const userId = getUserIdFromSession();
+  const url = backendConfig.backendUrl;
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        console.log('Texto copiado para a área de transferência:', text);
+        alert('Link copiado para a área de transferência!');
+      })
+      .catch((error) => {
+        console.error('Erro ao copiar texto:', error);
+        alert('Erro ao copiar link. Por favor, tente novamente.');
+      });
+  };
+  
+  const handleCopyLink = () => {
+    const affiliateLink = `https://${url}/user/register?code=${userId}`;
+    copyToClipboard(affiliateLink);
+  };
   return (
     <>
       <section id="hero" className="hero-section dark wf-section">
@@ -17,17 +39,12 @@ const Affiliate = () => {
           </p>
           <p>
             Seu link de divulgação é: <br />
-            https://fruitsmoney.com/join/1386676{" "}
+            https://{url}/user/register?code={userId}
           </p>
           <br />
-          <a
-            id="depCopiaCodigo"
-            href="javascript:void(0);"
-            onClick={() => {}}
-            className="primary-button dark w-button"
-          >
-            Copiar link de afiliado
-          </a>
+          <button onClick={handleCopyLink} className="primary-button dark w-button">
+      Copiar link de afiliado
+    </button>
           <br />
           <br />
           <div className="properties">
@@ -51,10 +68,6 @@ const Affiliate = () => {
                   <div className="rarity-number">Recorrência</div>
                   <div>R$0,00</div>
                 </div>
-                <div className="rarity-row blue">
-                  <div className="rarity-number">Indicação</div>
-                  <div>R$0,00</div>
-                </div>
               </div>
               <div>
                 <div className="rarity-row blue">
@@ -66,12 +79,8 @@ const Affiliate = () => {
                   <div>R$ 18.00</div>
                 </div>
                 <div className="rarity-row blue">
-                  <div className="rarity-number">Recorrência</div>
+                  <div className="rarity-number">% de Recorrência</div>
                   <div>10.00%</div>
-                </div>
-                <div className="rarity-row">
-                  <div className="rarity-number">Indicação</div>
-                  <div>10%</div>
                 </div>
               </div>
             </div>

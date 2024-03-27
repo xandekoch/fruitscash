@@ -1,6 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Faq, Mint, Rarity } from '../components'
 import Game from './Game';
+import { getUserBalance, sendGameResult } from '../lib/spring/api';
+import Notification from '../components/Notification';
+import { getUserIdFromSession } from '../context/AuthProvider';
 
 declare global {
   interface Window {
@@ -8,31 +11,82 @@ declare global {
   }
 }
 
+interface GameResult {
+  description: string;
+  score: number;
+}
+
 const Play = ({ setShowNavbarAndFooter }: any) => {
   console.log('Play');
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [betAmount, setBetAmount] = useState(5);
+  const userId = getUserIdFromSession();
+  const [balance, setBalance] = useState<number | null>(null);
+  const [mode, setMode] = useState('default');
 
-  // Defina a função ReceiveScore aqui
-  window.ReceiveScore = (score: string) => {
-    console.log("Score recebido:", score);
+  useEffect(() => {
+    if (userId) {
+      getUserBalance(userId).then((balance) => {
+        setBalance(balance);
+        if (balance === 0) {
+          setMode('testAffiliate');
+        }
+      });
+    }
+  }, [userId, isFullscreen]);
+
+  // Recebe GAIN ou LOSS do resultado do jogo
+  window.ReceiveScore = (descriptionScore: string) => {
+    console.log("Score recebido:", descriptionScore);
+    const [descriptionString, scoreString] = descriptionScore.split(';');
+    const scoreFormatted = scoreString.replace(/\s/g, '').replace(',', '.');
+    const score = Number(scoreFormatted);
+    const description = descriptionString.toUpperCase();
+    console.log(description, score)
+
+    handleApi({ description, score });
+
     setTimeout(() => {
       setIsFullscreen(false);
       setShowNavbarAndFooter(true);
     }, 2500);
   };
 
-  const handleSubmit = () => {
+  // Recebe o PAY pra iniciar o jogo se tiver saldo
+  const handleSubmit = async ({ description, score }: GameResult) => {
+    try {
+      const success = await handleApi({ description, score });
+
+      if (success) {
+        setIsFullscreen(true);
+        setShowNavbarAndFooter(false);
+      } else {
+        console.error('Erro ao processar a solicitação: A requisição não foi bem-sucedida');
+      }
+    } catch (error) {
+      console.error('Erro ao processar a solicitação:', error);
+    }
+  };
+
+  const handleApi = async ({ description, score }: GameResult) => {
+    try {
+      await sendGameResult(description, score);
+      return true;
+    } catch (error) {
+      return false;
+    };
+  }
+
+  const handleFreeTrial = () => {
     setIsFullscreen(true);
     setShowNavbarAndFooter(false);
-    console.log('navFooter False');
-  };
+  }
 
   return (
     <>
       {isFullscreen ? (
         <div className="fullscreen-overlay" style={{ background: "black" }}>
-          <Game betAmount={betAmount} />
+          <Game betAmount={betAmount} mode={mode} />
         </div>
       ) : (
         <>
@@ -48,7 +102,7 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
               textAlign: "center"
             }}
           >
-            SALDO: R$<b className="saldo"> 0,00 </b>
+            SALDO: R$<b className="saldo"> {balance} </b>
           </div>
 
           <section id="hero" className="hero-section dark wf-section">
@@ -62,7 +116,7 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
               <a className="escudo">
                 <img src="/assets/play/trophy.gif" />
               </a>
-              <h2>Cortar Frutas</h2>
+              <h2 onClick={() => handleApi({ description: "GAIN", score: 9 })}>Cortar Frutas</h2>
               <p>
                 Cada fruta tem um valor pré determinado, ao corta-la você coleta seu
                 valor, e é melhor não deixar ela cair, #ficadica!
@@ -71,6 +125,16 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
                 id="play"
                 method="post"
                 aria-label="Form"
+                onSubmit={(e) => {
+                  e.preventDefault();
+
+                  if (balance !== null && betAmount <= balance) {
+                    console.log(`Aposta: ${betAmount}, saldo: ${balance}`);
+                    handleSubmit({ description: "PAY", score: betAmount });
+                  } else {
+                    console.log('Saldo insuficiente');
+                  }
+                }}
               >
                 <div className="properties">
                   <h4 className="rarity-heading">Valor de entrada</h4>
@@ -85,14 +149,13 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
                       id="bet"
                       required
                       defaultValue={5}
-                      value={betAmount} // Valor atual do estado do formulário
-                      onChange={(event) => setBetAmount(parseInt(event.target.value))} // Atualiza o estado quando o valor muda
+                      value={betAmount}
+                      onChange={(event) => setBetAmount(parseInt(event.target.value))}
                     />
                   </div>
                 </div>
                 <div className="">
                   <input
-                    onClick={handleSubmit}
                     type="submit"
                     value="Cortar"
                     className="primary-button w-button"
@@ -101,23 +164,27 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
                   <br />
                 </div>
               </form>
-              <p>Você tem 1 tentativas!</p>
-              <form
-                data-name=""
-                id="test"
-                method="post"
-                aria-label="Form"
-              >
-                <div className="">
-                  <input
-                    type="submit"
-                    value="Testar"
-                    className="primary-button w-button"
-                  />
-                  <br />
-                  <br />
-                </div>
-              </form>
+
+              {balance === 0 && (
+                <form
+                  data-name=""
+                  id="test"
+                  method="post"
+                  aria-label="Form"
+                >
+                  <p>Teste gratuitamente!</p>
+                  <div className="">
+                    <input
+                      onClick={handleFreeTrial}
+                      type="submit"
+                      value="Testar"
+                      className="primary-button w-button"
+                    />
+                    <br />
+                    <br />
+                  </div>
+                </form>
+              )}
 
               <p>Valores para jogar: R$1.00 à R$25.00</p>
             </div>
@@ -140,12 +207,13 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
             >
               Usuários Online
               <br />
-              20425
+              {Math.floor(Math.random() * (25000 - 15000 + 1)) + 15000}
             </div>
 
 
           </section>
 
+          <Notification />
           <Mint />
           <Rarity />
           <Faq />
@@ -155,4 +223,4 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
   )
 }
 
-export default Play
+export default Play;

@@ -52,7 +52,6 @@ const SigninForm = () => {
             </a>
             <form
               id="f-user-login"
-              action="https://fruitsmoney.com/panel/login"
               onSubmit={handleSubmit}
             >
               <input

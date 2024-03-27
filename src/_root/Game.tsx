@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Unity, useUnityContext } from "react-unity-webgl";
 
-const Game = ({ betAmount }: {betAmount: number}) => {
+const Game = ({ betAmount, mode }: {betAmount: number, mode: string}) => {
   const [isLandscape, setIsLandscape] = useState(
     window.innerWidth > window.innerHeight
   );
@@ -33,12 +33,16 @@ const Game = ({ betAmount }: {betAmount: number}) => {
 
   useEffect(() => {
     if (unityProvider) {
-      sendMessage("Game Manager", "SetGoal", betAmount * 1.5);
+      sendMessage("Game Manager", "SetGoal", betAmount);
+      sendMessage("Spawner", "SetMode", mode);
+      console.log(betAmount, mode)
     }
   }, [unityProvider, sendMessage]);
 
   return (
-    <>
+    <div style={{display: "flex", flexDirection: "column"}}>
+    {!isLandscape && <h2 style={{color: "white", fontSize: "18px", textAlign: "center"}}>Vire o celular para uma melhor experiência</h2>}
+
     <Unity
       unityProvider={unityProvider}
       className="unity-canvas"
@@ -48,7 +52,7 @@ const Game = ({ betAmount }: {betAmount: number}) => {
         objectFit: "contain" // Manter a proporção de 16:9
       }}
     />
-    </>
+    </div>
   );
 }
 

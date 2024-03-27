@@ -1,17 +1,38 @@
 import React, { useState } from 'react';
-import { createAccount } from '../lib/spring/api';
+import { createAccount, login } from '../lib/spring/api';
 import AdvPayment from '../components/AdvPayment';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthProvider';
 
 const SignupForm = () => {
   console.log('SignupForm')
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const { authenticate } = useAuth();
+  const navigate = useNavigate();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    createAccount(email, password);
+    try {
+      await createAccount(email, password);
+      const session = await login(email, password);
+
+      // Verifica se a sessão foi obtida com sucesso
+      if (session) {
+        // Autentica o usuário localmente
+        authenticate(session);
+
+        // Redireciona para a página principal
+        navigate('/');
+      } else {
+        // Exibe uma mensagem de erro ao usuário
+        console.error('Erro ao realizar o login');
+      }
+      console.log('Usuário cadastrado e autenticado:', session);
+    } catch (error) {
+      console.error('Erro ao cadastrar e autenticar:', error);
+    }
   };
 
   const togglePasswordVisibility = () => {

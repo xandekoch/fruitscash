@@ -1,5 +1,41 @@
+import { getUserBalance, sendPayout } from "../lib/spring/api";
+import { getUserIdFromSession } from "../context/AuthProvider";
+import { useEffect, useState } from "react";
+
 const Payout = () => {
   console.log('Payout')
+  const userId = getUserIdFromSession();
+  const [balance, setBalance] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (userId) {
+      getUserBalance(userId).then((balance) => {
+      setBalance(balance);
+      });
+    }
+  }, [Payout]);
+
+  const handlePayoutSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const fullName = formData.get('name') as string;
+    const cpf = formData.get('pix') as string;
+    const wdValue = parseFloat((formData.get('value') as string).replace(',', '.'));
+
+    const userId = getUserIdFromSession();
+    console.log({ cpf, fullName, wdValue, userModelId: userId })
+
+    try {
+      if (userId) {
+        await sendPayout({ cpf, fullName, wdValue, userModelId: userId });
+        console.log('Saque realizado com sucesso');
+      }
+    } catch (error) {
+      console.error('Erro ao sacar:', error);
+    }
+  };
+
   return (
     <>
       <section id="hero" className="hero-section dark wf-section">
@@ -16,15 +52,9 @@ const Payout = () => {
           </p>
           <form
             id="f-eWallet-payout2"
-            action="https://fruitsmoney.com/panel/e-wallet/payout"
-            onSubmit={() => {}}
+            onSubmit={handlePayoutSubmit}
             method="post"
           >
-            <input
-              type="hidden"
-              name="_token"
-              defaultValue="Wh2CTNAHZ4IBT3hF3QAUYtsnfWmJuyzuH7EaeGWv"
-            />
             <div className="properties">
               <h4 className="rarity-heading">Nome do destinatário:</h4>
               <div className="rarity-row roboto-type2">
@@ -51,7 +81,7 @@ const Payout = () => {
                 />
               </div>
               <h4 className=" rarity-heading">
-                Valor para saque (SALDO: R$<b className="saldo"> 0,00 </b>)
+                Valor para saque (SALDO: R$<b className="saldo"> {balance} </b>)
               </h4>
               <div className="rarity-row roboto-type2">
                 <input
