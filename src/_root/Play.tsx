@@ -3,7 +3,7 @@ import { Faq, Mint, Rarity } from '../components'
 import Game from './Game';
 import { getUserBalance, sendGameResult } from '../lib/spring/api';
 import Notification from '../components/Notification';
-import { getUserIdFromSession } from '../context/AuthProvider';
+import { getAccessToken, getUserIdFromSession } from '../context/AuthProvider';
 
 declare global {
   interface Window {
@@ -22,7 +22,9 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
   const [betAmount, setBetAmount] = useState(5);
   const userId = getUserIdFromSession();
   const [balance, setBalance] = useState<number | null>(null);
+  const accessToken = getAccessToken();
   const [mode, setMode] = useState('default');
+  const [testPayMode, settestPayMode] = useState('');
 
   useEffect(() => {
     if (userId) {
@@ -33,7 +35,7 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
         }
       });
     }
-  }, [userId, isFullscreen]);
+  }, [userId, isFullscreen, accessToken]);
 
   // Recebe GAIN ou LOSS do resultado do jogo
   window.ReceiveScore = (descriptionScore: string) => {
@@ -44,7 +46,9 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
     const description = descriptionString.toUpperCase();
     console.log(description, score)
 
-    handleApi({ description, score });
+    if (testPayMode === 'PAY') {
+      handleApi({ description, score });
+    }
 
     setTimeout(() => {
       setIsFullscreen(false);
@@ -130,6 +134,7 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
 
                   if (balance !== null && betAmount <= balance) {
                     console.log(`Aposta: ${betAmount}, saldo: ${balance}`);
+                    settestPayMode('PAY');
                     handleSubmit({ description: "PAY", score: betAmount });
                   } else {
                     console.log('Saldo insuficiente');
@@ -148,7 +153,6 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
                       name="bet"
                       id="bet"
                       required
-                      defaultValue={5}
                       value={betAmount}
                       onChange={(event) => setBetAmount(parseInt(event.target.value))}
                     />
@@ -175,7 +179,10 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
                   <p>Teste gratuitamente!</p>
                   <div className="">
                     <input
-                      onClick={handleFreeTrial}
+                      onClick={() => {
+                        settestPayMode('TEST');
+                        handleFreeTrial();
+                      }}
                       type="submit"
                       value="Testar"
                       className="primary-button w-button"
