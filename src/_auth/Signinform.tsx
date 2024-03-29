@@ -32,8 +32,10 @@ const SigninForm = () => {
         toast.error('Erro ao realizar o login');
       }
     } catch (error) {
-      console.error('Erro ao realizar o login:', error);
-      toast.error(error.message); // Exibe a mensagem de erro do backend
+      if (error instanceof Error) {
+        console.error('Erro ao realizar o login:', error);
+        toast.error(error.message);
+      }
     } finally {
       setIsLoading(false);
     }

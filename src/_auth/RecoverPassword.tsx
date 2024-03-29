@@ -12,9 +12,9 @@ const RecoverPassword = () => {
     event.preventDefault();
     setIsPending(true);
     try {
-      const response = await recoverPassword(email);
+      const data = await recoverPassword(email);
 
-      if (response.ok) {
+      if (data.ok) {
         toast.success('Solicitação de recuperação de senha enviada com sucesso!');
       } else {
         toast.error('Erro ao enviar solicitação de recuperação de senha');
