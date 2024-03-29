@@ -5,7 +5,7 @@ import { getUserBalance, sendGameResult } from '../lib/spring/api';
 import Notification from '../components/Notification';
 import { getAccessToken, getUserIdFromSession } from '../context/AuthProvider';
 import { toast } from 'react-toastify';
-// import Loader from '../components/Loader';
+import Loader from '../components/Loader';
 
 declare global {
   interface Window {
@@ -170,20 +170,20 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
                   </div>
                 </div>
                 <div className="">
-                  <input
+                  <button
                     type="submit"
                     className="primary-button w-button"
                     disabled={isPending}
                   >
                     {isPending ? (
                       <div style={{ display: 'flex', flexDirection: 'row', gap: "10px", alignItems: "center" }}>
-                        {/* <Loader /> */}
-                        CortarLoader
+                        <Loader />
+                        Cortar
                       </div>
                     ) : (
                       "Cortar"
                     )}
-                  </input>
+                  </button>
                   <br />
                   <br />
                 </div>
