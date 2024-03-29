@@ -29,7 +29,7 @@ const SignupForm = () => {
         authenticate(session);
 
         // Redireciona para a página de login
-        navigate('/sign-in');
+        navigate('/');
         toast.success('Cadastro realizado com sucesso');
       } else {
         // Exibe uma mensagem de erro ao usuário

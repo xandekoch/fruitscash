@@ -2,11 +2,14 @@ import { sendDeposit } from '../lib/spring/api';
 import { getUserIdFromSession } from '../context/AuthProvider';
 import { useState } from 'react';
 import Notification from '../components/Notification';
+import { toast } from 'react-toastify';
+import Loader from '../components/Loader';
 
 const Deposit = () => {
   console.log('Deposit');
 
   const [valuedeposit, setValuedeposit] = useState('');
+  const [isPending, setIsPending] = useState(false);
 
   const handleDepositClick = (amount: string) => {
     setValuedeposit(amount);
@@ -14,6 +17,8 @@ const Deposit = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    setIsPending(true); // Ativa o loader
 
     const formData = new FormData(event.currentTarget);
     const cpf = formData.get('cpf') as string;
@@ -25,10 +30,13 @@ const Deposit = () => {
       if (userId) {
         await sendDeposit({ cpf, fullName, wdValue, userModelId: userId });
         console.log('Depósito enviado com sucesso');
+        toast.success('Depósito enviado com sucesso!');
       }
     } catch (error) {
       console.error('Erro ao enviar o depósito:', error);
-    }
+      toast.error('Erro ao enviar o depósito');
+
+    setIsPending(false); // Desativa o loader após a requisição
   };
 
   return (
@@ -132,9 +140,11 @@ const Deposit = () => {
               <input
                 id="pixgenerator"
                 type="submit"
-                defaultValue="Depositar via PIX"
                 className="primary-button w-button"
-              />
+              >
+                {isPending && <Loader />}
+                Depositar via PIX
+              </input>
               <br />
               <br />
               <p>
@@ -183,5 +193,6 @@ const Deposit = () => {
     </>
   )
 }
+}
 
-export default Deposit
+export default Deposit;

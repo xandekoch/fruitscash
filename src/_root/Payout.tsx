@@ -1,11 +1,14 @@
 import { getUserBalance, sendPayout } from "../lib/spring/api";
 import { getUserIdFromSession } from "../context/AuthProvider";
 import { useEffect, useState } from "react";
+import Loader from "../components/Loader";
+import { toast } from "react-toastify";
 
 const Payout = () => {
   console.log('Payout')
   const userId = getUserIdFromSession();
   const [balance, setBalance] = useState<number | null>(null);
+  const [isPending, setIsPending] = useState(false);
 
   useEffect(() => {
     if (userId) {
@@ -15,25 +18,32 @@ const Payout = () => {
     }
   }, [Payout]);
 
-  const handlePayoutSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handlePayoutSubmit = async (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
     event.preventDefault();
 
-    const formData = new FormData(event.currentTarget);
-    const fullName = formData.get('name') as string;
-    const cpf = formData.get('pix') as string;
-    const wdValue = parseFloat((formData.get('value') as string).replace(',', '.'));
+    setIsPending(true); // Ativa o loader
 
-    const userId = getUserIdFromSession();
-    console.log({ cpf, fullName, wdValue, userModelId: userId })
+    const formData = new FormData(event.currentTarget);
+    const fullName = formData.get("name") as string;
+    const cpf = formData.get("pix") as string;
+    const wdValue = parseFloat(
+      (formData.get("value") as string).replace(",", ".")
+    );
 
     try {
       if (userId) {
         await sendPayout({ cpf, fullName, wdValue, userModelId: userId });
-        console.log('Saque realizado com sucesso');
+        console.log("Saque realizado com sucesso");
+        toast.success("Saque realizado com sucesso!"); // Exibe toast de sucesso
       }
     } catch (error) {
-      console.error('Erro ao sacar:', error);
+      console.error("Erro ao sacar:", error);
+      toast.error("Erro ao sacar"); // Exibe toast de erro
     }
+
+    setIsPending(false); // Desativa o loader após a requisição
   };
 
   return (
@@ -97,10 +107,12 @@ const Payout = () => {
             <div className="">
               <input
                 type="submit"
-                defaultValue="Sacar via PIX"
                 id="pixgenerator"
                 className="primary-button w-button"
-              />
+              >
+              {isPending && <Loader />}
+              Sacar via PIX
+              </ input>
               <br />
               <br />
               <p>

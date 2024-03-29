@@ -33,7 +33,7 @@ const SigninForm = () => {
       }
     } catch (error) {
       if (error instanceof Error) {
-        console.error('Erro ao realizar o login:', error);
+        console.error(error);
         toast.error(error.message);
       }
     } finally {
@@ -105,15 +105,11 @@ const SigninForm = () => {
                 </p>
               </a>
               <div className="">
-                <button className="primary-button w-button" disabled={isLoading}>
-                  {isLoading ? (
-                    <div style={{ display: 'flex', flexDirection: 'row', gap: "10px", alignItems: "center" }}>
-                      <Loader />
-                      Entrar
-                    </div>
-                  ) : (
-                    'Entrar'
-                  )}
+                <button className="primary-button w-button" >
+                  <div style={{ display: 'flex', flexDirection: 'row', gap: "10px", alignItems: "center" }}>
+                {isLoading && <Loader />}
+                Entrar
+                  </div>
                 </button>
                 <br />
                 <br />

@@ -4,6 +4,7 @@ import Game from './Game';
 import { getUserBalance, sendGameResult } from '../lib/spring/api';
 import Notification from '../components/Notification';
 import { getAccessToken, getUserIdFromSession } from '../context/AuthProvider';
+import { toast } from 'react-toastify';
 
 declare global {
   interface Window {
@@ -32,6 +33,8 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
         setBalance(balance);
         if (balance === 0) {
           setMode('testAffiliate');
+        } else {
+          setMode('default');
         }
       });
     }
@@ -62,13 +65,16 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
       const success = await handleApi({ description, score });
 
       if (success) {
+        toast.success("Iniciando o jogo");
         setIsFullscreen(true);
         setShowNavbarAndFooter(false);
       } else {
         console.error('Erro ao processar a solicitação: A requisição não foi bem-sucedida');
+        toast.error("Erro ao iniciar o jogo");
       }
     } catch (error) {
       console.error('Erro ao processar a solicitação:', error);
+      toast.error("Erro ao iniciar o jogo");
     }
   };
 
@@ -138,6 +144,7 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
                     handleSubmit({ description: "PAY", score: betAmount });
                   } else {
                     console.log('Saldo insuficiente');
+                    toast.error("Saldo insuficiente");
                   }
                 }}
               >
