@@ -36,8 +36,9 @@ const Deposit = () => {
       console.error('Erro ao enviar o depósito:', error);
       toast.error('Erro ao enviar o depósito');
 
-    setIsPending(false); // Desativa o loader após a requisição
-  };
+      setIsPending(false); // Desativa o loader após a requisição
+    }
+  }
 
   return (
     <>
@@ -93,7 +94,7 @@ const Deposit = () => {
               </div>
             </div>
             <div className="">
-            <button
+              <button
                 type="button"
                 className="button nav w-button"
                 style={{ width: "45%" }}
@@ -193,6 +194,5 @@ const Deposit = () => {
     </>
   )
 }
-}
 
-export default Deposit;
+export default Deposit
