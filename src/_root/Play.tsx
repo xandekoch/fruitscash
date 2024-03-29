@@ -175,10 +175,14 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
                     className="primary-button w-button"
                     disabled={isPending}
                   >
-                    <div style={{ display: 'flex', flexDirection: 'row', gap: "10px", alignItems: "center" }}>
-                  {isPending && <Loader />}
-                  Cortar
-                </div>
+                    {isPending ? (
+                      <div style={{ display: 'flex', flexDirection: 'row', gap: "10px", alignItems: "center" }}>
+                        <Loader />
+                        Cortar
+                      </div>
+                    ) : (
+                      "Cortar"
+                    )}
                   </input>
                   <br />
                   <br />
