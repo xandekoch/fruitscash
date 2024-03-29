@@ -111,7 +111,8 @@ const SignupForm = () => {
                 <Link to="/sign-in"> Login</Link>
               </p>
               <div className="">
-                <button type="submit" className="primary-button w-button">
+                <button type="submit" className="primary-button w-button"
+                  disabled={isPending}>
                   <div style={{ display: 'flex', flexDirection: 'row', gap: "10px", alignItems: "center" }}>
                     {isPending && <Loader />}
                     Criar Conta

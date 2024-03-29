@@ -142,9 +142,12 @@ const Deposit = () => {
                 id="pixgenerator"
                 type="submit"
                 className="primary-button w-button"
+                disabled={isPending}
               >
-                {isPending && <Loader />}
-                Depositar via PIX
+                <div style={{ display: 'flex', flexDirection: 'row', gap: "10px", alignItems: "center" }}>
+                  {isPending && <Loader />}
+                  Depositar via PIX
+                </div>
               </input>
               <br />
               <br />

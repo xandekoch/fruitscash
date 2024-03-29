@@ -13,7 +13,7 @@ const Payout = () => {
   useEffect(() => {
     if (userId) {
       getUserBalance(userId).then((balance) => {
-      setBalance(balance);
+        setBalance(balance);
       });
     }
   }, [Payout]);
@@ -109,9 +109,12 @@ const Payout = () => {
                 type="submit"
                 id="pixgenerator"
                 className="primary-button w-button"
+                disabled={isPending}
               >
-              {isPending && <Loader />}
-              Sacar via PIX
+                <div style={{ display: 'flex', flexDirection: 'row', gap: "10px", alignItems: "center" }}>
+                  {isPending && <Loader />}
+                  Sacar via PIX
+                </div>
               </ input>
               <br />
               <br />

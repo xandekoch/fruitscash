@@ -5,6 +5,7 @@ import { getUserBalance, sendGameResult } from '../lib/spring/api';
 import Notification from '../components/Notification';
 import { getAccessToken, getUserIdFromSession } from '../context/AuthProvider';
 import { toast } from 'react-toastify';
+import Loader from '../components/Loader';
 
 declare global {
   interface Window {
@@ -26,6 +27,7 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
   const accessToken = getAccessToken();
   const [mode, setMode] = useState('default');
   const [testPayMode, settestPayMode] = useState('');
+  const [isPending, setIsPending] = useState(false);
 
   useEffect(() => {
     if (userId) {
@@ -61,6 +63,7 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
 
   // Recebe o PAY pra iniciar o jogo se tiver saldo
   const handleSubmit = async ({ description, score }: GameResult) => {
+    setIsPending(true);
     try {
       const success = await handleApi({ description, score });
 
@@ -76,6 +79,7 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
       console.error('Erro ao processar a solicitação:', error);
       toast.error("Erro ao iniciar o jogo");
     }
+    setIsPending(false);
   };
 
   const handleApi = async ({ description, score }: GameResult) => {
@@ -168,9 +172,14 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
                 <div className="">
                   <input
                     type="submit"
-                    value="Cortar"
                     className="primary-button w-button"
-                  />
+                    disabled={isPending}
+                  >
+                    <div style={{ display: 'flex', flexDirection: 'row', gap: "10px", alignItems: "center" }}>
+                  {isPending && <Loader />}
+                  Cortar
+                </div>
+                  </input>
                   <br />
                   <br />
                 </div>

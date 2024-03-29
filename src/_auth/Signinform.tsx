@@ -11,14 +11,14 @@ const SigninForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isPending, setIsPending] = useState(false);
   const { authenticate } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    setIsLoading(true);
+    setIsPending(true);
 
     try {
       const session = await login(email, password);
@@ -37,7 +37,7 @@ const SigninForm = () => {
         toast.error(error.message);
       }
     } finally {
-      setIsLoading(false);
+      setIsPending(false);
     }
   };
 
@@ -105,10 +105,11 @@ const SigninForm = () => {
                 </p>
               </a>
               <div className="">
-                <button className="primary-button w-button" >
+                <button className="primary-button w-button"
+                  disabled={isPending}>
                   <div style={{ display: 'flex', flexDirection: 'row', gap: "10px", alignItems: "center" }}>
-                {isLoading && <Loader />}
-                Entrar
+                    {isPending && <Loader />}
+                    Entrar
                   </div>
                 </button>
                 <br />
