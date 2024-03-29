@@ -2,36 +2,40 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthProvider';
 import { login } from '../lib/spring/api';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Loader from '../components/Loader';
 
 const SigninForm = () => {
   console.log('SigninForm')
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { authenticate } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    setIsLoading(true);
+
     try {
-      // Realiza o login
       const session = await login(email, password);
 
-      // Verifica se a sessão foi obtida com sucesso
       if (session) {
-        // Autentica o usuário localmente
         authenticate(session);
-
-        // Redireciona para a página principal
+        toast.success('Login realizado com sucesso');
         navigate('/');
       } else {
-        // Exibe uma mensagem de erro ao usuário
         console.error('Erro ao realizar o login');
+        toast.error('Erro ao realizar o login');
       }
     } catch (error) {
-      // Exibe uma mensagem de erro ao usuário
       console.error('Erro ao realizar o login:', error);
+      toast.error(error.message); // Exibe a mensagem de erro do backend
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -99,7 +103,16 @@ const SigninForm = () => {
                 </p>
               </a>
               <div className="">
-                <button className="primary-button w-button">Entrar</button>
+                <button className="primary-button w-button" disabled={isLoading}>
+                  {isLoading ? (
+                    <div style={{ display: 'flex', flexDirection: 'row', gap: "10px", alignItems: "center" }}>
+                      <Loader />
+                      Entrar
+                    </div>
+                  ) : (
+                    'Entrar'
+                  )}
+                </button>
                 <br />
                 <br />
               </div>

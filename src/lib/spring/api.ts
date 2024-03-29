@@ -78,6 +78,7 @@ export const recoverPassword = async (email: string) => {
     }
 
     console.log('Senha recuperada com sucesso');
+    return response;
   } catch (error) {
     console.error('Erro:', error);
   }

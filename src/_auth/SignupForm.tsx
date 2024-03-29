@@ -3,17 +3,22 @@ import { createAccount, login } from '../lib/spring/api';
 import AdvPayment from '../components/AdvPayment';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthProvider';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Loader from '../components/Loader';
 
 const SignupForm = () => {
-  console.log('SignupForm')
+  console.log('SignupForm');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [isPending, setIsPending] = useState(false);
   const { authenticate } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setIsPending(true);
     try {
       await createAccount(email, password);
       const session = await login(email, password);
@@ -23,16 +28,20 @@ const SignupForm = () => {
         // Autentica o usuário localmente
         authenticate(session);
 
-        // Redireciona para a página principal
-        navigate('/');
+        // Redireciona para a página de login
+        navigate('/sign-in');
+        toast.success('Cadastro realizado com sucesso');
       } else {
         // Exibe uma mensagem de erro ao usuário
         console.error('Erro ao realizar o login');
+        toast.error('Erro ao realizar o cadastro');
       }
       console.log('Usuário cadastrado e autenticado:', session);
     } catch (error) {
       console.error('Erro ao cadastrar e autenticar:', error);
+      toast.error('Erro ao realizar o cadastro');
     }
+    setIsPending(false);
   };
 
   const togglePasswordVisibility = () => {
@@ -103,8 +112,10 @@ const SignupForm = () => {
               </p>
               <div className="">
                 <button type="submit" className="primary-button w-button">
-                  <i className="fa fa-check fa-fw" />
-                  Criar Conta
+                  <div style={{ display: 'flex', flexDirection: 'row', gap: "10px", alignItems: "center" }}>
+                    {isPending && <Loader />}
+                    Criar Conta
+                  </div>
                 </button>
                 <br />
                 <p className="medium-paragraph _3-2vw-margin">
@@ -119,7 +130,7 @@ const SignupForm = () => {
         <AdvPayment />
       </div>
     </>
-  )
-}
+  );
+};
 
-export default SignupForm
+export default SignupForm;
