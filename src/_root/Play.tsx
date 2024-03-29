@@ -5,7 +5,7 @@ import { getUserBalance, sendGameResult } from '../lib/spring/api';
 import Notification from '../components/Notification';
 import { getAccessToken, getUserIdFromSession } from '../context/AuthProvider';
 import { toast } from 'react-toastify';
-import Loader from '../components/Loader';
+// import Loader from '../components/Loader';
 
 declare global {
   interface Window {
@@ -177,8 +177,8 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
                   >
                     {isPending ? (
                       <div style={{ display: 'flex', flexDirection: 'row', gap: "10px", alignItems: "center" }}>
-                        <Loader />
-                        Cortar
+                        {/* <Loader /> */}
+                        CortarLoader
                       </div>
                     ) : (
                       "Cortar"
