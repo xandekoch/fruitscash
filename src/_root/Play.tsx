@@ -32,16 +32,19 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
 
   useEffect(() => {
     if (userId) {
-      getUserBalance(userId).then((balance) => {
-        setBalance(balance);
-        if (balance === 0 && isInfluencer) {
-          setMode('testAffiliate');
-        } else {
-          setMode('default');
-        }
-      });
+      setTimeout(() => {
+        getUserBalance(userId).then((balance) => {
+          setBalance(balance);
+          if (balance === 0 || isInfluencer) {
+            setMode('testAffiliate');
+          } else {
+            setMode('default');
+          }
+        });
+      }, 1000);
     }
   }, [userId, isFullscreen, accessToken]);
+  
 
   // Recebe GAIN ou LOSS do resultado do jogo
   window.ReceiveScore = (descriptionScore: string) => {
