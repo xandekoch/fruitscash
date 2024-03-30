@@ -7,13 +7,13 @@ const Terms = () => {
         <h2>1. Introdução</h2>
         <p>
           Estes termos e condições e os documentos referidos abaixo (os "Termos")
-          aplicam-se ao uso da FruitsMoney e seus serviços.
+          aplicam-se ao uso da FruitsCash e seus serviços.
         </p>
         <p>
           Você deve revisar cuidadosamente estes Termos, pois eles contêm
           informações importantes sobre seus direitos e obrigações relativas ao uso
           do site e formam um acordo legal vinculativo entre você - nosso cliente (o
-          "Cliente") e nós. Ao usar este Site e/ou acessar a FruitsMoney, você, seja
+          "Cliente") e nós. Ao usar este Site e/ou acessar a FruitsCash, você, seja
           você um convidado ou um usuário registrado com uma conta (“Conta”),
           concorda em ficar vinculado por estes Termos, juntamente com qualquer
           alterações, que podem ser publicadas de tempos em tempos. Se não aceitar
@@ -26,7 +26,7 @@ const Terms = () => {
           qualquer momento. Você deve visitar esta página periodicamente para
           revisar os Termos e Condições. Alterações será vinculativo e entrará em
           vigor imediatamente após a publicação neste Site. Se você se opuser a
-          qualquer alterações, você deve parar imediatamente de usar a FruitsMoney e
+          qualquer alterações, você deve parar imediatamente de usar a FruitsCash e
           pedir encerramento na conta. Seu uso continuado do Site após tais
           publicação indicará sua concordância em ficar vinculado aos Termos
           conforme alterados..
@@ -34,7 +34,7 @@ const Terms = () => {
         <h2>3. Suas obrigações</h2>
         <p>
           Você reconhece que em todos os momentos que acessar o site e usar a
-          FruitsMoney por qualquer motivo:
+          FruitsCash por qualquer motivo:
         </p>
         <p>
           3.1. Não fraudar em nenhum momento nosso sistema de afiliados, aposta ou
@@ -43,7 +43,7 @@ const Terms = () => {
         </p>
         <p>
           3.2. Você ser maior de idade. Você não deve acessar o site ou apostar na
-          FruitsMoney se você não tiver 18 anos completos, sujeito a retenção do
+          FruitsCash se você não tiver 18 anos completos, sujeito a retenção do
           dinheiro até completar 18 anos e não alteramos dados para terceiros
           maiores de idade.
         </p>
@@ -63,7 +63,7 @@ const Terms = () => {
         </p>
         <p>
           3.7. Ao fazer apostas, você pode perder parte ou todo o seu dinheiro
-          depositado na FruitsMoney de acordo com estes Termos e você será
+          depositado na FruitsCash de acordo com estes Termos e você será
           totalmente responsável por essa perda.
         </p>
         <p>
@@ -72,12 +72,12 @@ const Terms = () => {
         </p>
         <p>
           3.9. Você não deve tentar manipular qualquer mercado ou elemento dentro da
-          FruitsMoney de má fé nem de uma maneira que afete adversamente a
-          integridade da FruitsMoney.
+          FruitsCash de má fé nem de uma maneira que afete adversamente a
+          integridade da FruitsCash.
         </p>
         <p>
-          3.10. Você deve geralmente agir de boa fé em relação a nós da FruitsMoney
-          em todos os momentos e para todas as apostas realizadas na FruitsMoney.
+          3.10. Você deve geralmente agir de boa fé em relação a nós da FruitsCash
+          em todos os momentos e para todas as apostas realizadas na FruitsCash.
         </p>
         <p>
           3.11. Você, ou, se aplicável, seus funcionários, empregadores, agentes ou
@@ -85,7 +85,7 @@ const Terms = () => {
           Afiliados.
         </p>
         <h2>4. Uso restrito</h2>
-        <p>4.1. Você não deve usar a FruitsMoney se:</p>
+        <p>4.1. Você não deve usar a FruitsCash se:</p>
         <p>
           4.1.1. Se você for menor de 18 anos (ou menor de idade, conforme
           estipulado nas leis do jurisdição aplicável a você) ou se você não for
@@ -119,18 +119,18 @@ const Terms = () => {
         </p>
         <p>
           4.1.5. interromper ou afetar ou influenciar indevidamente as atividades de
-          outros player ou parceiro ou a operação da FruitsMoney em geral;
+          outros player ou parceiro ou a operação da FruitsCash em geral;
         </p>
         <p>
           4.1.6. para promover anúncios comerciais não solicitados, links afiliados
-          e outras formas de solicitação que pode ser removido da FruitsMoney sem
+          e outras formas de solicitação que pode ser removido da FruitsCash sem
           aviso prévio, em casos de fraudes;
         </p>
         <p>
           4.1.7. qualquer forma que, em análise concluída seja constatada tentativa
-          de: (i) enganar a FruitsMoney ou outro cliente usando o FruitsMoney como
+          de: (i) enganar a FruitsCash ou outro cliente usando o FruitsCash como
           publicidade enganosa; ou (ii) conspirar com qualquer outro player ou
-          afiliado usando a FruitsMoney em para obter uma vantagem desonesta;
+          afiliado usando a FruitsCash em para obter uma vantagem desonesta;
         </p>
         <p>
           4.1.8. fraudar o sistema de apostas ou violar qualquer um dos nossos
@@ -147,24 +147,24 @@ const Terms = () => {
         </p>
         <p>
           4.4. Podemos encerrar imediatamente sua conta mediante notificação por
-          e-mail ou Whatsapp a você se você usar a FruitsMoney para fins não
+          e-mail ou Whatsapp a você se você usar a FruitsCash para fins não
           autorizados. Também podemos tomar medidas legais contra você por fazê-lo
           em determinadas circunstâncias.
         </p>
         <p>
           4.5. Funcionários da empresa, seus licenciados, subsidiárias, publicidade,
           ou outras agências, parceiros de mídia, contratados e membros das famílias
-          imediatas de cada um NÃO estão permitidas a usar a FruitsMoney com
+          imediatas de cada um NÃO estão permitidas a usar a FruitsCash com
           dinheiro real sem o consentimento prévio do gerente de marketing. Deve tal
           atividade seja descoberta, a(s) conta(s) será(ão) encerrada(s)
           imediatamente e todos os bônus/ganhos serão perdido.
         </p>
         <h2>5. Registro</h2>
-        <p>Você concorda que em todos os momentos que usar a FruitsMoney:</p>
+        <p>Você concorda que em todos os momentos que usar a FruitsCash:</p>
         <p>
           5.1. Reservamo-nos o direito de recusar cadastros e/ou depósitos de
           qualquer pessoa que se enquadre em nossa politica privada. Reservamos que
-          cadastros ou depósitos reembolsados, a FruitsMoney não tem qualquer
+          cadastros ou depósitos reembolsados, a FruitsCash não tem qualquer
           obrigação de comunicar um motivo específico.
         </p>
         <p>
@@ -197,7 +197,7 @@ const Terms = () => {
           avisar a Empresa sobre quaisquer alterações em seu endereço de e-mail.
         </p>
         <p>
-          5.4. Você só tem direito para cadastrar uma conta para a FruitsMoney,
+          5.4. Você só tem direito para cadastrar uma conta para a FruitsCash,
           regra vale para players e afiliados. As contas estão sujeitas a
           encerramento se for constatado que você tem várias contas registradas
           conosco. Isso inclui o uso de representantes, parentes, associados,
@@ -214,7 +214,7 @@ const Terms = () => {
           iremos informá-lo sobre os dados obtidos.
         </p>
         <p>
-          5.6. Você deve manter sua senha para login na FruitsMoney de modo
+          5.6. Você deve manter sua senha para login na FruitsCash de modo
           confidencial. Desde que as informações da conta com algum problema for
           fornecida corretamente, temos o direito de assumir que as apostas,
           depósitos e saques foram foi feito por você. Aconselhamos que você altere
@@ -342,7 +342,7 @@ const Terms = () => {
         <p>
           8.2. Taxas e encargos podem ser aplicados a depósitos e saques de
           clientes, que podem ser encontrados no Site. Dentro na maioria dos casos,
-          absorvemos taxas de transação para depósitos em sua conta FruitsMoney.
+          absorvemos taxas de transação para depósitos em sua conta FruitsCash.
           Você é responsável por seus próprios encargos bancários que você pode
           incorrer devido ao depósito de fundos conosco.
         </p>
@@ -350,13 +350,13 @@ const Terms = () => {
           8.3. A empresa não é uma instituição financeira e usa processadores de
           pagamento eletrônico de terceiros para processar depósitos em pix; eles
           não são processados ​​diretamente por nós. Se você depositar qualquer
-          saldo na FruitsMoney, o prazo máximo de adicionar na sua conta é de 2
+          saldo na FruitsCash, o prazo máximo de adicionar na sua conta é de 2
           minutos. Se passar de 5 minutos e isso não se resolver, chame o suporte
           ao-vivo com o comprovante do pagamento.
         </p>
         <p>
           8.6. Os depósitos provenientes de atividades criminosas e/ou ilegais e/ou
-          não autorizadas não devem ser depositados na FruitsMoney, em caso de
+          não autorizadas não devem ser depositados na FruitsCash, em caso de
           suspeita o reembolso e banimento é imediato. Acrescentamos que será
           realizado um relatório e entregue para a polícia local sobre o ocorrido.
         </p>
@@ -430,9 +430,9 @@ const Terms = () => {
           11.1. Em caso de erro ou mau funcionamento do nosso sistema ou processos,
           todas as apostas serão anuladas. Você têm a obrigação de nos informar
           imediatamente assim que tomar conhecimento de qualquer erro com a
-          FruitsMoney. No caso de erros de comunicação ou do sistema ou bugs ou
-          vírus que ocorram em conexão com a FruitsMoney e/ou pagamentos feitos a
-          você como resultado de um defeito ou erro no FruitsMoney, não seremos
+          FruitsCash. No caso de erros de comunicação ou do sistema ou bugs ou
+          vírus que ocorram em conexão com a FruitsCash e/ou pagamentos feitos a
+          você como resultado de um defeito ou erro no FruitsCash, não seremos
           responsáveis ​​perante você ou a terceiros por quaisquer custos, despesas,
           perdas ou reclamações diretas ou indiretas decorrentes ou resultantes de
           tais erros, e nos reservamos o direito de anular todos as apostas em
@@ -555,7 +555,7 @@ const Terms = () => {
           serão retidos e você será banido até completar 18 anos.;
         </p>
         <p>
-          Todos os ganhos obtidos com apostas através da FruitsMoney enquanto menor
+          Todos os ganhos obtidos com apostas através da FruitsCash enquanto menor
           de idade devem ser pagos a nós sob demanda (se você não cumprir esta
           disposição, procuraremos recuperar todos os custos associados à
           recuperação de tais valores);
@@ -565,7 +565,7 @@ const Terms = () => {
           retidos até que você completar 18 anos a nosso exclusivo critério.
           Reservamo-nos o direito de deduzir as taxas de transação de pagamento do
           valor a ser devolvido, incluindo taxas de transação para depósitos em sua
-          conta FruitsMoney.com que cobrimos.
+          conta FruitsCash.com que cobrimos.
         </p>
         <p>
           16.2. Esta condição também se aplica a você se tiver mais de 18 anos, mas
@@ -601,7 +601,7 @@ const Terms = () => {
         </p>
         <p>
           18.2. Entre nós e você, somos os únicos proprietários dos direitos sobre a
-          FruitsMoney, nossa tecnologia, software e sistemas de negócios (os
+          FruitsCash, nossa tecnologia, software e sistemas de negócios (os
           "Sistemas"), bem como nossas probabilidades. Você não deve usar seu perfil
           pessoal para seu próprio ganho comercial (como vender sua atualização de
           status para um anunciante); e ao selecionar um usuário de parceiro para
@@ -622,14 +622,14 @@ const Terms = () => {
           todos esses direitos, licenças, título e interesse especificamente retidos
           por nós e nossos licenciadores. Você concorda em não usar nenhum sistema
           automático ou dispositivo manual para monitorar ou copiar páginas da web
-          ou conteúdo dentro da FruitsMoney. Qualquer uso não autorizado ou
+          ou conteúdo dentro da FruitsCash. Qualquer uso não autorizado ou
           reprodução pode resultar em ação legal contra você.
         </p>
         <h2>19. Sua licença</h2>
         <p>
           19.1. Sujeito a estes Termos e sua conformidade com eles, concedemos a
           você uma licença não exclusiva, limitada, não licença transferível e não
-          sublicenciável para acessar e usar a FruitsMoney para seu uso pessoal não
+          sublicenciável para acessar e usar a FruitsCash para seu uso pessoal não
           comercial apenas propósitos. Nossa licença para você termina se nosso
           contrato com você sob estes Termos terminar.
         </p>
@@ -638,10 +638,10 @@ const Terms = () => {
           circunstância, modificar, publicar, transmitir, transferir, vender,
           reproduzir, fazer upload, postar, distribuir, executar, exibir, criar
           trabalhos derivados de ou em de qualquer outra forma explorar, a
-          FruitsMoney e/ou qualquer conteúdo nele contido ou o software nele
+          FruitsCash e/ou qualquer conteúdo nele contido ou o software nele
           contido, exceto conforme expressamente permitido nestes Termos ou de outra
           forma no Site. Nenhuma informação ou conteúdo no Serviço ou
-          disponibilizado a você em conexão com a FruitsMoney pode ser modificado ou
+          disponibilizado a você em conexão com a FruitsCash pode ser modificado ou
           alterado, fundido com outros dados ou publicados de qualquer forma,
           incluindo, por exemplo, captura de tela ou banco de dados e qualquer outra
           atividade destinados a coletar, armazenar, reorganizar ou manipular tais
@@ -656,8 +656,8 @@ const Terms = () => {
         <h2>20. Sua conduta e proteção dentro do site</h2>
         <p>
           20.1. Para sua proteção e proteção de todos os nossos Clientes, a
-          publicação de qualquer conteúdo na FruitsMoney, bem como conduta
-          relacionada a ele e/ou a FruitsMoney, que seja de alguma forma ilegal,
+          publicação de qualquer conteúdo na FruitsCash, bem como conduta
+          relacionada a ele e/ou a FruitsCash, que seja de alguma forma ilegal,
           inapropriada ou indesejável é estritamente proibido (“Comportamento
           Proibido”).
         </p>
@@ -671,7 +671,7 @@ const Terms = () => {
         </p>
         <p>
           20.3. O comportamento proibido inclui, mas não se limita a, acessar ou
-          usar o FruitsMoney para: promover ou compartilhar informações que você
+          usar o FruitsCash para: promover ou compartilhar informações que você
           sabe que são falsas, enganosas ou ilegais; realizar qualquer atividade
           ilegal ou ilegal, como, mas não limitado a, qualquer atividade que promova
           ou promova qualquer atividade ou empreendimento criminoso, viole a
@@ -690,19 +690,19 @@ const Terms = () => {
           Divulgar qualquer conteúdo ou material que contenha qualquer vírus de
           software ou outro computador ou código de programação (incluindo HTML)
           projetado para interromper, destruir ou alterar a funcionalidade da
-          FruitsMoney, sua apresentação ou qualquer outro site, software ou hardware
+          FruitsCash, sua apresentação ou qualquer outro site, software ou hardware
           de computador;
         </p>
         <p>
-          Interferir, interromper ou fazer engenharia reversa da FruitsMoney de
+          Interferir, interromper ou fazer engenharia reversa da FruitsCash de
           qualquer maneira, incluindo, sem limitação, interceptar, emular ou
           redirecionar os protocolos de comunicação usados ​​por nós, criar ou usar
           cheats, mods ou hacks ou qualquer outro software projetado para modificar
-          a FruitsMoney, ou usando qualquer software que intercepte ou coleta
-          informações de ou através da FruitsMoney;
+          a FruitsCash, ou usando qualquer software que intercepte ou coleta
+          informações de ou através da FruitsCash;
         </p>
         <p>
-          Recuperar ou indexar qualquer informação da FruitsMoney usando qualquer
+          Recuperar ou indexar qualquer informação da FruitsCash usando qualquer
           robô, spider ou outro mecanismo automatizado;
         </p>
         <p>
@@ -727,7 +727,7 @@ const Terms = () => {
           qualquer momento ou de tempos em tempos ao tempo. Reservamo-nos o direito
           de investigar e tomar todas as ações que, a nosso exclusivo critério,
           julgarmos apropriado ou necessário de acordo com as circunstâncias,
-          incluindo, sem limitação, a exclusão do postagem(ões) da FruitsMoney e/ou
+          incluindo, sem limitação, a exclusão do postagem(ões) da FruitsCash e/ou
           encerrar sua Conta, e tomar qualquer ação contra qualquer Cliente ou
           terceiro que direta ou indiretamente, ou conscientemente permite que
           qualquer terceiro, direta ou indiretamente, se envolver em Comportamento
@@ -735,7 +735,7 @@ const Terms = () => {
         </p>
         <h2>21. Links para outros sites</h2>
         <p>
-          O FruitsMoney pode conter links para sites de terceiros que não são
+          O FruitsCash pode conter links para sites de terceiros que não são
           mantidos ou relacionados a nós e sobre os quais não temos controle. Os
           links para esses sites são fornecidos apenas para conveniência dos
           Clientes e não são de forma alguma investigados, monitorados ou
@@ -804,7 +804,7 @@ const Terms = () => {
         <h2>25. Violação desses termos</h2>
         <p>
           Sem limitar nossos outros recursos, podemos suspender ou encerrar sua
-          conta e nos recusar a continuar a fornecer a você a FruitsMoney, em ambos
+          conta e nos recusar a continuar a fornecer a você a FruitsCash, em ambos
           os casos sem aviso prévio, se, em nossa opinião razoável, você violar
           qualquer termo material destes Termos. A notificação de qualquer ação
           tomada será, no entanto, prontamente fornecido a você.
@@ -812,7 +812,7 @@ const Terms = () => {
         <h2>26. Regras em geral</h2>
         <p>
           26.1. Termo de acordo. Estes Termos permanecerão em pleno vigor e efeito
-          enquanto você acessar ou usar a FruitsMoney ou é um Cliente ou visitante
+          enquanto você acessar ou usar a FruitsCash ou é um Cliente ou visitante
           do Site. Estes Termos sobreviverão ao término de sua Conta por qualquer
           motivo.
         </p>
@@ -844,7 +844,7 @@ const Terms = () => {
           disposição em qualquer outra hora.
         </p>
         <p>
-          26.4. Reconhecimento de culpa. Ao acessar ou usar A FruitsMoney, você
+          26.4. Reconhecimento de culpa. Ao acessar ou usar A FruitsCash, você
           reconhece ter lido, entendido e concordou com cada parágrafo destes
           Termos. Como resultado, você renuncia irrevogavelmente a qualquer
           argumentar, reivindicar, exigir ou proceder em contrário de qualquer coisa
@@ -853,7 +853,7 @@ const Terms = () => {
         <p>
           26.5. Ao cadastrar e depositar, você concorda em seguir os termos. Estes
           Termos constituem o acordo integral entre você e nós com relação à sua
-          acesso e uso da FruitsMoney e substitui todos os outros acordos e
+          acesso e uso da FruitsCash e substitui todos os outros acordos e
           comunicações anteriores, sejam verbais ou escrito em relação ao assunto
           aqui tratado.
         </p>

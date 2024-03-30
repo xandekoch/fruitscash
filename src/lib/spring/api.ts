@@ -6,10 +6,15 @@ const baseUrl = backendConfig.backendUrl;
 const accessToken = getAccessToken();
 const userId = getUserIdFromSession();
 
-export const createAccount = async (email: string, password: string) => {
+export const createAccount = async (email: string, password: string, code?: string) => {
   try {
-    // Faz a requisição POST
-    const response = await fetch(`${baseUrl}/api/user/register`, {
+    let url = `${baseUrl}/api/user/register`;
+
+    if (code) {
+      url += `?code=${encodeURIComponent(code)}`;
+    }
+
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -29,11 +34,11 @@ export const createAccount = async (email: string, password: string) => {
     return data
   } catch (error) {
     console.error('Erro:', error);
-    // Adicione aqui a lógica para exibir uma mensagem de erro ao usuário
   }
 };
 
 export const login = async (username: string, password: string) => {
+  
   try {
     // const authString = btoa('myclientid:myclientsecret');
 

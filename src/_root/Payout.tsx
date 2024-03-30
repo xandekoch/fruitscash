@@ -23,7 +23,7 @@ const Payout = () => {
   ) => {
     event.preventDefault();
 
-    setIsPending(true); // Ativa o loader
+    setIsPending(true);
 
     const formData = new FormData(event.currentTarget);
     const fullName = formData.get("name") as string;
@@ -35,15 +35,15 @@ const Payout = () => {
     try {
       if (userId) {
         await sendPayout({ cpf, fullName, wdValue, userModelId: userId });
-        console.log("Saque realizado com sucesso");
-        toast.success("Saque realizado com sucesso!"); // Exibe toast de sucesso
+        console.log("Saque solicitado com sucesso!");
+        toast.success("Saque solicitado com sucesso!");
       }
     } catch (error) {
       console.error("Erro ao sacar:", error);
-      toast.error("Erro ao sacar"); // Exibe toast de erro
+      toast.error("Saldo insuficiente.");
     }
 
-    setIsPending(false); // Desativa o loader após a requisição
+    setIsPending(false);
   };
 
   return (

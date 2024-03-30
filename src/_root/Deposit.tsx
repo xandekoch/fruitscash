@@ -29,14 +29,15 @@ const Deposit = () => {
     try {
       if (userId) {
         await sendDeposit({ cpf, fullName, wdValue, userModelId: userId });
-        console.log('Depósito enviado com sucesso');
-        toast.success('Depósito enviado com sucesso!');
+        console.log('Depósito criado com sucesso');
+        toast.success('Depósito criado com sucesso!');
+        // Navigate('/pix');
       }
     } catch (error) {
-      console.error('Erro ao enviar o depósito:', error);
-      toast.error('Erro ao enviar o depósito');
+      console.error('Erro ao criar o depósito:');
+      toast.error('Erro ao criar o depósito');
 
-      setIsPending(false); // Desativa o loader após a requisição
+      setIsPending(false);
     }
   }
 

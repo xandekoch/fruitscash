@@ -37,7 +37,7 @@ const Faq = () => {
             />
             <h3>Como funciona?</h3>
             <div>
-              FruitsMoney é o mais novo jogo divertido e lucrativo da galera! Lembra
+              FruitsCash é o mais novo jogo divertido e lucrativo da galera! Lembra
               daquele joguinho de cortar as frutas que todo mundo era viciado? Ele
               voltou e agora dá para ganhar dinheiro com cada frutinha cortada, mas
               cuidado com as bombas para você garantir o seu prêmio. É super simples,
@@ -123,10 +123,10 @@ const Faq = () => {
                   várias frutas consecutivas, você receberá bônus multiplicadores.
                 </li>
               </ul>
-              <p>
-                Clique <a href="https://fruitsmoney.com/#">aqui</a> e acesse nosso
+              {/* <p>
+                Clique <a href="https://fruitscash.com.br/#">aqui</a> e acesse nosso
                 grupo no Telegram para participar de eventos exclusivos.{" "}
-              </p>
+              </p> */}
             </div>
           </div>
           <div className="question">
@@ -169,10 +169,10 @@ const Faq = () => {
                   prêmio do convite.
                 </li>
                 <li>
-                  Você não pode criar novas contas na FruitsMoney e se inscrever
+                  Você não pode criar novas contas na FruitsCash e se inscrever
                   através do seu próprio link para receber a recompensa. O programa
                   Indique um Amigo é feito para nossos jogadores convidarem amigos
-                  para a plataforma FruitsMoney. Qualquer outro uso deste programa é
+                  para a plataforma FruitsCash. Qualquer outro uso deste programa é
                   estritamente proibido.{" "}
                 </li>
               </ol>
@@ -339,13 +339,11 @@ const Faq = () => {
             className="faq-img"
             style={{ opacity: 0 }}
           />
-          <img
-            data-cfsrc="https://fruitsmoney.com/assets/images/60f8dbc385822360571c62e0_icon-256w.png"
-            
+          <img     
             width={234}
             alt=""
             className="faq-img _1"
-            src="https://fruitsmoney.com/assets/images/60f8dbc385822360571c62e0_icon-256w.png"
+            src="/assets/home/60f8dbc385822360571c62e0_icon-256w.png"
             style={{ opacity: 0 }}
           />
         </div>

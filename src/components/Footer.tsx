@@ -5,7 +5,7 @@ const Footer = () => {
           FRUITS <br />
         </div>
         <div className="domo-text purple">
-          MONEY <br />
+          CASH <br />
         </div>
         <div className="follow-test">© Copyright</div>
         <div className="follow-test">
@@ -13,9 +13,9 @@ const Footer = () => {
             <strong className="bold-white-link">Termos de uso</strong>
           </a>
         </div>
-        <div className="follow-test">contato@fruitsmoney.com</div>
+        <div className="follow-test">sac.fruitscash@gmail.com</div>
         <div className="follow-test">
-          <a href="home" target="_blank">
+          <a href="#" /* target="_blank" */>
             <img
               src="/assets/home/telegram.webp"
               width="40px"

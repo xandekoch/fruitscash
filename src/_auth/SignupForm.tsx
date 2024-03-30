@@ -15,12 +15,18 @@ const SignupForm = () => {
   const [isPending, setIsPending] = useState(false);
   const { authenticate } = useAuth();
   const navigate = useNavigate();
+  const code = new URLSearchParams(window.location.search).get('code');
+
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsPending(true);
     try {
-      await createAccount(email, password);
+      if (code) {
+        await createAccount(email, password, code);
+      } else {
+        await createAccount(email, password);
+      }
       const session = await login(email, password);
 
       // Verifica se a sessão foi obtida com sucesso

@@ -63,7 +63,7 @@ const Navbar = () => {
               alt=""
               className="image-6"
             />
-            <div className="nav-link logo">FruitsMoney</div>
+            <div className="nav-link logo">FruitsCash</div>
           </NavLink>
           <nav
             role="navigation"
@@ -142,7 +142,7 @@ const Navbar = () => {
             role="navigation"
             className="nav-menu w-nav-menu"
             style={{
-              transform: `translateY(${menuOpen ? '0px' : '-237px'}) translateX(0px)`, // Condicional para translateY
+              transform: `translateY(${menuOpen ? '0px' : '-237px'}) translateX(0px)`,
               transition: "transform 400ms ease 0s"
             }}
             data-nav-menu-open=""
@@ -155,7 +155,7 @@ const Navbar = () => {
                 style={{ maxWidth: "100%" }}
                 onClick={(e) => {
                   if (link.label === "Sair") {
-                    e.preventDefault(); // Evita o redirecionamento padrão
+                    e.preventDefault();
                     handleLogout();
                     navigate('/');
                   } else {

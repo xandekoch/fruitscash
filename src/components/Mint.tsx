@@ -4,16 +4,14 @@ const Mint = () => {
       <section id="mint" className="mint-section wf-section">
         <div className="minting-container w-container">
           <img
-            data-cfsrc="https://fruitsmoney.com/assets/images/money.png"
-            
             width={240}
             alt=""
             className="mint-card-image"
-            src="https://fruitsmoney.com/assets/images/money.png"
+            src="/assets/home/money.png"
           />
-          <h2>FruitsMoney</h2>
+          <h2>FruitsCash</h2>
           <p className="paragraph">
-            Bem-vindo ao mundo suculento e lucrativo de FruitsMoney, o joguinho que
+            Bem-vindo ao mundo suculento e lucrativo de FruitsCash, o joguinho que
             vai deixar você com água na boca e o bolso cheio! Prepare-se para uma
             experiência emocionante, onde suas habilidades de corte serão testadas e
             sua conta bancária pode crescer a cada fatia.{" "}

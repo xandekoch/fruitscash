@@ -4,7 +4,7 @@ import { backendConfig } from "../lib/spring/config";
 const Affiliate = () => {
   console.log('Affiliate')
   const userId = getUserIdFromSession();
-  const url = backendConfig.backendUrl;
+  const url = backendConfig.frontendUrl;
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)
@@ -86,13 +86,13 @@ const Affiliate = () => {
             </div>
             <div className="grid-box">
               <a
-                href="https://fruitsmoney.com/panel/e-wallet/payout"
+                href="payoutaffiliate"
                 className="primary-button w-button"
               >
                 Sacar saldo disponível
               </a>
               <a
-                href="https://wa.me/5511954895084?text=Preciso%20de%20ajuda%20no%20FruitsMoney!"
+                href="https://wa.me/5521970707070?text=Preciso%20de%20ajuda%20no%20FruitsCash!"
                 target="_blank"
                 className="primary-button dark w-button"
               >
@@ -100,14 +100,14 @@ const Affiliate = () => {
               </a>
             </div>
             <br />
-            <div className="grid-box">
+            {/* <div className="grid-box">
               <a
-                href="https://fruitsmoney.com/panel/affiliate#"
+                href="#hero"
                 className="primary-button dark w-button"
               >
                 Telegram
               </a>
-            </div>
+            </div> */}
           </div>
         </div>
       </section>

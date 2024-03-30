@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';/public/
+import { NavLink } from 'react-router-dom';
 import { Mint, Rarity, Faq } from '../components';
 
 const Home = () => {
@@ -12,7 +12,7 @@ const Home = () => {
               className="hero-heading"
             >
               FRUITS <br />
-              MONEY{" "}
+              CASH{" "}
             </h1>
           </div>
           <img
