@@ -105,7 +105,7 @@ const Payout = () => {
               </div>
             </div>
             <div className="">
-              <input
+              <button
                 type="submit"
                 id="pixgenerator"
                 className="primary-button w-button"
@@ -115,7 +115,7 @@ const Payout = () => {
                   {isPending && <Loader />}
                   Sacar via PIX
                 </div>
-              </ input>
+              </ button>
               <br />
               <br />
               <p>

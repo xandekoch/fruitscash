@@ -13,7 +13,8 @@ interface Session {
   token_type: string;
   expires_in: number;
   userId: string; 
-  issuedAt: string; // Adicionando a data de emissão (issuedAt) à interface Session
+  issuedAt: string;
+  isInfluencer: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -35,9 +36,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       // Decodifica o token JWT para obter o userId
       const decodedToken = decodeJwt(session.access_token);
       const userId = decodedToken.userId;
+      const isInfluencer = decodedToken.isInfluencer;
 
       // Adiciona o userId à sessão
       session.userId = userId;
+      session.isInfluencer = isInfluencer;
 
       setIsAuthenticated(true);
       localStorage.setItem('session', JSON.stringify(session));
@@ -85,13 +88,23 @@ export const getUserIdFromSession = () => {
   }
 };
 
+export const getIsInfluencerFromSession = () => {
+  const sessionString = localStorage.getItem('session');
+  if (sessionString) {
+    const session = JSON.parse(sessionString);
+    return session.IsInfluencer;
+  } else {
+    console.error('Sessão não encontrado')
+  }
+};
+
 export const getAccessToken = () => {
   const sessionString = localStorage.getItem('session');
   if (sessionString) {
     const session = JSON.parse(sessionString);
     return session.access_token;
   } else {
-    console.error('Token não encontrado')
+    console.error('Sessão não encontrado')
   }
 };
 

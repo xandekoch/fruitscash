@@ -3,7 +3,7 @@ import { Faq, Mint, Rarity } from '../components'
 import Game from './Game';
 import { getUserBalance, sendGameResult } from '../lib/spring/api';
 import Notification from '../components/Notification';
-import { getAccessToken, getUserIdFromSession } from '../context/AuthProvider';
+import { getAccessToken, getIsInfluencerFromSession, getUserIdFromSession } from '../context/AuthProvider';
 import { toast } from 'react-toastify';
 import Loader from '../components/Loader';
 
@@ -28,12 +28,13 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
   const [mode, setMode] = useState('default');
   const [testPayMode, settestPayMode] = useState('');
   const [isPending, setIsPending] = useState(false);
+  const isInfluencer = getIsInfluencerFromSession();
 
   useEffect(() => {
     if (userId) {
       getUserBalance(userId).then((balance) => {
         setBalance(balance);
-        if (balance === 0) {
+        if (balance === 0 && isInfluencer) {
           setMode('testAffiliate');
         } else {
           setMode('default');

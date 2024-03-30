@@ -138,7 +138,7 @@ const Deposit = () => {
               </button>
               <br />
               <br />
-              <input
+              <button
                 id="pixgenerator"
                 type="submit"
                 className="primary-button w-button"
@@ -148,7 +148,7 @@ const Deposit = () => {
                   {isPending && <Loader />}
                   Depositar via PIX
                 </div>
-              </input>
+              </button>
               <br />
               <br />
               <p>
