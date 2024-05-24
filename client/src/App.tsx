@@ -22,16 +22,16 @@ const App = () => {
 
   return (
     <main className='App'>
-      <Routes>     
+      <Routes>
         {!isAuthenticated ? (
           // Rotas públicas - login/cadastro
           <Route path='/' element={<AuthLayout />}>
-          <Route index element={<Home />} />
-          <Route path='/sign-up' element={<SignupForm />} />
-          <Route path='/sign-in' element={<SigninForm />} />
-          <Route path='/terms' element={<Terms />} />
-          <Route path='/recover-password' element={<RecoverPassword />} />
-        </Route>
+            <Route index element={<Home />} />
+            <Route path='/sign-up' element={<SignupForm />} />
+            <Route path='/sign-in' element={<SigninForm />} />
+            <Route path='/terms' element={<Terms />} />
+            <Route path='/recover-password' element={<RecoverPassword />} />
+          </Route>
         ) : (
           // Rotas privadas - apenas quando estiver logado
           <Route path='/' element={<RootLayout showNavbarAndFooter={showNavbarAndFooter} />}>
