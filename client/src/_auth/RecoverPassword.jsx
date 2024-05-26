@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { recoverPassword } from '../lib/spring/api';
+import { recoverPassword } from '../lib/node/authApi';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loader from '../components/Loader';
@@ -8,13 +8,13 @@ const RecoverPassword = () => {
   const [email, setEmail] = useState('');
   const [isPending, setIsPending] = useState(false);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     setIsPending(true);
     try {
-      const data = await recoverPassword(email);
+      const response = await recoverPassword(email);
 
-      if (data.ok) {
+      if (response.ok) {
         toast.success('Solicitação de recuperação de senha enviada com sucesso!');
       } else {
         toast.error('Erro ao enviar solicitação de recuperação de senha');

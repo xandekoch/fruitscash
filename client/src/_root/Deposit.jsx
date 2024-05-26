@@ -1,5 +1,4 @@
-import { sendDeposit } from '../lib/spring/api';
-import { getUserIdFromSession } from '../context/AuthProvider';
+import { useAuth } from '../context/AuthProvider';
 import { useState } from 'react';
 import Notification from '../components/Notification';
 import { toast } from 'react-toastify';
@@ -11,20 +10,20 @@ const Deposit = () => {
   const [valuedeposit, setValuedeposit] = useState('');
   const [isPending, setIsPending] = useState(false);
 
-  const handleDepositClick = (amount: string) => {
+  const handleDepositClick = (amount) => {
     setValuedeposit(amount);
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     setIsPending(true); // Ativa o loader
 
     const formData = new FormData(event.currentTarget);
-    const cpf = formData.get('cpf') as string;
-    const fullName = formData.get('name') as string;
-    const wdValue = parseFloat((formData.get('valuedeposit') as string).replace(',', '.'));
-    const userId = getUserIdFromSession();
+    const cpf = formData.get('cpf');
+    const fullName = formData.get('name');
+    const wdValue = parseFloat((formData.get('valuedeposit')).replace(',', '.'));
+    const userId = useAuth(user.userId);
 
     try {
       if (userId) {

@@ -1,26 +1,28 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import nodemailer from 'nodemailer';
 import User from '../models/User.js';
 
 export const register = async (req, res) => {
     try {
         const {
-            username,
             email,
             password,
+            code,
         } = req.body;
 
         const salt = await bcrypt.genSalt();
         const passwordHash = await bcrypt.hash(password, salt);
 
         const newUser = new User({
-            username,
             email,
             password: passwordHash,
         });
 
-        const savedUser = await newUser.save();
-        res.status(201).json(savedUser);
+        if(code) newUser.referrerUser = code;
+
+        await newUser.save();
+        res.status(201).json({message: 'Conta criada com sucesso.'});
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -28,32 +30,76 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
     try {
-        if (req.method === 'OPTIONS') { return res.status(200).json(({ body: "OK" })) }
-        const { usernameOrEmail, password } = req.body;
+        const { email, password } = req.body;
 
-        const user = await User.findOne({ email: usernameOrEmail });
+        const user = await User.findOne({ email: email });
 
         if (!user) return res.status(400).json({ msg: "User not found. " });
 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).json({ msg: "Invalid credentials. " });
 
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {expiresIn: '1h'});
+        const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET, { expiresIn: '12h' });
         delete user.password;
 
-        const { _id, email, name, balance, bonusBalance, isAdmin, isInfluencer } = user;
-        res.status(200).json({ user: { _id, username, email, name, verified, picturePath }, token });
+        const { _id, isAdmin, isInfluencer } = user;
+        res.status(200).json({ user: { _id, email, isAdmin, isInfluencer }, token });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 }
 
 /* RECOVER PASSWORD */
+const generateRandomPassword = (length = 8) => {
+    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+~`|}{[]:;?><,./-=';
+    let password = '';
+    for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * chars.length);
+        password += chars[randomIndex];
+    }
+    return password;
+};
+
+const sendEmail = async (email, subject, text) => {
+    const transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+            user: process.env.EMAIL_USERNAME,
+            pass: process.env.EMAIL_PASSWORD
+        }
+    });
+
+    const mailOptions = {
+        from: process.env.EMAIL_USERNAME,
+        to: email,
+        subject: subject,
+        text: text
+    };
+
+    await transporter.sendMail(mailOptions);
+};
+
 export const recoverPassword = async (req, res) => {
     try {
         const { email } = req.body;
 
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ error: 'Usuário não encontrado' });
+        }
+
+        const newPassword = generateRandomPassword();
+
+        const salt = await bcrypt.genSalt();
+        const newPasswordHash = await bcrypt.hash(newPassword, salt);
+
+        user.password = newPasswordHash;
+        await user.save();
+
+        await sendEmail(email, 'Recuperação de Senha', `Sua nova senha é: ${newPassword}`);
+
+        res.status(200).json({ message: 'Nova senha gerada e enviada por e-mail' });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
-}
+};

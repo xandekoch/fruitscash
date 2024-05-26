@@ -1,35 +1,33 @@
-import { getUserBalance, sendPayout } from "../lib/spring/api";
-import { getUserIdFromSession } from "../context/AuthProvider";
+import { getBalance } from "../lib/node/userApi";
+import { useAuth } from "../context/AuthProvider";
 import { useEffect, useState } from "react";
 import Loader from "../components/Loader";
 import { toast } from "react-toastify";
 
 const Payout = () => {
   console.log('Payout')
-  const userId = getUserIdFromSession();
-  const [balance, setBalance] = useState<number | null>(null);
+  const userId = useAuth(user.userId);
+  const [balance, setBalance] = useState(null);
   const [isPending, setIsPending] = useState(false);
 
   useEffect(() => {
     if (userId) {
-      getUserBalance(userId).then((balance) => {
+      getBalance(userId).then((balance) => {
         setBalance(balance);
       });
     }
   }, [Payout]);
 
-  const handlePayoutSubmit = async (
-    event: React.FormEvent<HTMLFormElement>
-  ) => {
+  const handlePayoutSubmit = async (event) => {
     event.preventDefault();
 
     setIsPending(true);
 
     const formData = new FormData(event.currentTarget);
-    const fullName = formData.get("name") as string;
-    const cpf = formData.get("pix") as string;
+    const fullName = formData.get("name");
+    const cpf = formData.get("pix");
     const wdValue = parseFloat(
-      (formData.get("value") as string).replace(",", ".")
+      (formData.get("value")).replace(",", ".")
     );
 
     try {

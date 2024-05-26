@@ -1,45 +1,36 @@
 import { useEffect, useState } from 'react';
-import { Faq, Mint, Rarity } from '../components'
+import { getAccessToken, useAuth } from '../context/AuthProvider';
 import Game from './Game';
-import { getUserBalance, sendGameResult } from '../lib/spring/api';
-import Notification from '../components/Notification';
-import { getAccessToken, getIsInfluencerFromSession, getUserIdFromSession } from '../context/AuthProvider';
-import { toast } from 'react-toastify';
+import { createBet, updateBet } from '../lib/node/betApi';
+import { Faq, Mint, Rarity } from '../components'
 import Loader from '../components/Loader';
+import Notification from '../components/Notification';
+import { toast } from 'react-toastify';
+import { getBalance } from '../lib/node/userApi';
 
-declare global {
-  interface Window {
-    ReceiveScore: (score: string) => void;
-  }
-}
-
-interface GameResult {
-  description: string;
-  score: number;
-}
-
-const Play = ({ setShowNavbarAndFooter }: any) => {
+const Play = ({ setShowNavbarAndFooter }) => {
   console.log('Play');
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [betAmount, setBetAmount] = useState(5);
-  const userId = getUserIdFromSession();
-  const [balance, setBalance] = useState<number | null>(null);
+  const { user: { userId, isInfluencer } } = useAuth();
+  const [balance, setBalance] = useState(0);
   const accessToken = getAccessToken();
   const [mode, setMode] = useState('default');
-  const [testPayMode, settestPayMode] = useState('');
+  const [testPayMode, setTestPayMode] = useState('');
+  const [betId, setBetId] = useState('')
   const [isPending, setIsPending] = useState(false);
-  const isInfluencer = getIsInfluencerFromSession();
 
   useEffect(() => {
     if (userId) {
-      setTimeout(() => {
-        getUserBalance(userId).then((balance) => {
-          setBalance(balance);
+      setTimeout(async () => {
+        await getBalance().then((response) => {
+          setBalance(response.balance + response.bonusBalance);
           if (balance === 0 || isInfluencer) {
             setMode('testAffiliate');
           } else {
             setMode('default');
           }
+          console.log('mode', mode)
         });
       }, 1000);
     }
@@ -47,7 +38,7 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
   
 
   // Recebe GAIN ou LOSS do resultado do jogo
-  window.ReceiveScore = (descriptionScore: string) => {
+  window.ReceiveScore = (descriptionScore) => {
     console.log("Score recebido:", descriptionScore);
     const [descriptionString, scoreString] = descriptionScore.split(';');
     const scoreFormatted = scoreString.replace(/\s/g, '').replace(',', '.');
@@ -55,8 +46,8 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
     const description = descriptionString.toUpperCase();
     console.log(description, score)
 
-    if (testPayMode === 'PAY') {
-      handleApi({ description, score });
+    if (testPayMode === 'PAY' && description === 'GAIN') {
+      handleApi({ score });
     }
 
     setTimeout(() => {
@@ -66,12 +57,13 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
   };
 
   // Recebe o PAY pra iniciar o jogo se tiver saldo
-  const handleSubmit = async ({ description, score }: GameResult) => {
+  const handleSubmit = async ({ betAmount }) => {
     setIsPending(true);
     try {
-      const success = await handleApi({ description, score });
+      const response = await createBet(betAmount);
+      setBetId(response.bet._id)
 
-      if (success) {
+      if (response) {
         toast.success("Iniciando o jogo");
         setIsFullscreen(true);
         setShowNavbarAndFooter(false);
@@ -86,9 +78,9 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
     setIsPending(false);
   };
 
-  const handleApi = async ({ description, score }: GameResult) => {
+  const handleApi = async ({ score }) => {
     try {
-      await sendGameResult(description, score);
+      await updateBet(betId, score);
       return true;
     } catch (error) {
       return false;
@@ -134,7 +126,7 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
               <a className="escudo">
                 <img src="/assets/play/trophy.gif" />
               </a>
-              <h2 onClick={() => handleApi({ description: "GAIN", score: 9 })}>Cortar Frutas</h2>
+              <h2 onClick={async () => { await createBet(9) }}>Cortar Frutas</h2>
               <p>
                 Cada fruta tem um valor pré determinado, ao corta-la você coleta seu
                 valor, e é melhor não deixar ela cair, #ficadica!
@@ -148,8 +140,8 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
 
                   if (balance !== null && betAmount <= balance) {
                     console.log(`Aposta: ${betAmount}, saldo: ${balance}`);
-                    settestPayMode('PAY');
-                    handleSubmit({ description: "PAY", score: betAmount });
+                    setTestPayMode('PAY');
+                    handleSubmit({ betAmount });
                   } else {
                     console.log('Saldo insuficiente');
                     toast.error("Saldo insuficiente");
@@ -204,7 +196,7 @@ const Play = ({ setShowNavbarAndFooter }: any) => {
                   <div className="">
                     <input
                       onClick={() => {
-                        settestPayMode('TEST');
+                        setTestPayMode('TEST');
                         handleFreeTrial();
                       }}
                       type="submit"

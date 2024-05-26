@@ -1,12 +1,12 @@
-import { getUserIdFromSession } from "../context/AuthProvider";
-import { backendConfig } from "../lib/spring/config";
+import {  useAuth } from "../context/AuthProvider";
+import { backendConfig } from "../lib/node/config";
 
 const Affiliate = () => {
   console.log('Affiliate')
-  const userId = getUserIdFromSession();
+  const userId = useAuth(user.userId);
   const url = backendConfig.frontendUrl;
 
-  const copyToClipboard = (text: string) => {
+  const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text)
       .then(() => {
         console.log('Texto copiado para a área de transferência:', text);

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Unity, useUnityContext } from "react-unity-webgl";
 
-const Game = ({ betAmount, mode }: {betAmount: number, mode: string}) => {
+const Game = ({ betAmount, mode }) => {
   const [isLandscape, setIsLandscape] = useState(
     window.innerWidth > window.innerHeight
   );

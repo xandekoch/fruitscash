@@ -5,6 +5,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import helmet from "helmet";
 import morgan from "morgan";
+import adminRoutes from "./routes/admin.js";
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
 import betRoutes from "./routes/bets.js";
@@ -29,6 +30,7 @@ app.use(cors({
 }));
 
 /* ROUTES */
+app.use("/admin", adminRoutes);
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/bets", betRoutes);

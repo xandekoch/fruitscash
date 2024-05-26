@@ -1,12 +1,3 @@
-declare global {
-  interface Window {
-    devtools: {
-      isOpen: boolean;
-    };
-  }
-}
-
-
 // Impedir ctrl+c na página
 document.addEventListener('keydown', function (event) {
   if (event.ctrlKey && (event.key === 'c' || event.key === 'C')) {

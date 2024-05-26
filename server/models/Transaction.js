@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-
 const TransactionSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -15,6 +14,11 @@ const TransactionSchema = new mongoose.Schema({
     operationAmount: {
         type: Number,
         required: true,
+    },
+    status: {
+        type: String,
+        enum: ['pending', 'concluded', 'rejected'],
+        default: 'pending',
     },
 }, { timestamps: true });
 

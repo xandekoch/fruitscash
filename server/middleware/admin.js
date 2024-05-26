@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-export const verifyToken = (req, res, next) => {
+export const isAdmin = (req, res, next) => {
     try {
         let token = req.headers["authorization"];
         
@@ -24,15 +24,22 @@ export const verifyToken = (req, res, next) => {
             return res.status(401).json({ error: "Token expirado" });
         }
 
-        const userId = decoded.id;''
+        const adminId = decoded.id;
         
-        if (req.params.userId !== userId) {
-            console.log(userId);
+        if (req.params.adminId !== adminId) {
+            console.log(adminId);
+            return res.status(403).json({ error: "Unauthorized" });
+        }
+
+        const isAdmin = decoded.isAdmin;
+        console.log('isAdmin', isAdmin)
+        
+        if (!isAdmin) {
             return res.status(403).json({ error: "Unauthorized" });
         }
 
         next();
     } catch (err) {
-        res.status(500).json({error: err.message});
+        res.status(500).json({error: "Token is not valid"});
     }
 }

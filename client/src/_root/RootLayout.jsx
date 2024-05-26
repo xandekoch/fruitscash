@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom'
 import { Footer, Navbar } from '../components';
 
-const RootLayout = ({ showNavbarAndFooter }: any) => {
+const RootLayout = ({ showNavbarAndFooter }) => {
   console.log('RootLayout')
   
   return (

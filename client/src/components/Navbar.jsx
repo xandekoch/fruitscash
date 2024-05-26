@@ -6,18 +6,18 @@ import { useAuth } from '../context/AuthProvider';
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, logout } = useAuth();
-  const navRef = useRef<HTMLDivElement>(null);
+  const { isAuthenticated, logout, user: { isAdmin } } = useAuth();
+  const navRef = useRef();
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     // Função para fechar a navbar quando clicar fora dela
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClickOutside = (event) => {
       if (
         navRef.current &&
         event.target &&
-        !navRef.current.contains(event.target as Node) &&
-        !((event.target as Element).closest('.menu-button'))
+        !navRef.current.contains(event.target) &&
+        !((event.target).closest('.menu-button'))
       ) {
         setMenuOpen(false);
       }
@@ -87,6 +87,14 @@ const Navbar = () => {
                 {link.label}
               </NavLink>
             ))}
+            <NavLink
+              to='/admin'
+              className="button nav w-button"
+              style={{background: '#2377d3'}}
+              onClick={toggleMenu}
+            >
+              Painel Admin
+            </NavLink>
             <NavLink
               to={isAuthenticated ? "/deposit" : "/sign-up"}
               className="button nav w-button"
@@ -166,14 +174,25 @@ const Navbar = () => {
                 {link.label}
               </NavLink>
             ))}
+            <div
+            style={{display: 'flex', justifyContent: 'center', gap: '20px'}}>
+            <NavLink
+              to='/admin'
+              className="button nav w-button"
+              style={{background: '#2377d3', margin: 0}}
+              onClick={toggleMenu}
+            >
+              Painel Admin
+            </NavLink>
             <NavLink
               to={isAuthenticated ? "/deposit" : "/sign-up"}
               className="button nav w-button"
+              style={{margin: 0}}
               onClick={toggleMenu}
             >
               {isAuthenticated ? "Depositar" : "Cadastrar"}
             </NavLink>
-
+            </div>
           </nav>
         </div>
       </div>

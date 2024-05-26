@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 
-const affiliateOperationSchema = new mongoose.Schema({
+const AffiliateOperationSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -23,5 +23,5 @@ const affiliateOperationSchema = new mongoose.Schema({
     },
 }, { timestamps: true });
 
-const affiliateOperation = mongoose.model('affiliateOperation', affiliateOperationSchema);
-export default affiliateOperation;
+const AffiliateOperation = mongoose.model('affiliateOperation', AffiliateOperationSchema);
+export default AffiliateOperation;

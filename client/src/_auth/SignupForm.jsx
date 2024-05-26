@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { createAccount, login } from '../lib/spring/api';
 import AdvPayment from '../components/AdvPayment';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthProvider';
+import { useAuth } from '../context/AuthProvider.jsx';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Loader from '../components/Loader';
+import Loader from '../components/Loader.jsx';
+import { register, login } from '../lib/node/authApi.js';
 
 const SignupForm = () => {
   console.log('SignupForm');
@@ -18,27 +18,23 @@ const SignupForm = () => {
   const code = new URLSearchParams(window.location.search).get('code');
 
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     setIsPending(true);
     try {
       if (code) {
-        await createAccount(email, password, code);
+        await register({ email, password, code });
       } else {
-        await createAccount(email, password);
+        await register({ email, password });
       }
-      const session = await login(email, password);
+      const session = await login({ email, password });
 
-      // Verifica se a sessão foi obtida com sucesso
       if (session) {
-        // Autentica o usuário localmente
         authenticate(session);
 
-        // Redireciona para a página de login
         navigate('/');
         toast.success('Cadastro realizado com sucesso');
       } else {
-        // Exibe uma mensagem de erro ao usuário
         console.error('Erro ao realizar o login');
         toast.error('Erro ao realizar o cadastro');
       }

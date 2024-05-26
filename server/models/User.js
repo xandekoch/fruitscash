@@ -61,7 +61,7 @@ const UserSchema = new mongoose.Schema({
     referrerUser: {
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'User',
-        default: '',
+        default: undefined,
     },
     isInfluencer: {
         type: Boolean,

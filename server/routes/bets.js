@@ -2,17 +2,15 @@ import Express from "express";
 import { verifyToken } from "../middleware/auth.js";
 import { 
     createBet,
-} from "../controllers/users.js";
+    updateBet
+} from "../controllers/bets.js";
 
 const router = Express.Router();
 
 /* CREATE */
-router.post("/createBet/:userId",verifyToken, createBet);
-
-/* READ */
+router.post('/createBet/:userId', verifyToken, createBet);
 
 /* UPDATE */
-
-/* DELETE */
+router.patch('/updateBet/:userId/:betId', verifyToken, updateBet)
 
 export default router;

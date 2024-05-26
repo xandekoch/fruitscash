@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { useAuth } from '../context/AuthProvider';
-import { login } from '../lib/spring/api';
+import { useAuth } from '../context/AuthProvider.jsx';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Loader from '../components/Loader';
+import Loader from '../components/Loader.jsx';
+import { login } from '../lib/node/authApi.js';
 
 const SigninForm = () => {
   console.log('SigninForm')
@@ -15,13 +15,13 @@ const SigninForm = () => {
   const { authenticate } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     setIsPending(true);
 
     try {
-      const session = await login(email, password);
+      const session = await login({ email, password });
 
       if (session) {
         authenticate(session);
