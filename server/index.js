@@ -23,19 +23,19 @@ app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 
 const allowedOrigins = [
-    '*',
+    'http://localhost:5173',
     process.env.CLIENT_URL,
-    'http://162.243.162.250',
-    'http://192.34.62.86',
-    'http://137.184.60.127',
-    'http://159.223.100.252',
-    'http://157.245.93.131',
-    'http://208.68.39.149'
+    'https://162.243.162.250',
+    'https://192.34.62.86',
+    'https://137.184.60.127',
+    'https://159.223.100.252',
+    'https://157.245.93.131',
+    'https://208.68.39.149'
 ];
 
 app.use(cors({
     origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes('*') || allowedOrigins.includes(origin)) {
+        if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);
         } else {
             callback(new Error('Not allowed by CORS'));
