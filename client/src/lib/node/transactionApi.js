@@ -15,10 +15,10 @@ const api = axios.create({
 axios.defaults.withCredentials = true;
 
 /* CREATE */
-export const createDeposit = async (operationAmount, cpf, name) => {
+export const generatePaymentCode = async (operationAmount, cpf, name) => {
     try {
         const userId = JSON.parse(localStorage.getItem('session'))?.user?._id || '';
-        const response = await api.post(`/transactions/createDeposit/${userId}`, {operationAmount, cpf, name});
+        const response = await api.post(`/transactions/generatePaymentCode/${userId}`, {operationAmount, cpf, name});
         return response.data;
     } catch (error) {
         throw new Error(error.response.data.error || 'Erro ao criar depósito.');

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import Notification from '../components/Notification';
 import { toast } from 'react-toastify';
 import Loader from '../components/Loader';
-import { createDeposit } from '../lib/node/transactionApi';
+import { generatePaymentCode } from '../lib/node/transactionApi';
 import Pix from '../components/Pix';
 
 const Deposit = () => {
@@ -33,7 +33,7 @@ const Deposit = () => {
 
     try {
       if (userId) {
-        const pixInfo = await createDeposit(operationAmount, cpf, name);
+        const pixInfo = await generatePaymentCode(operationAmount, cpf, name);
         setPixInfo(pixInfo);
         setPixInfo(prevPixInfo => ({
           ...prevPixInfo,

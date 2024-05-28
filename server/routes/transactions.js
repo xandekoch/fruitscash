@@ -11,8 +11,8 @@ import { generatePaymentCode, webhookPix } from "../middleware/suitPay.js";
 const router = Express.Router();
 
 /* CREATE */
-router.post("/createDeposit/:userId", verifyToken, generatePaymentCode);
-router.post("/webhookPix", webhookPix, createDeposit);
+router.post("/generatePaymentCode/:userId", verifyToken, generatePaymentCode);
+router.post("/createDeposit", webhookPix, createDeposit);
 
 router.post("/createWithdraw/:userId", verifyToken, createWithdraw);
 router.post("/createAffiliateWithdraw/:userId", verifyToken, createAffiliateWithdraw);

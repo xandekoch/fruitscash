@@ -25,7 +25,7 @@ export const generatePaymentCode = async (req, res) => {
             requestNumber: requestNumber,
             dueDate: dueDate,
             amount: operationAmount,
-            callbackUrl: `${process.env.SERVER_URL}/transactions/webhookPix`,
+            callbackUrl: `${process.env.SERVER_URL}/transactions/createDeposit`,
             client: {
                 name,
                 document: cpf,
@@ -36,10 +36,10 @@ export const generatePaymentCode = async (req, res) => {
         var config = {
             method: 'post',
             maxBodyLength: Infinity,
-            url: 'https://sandbox.ws.suitpay.app/api/v1/gateway/request-qrcode',
+            url: `${process.env.SUITPAY_URL}/api/v1/gateway/request-qrcode`,
             headers: {
-                'ci': 'testesandbox_1687443996536',
-                'cs': '5b7d6ed3407bc8c7efd45ac9d4c277004145afb96752e1252c2082d3211fe901177e09493c0d4f57b650d2b2fc1b062d'
+                'ci': process.env.SUITPAY_CLIENT_ID,
+                'cs': process.env.SUITPAY_CLIENT_SECRET
             },
             data: data
         };
@@ -47,6 +47,7 @@ export const generatePaymentCode = async (req, res) => {
         axios(config)
             .then(function (response) {
                 console.log(JSON.stringify(response.data));
+                console.log(data)
                 res.status(200).json(response.data);
             })
             .catch(function (error) {
@@ -74,6 +75,7 @@ export const webhookPix = async (req, res, next) => {
         const { statusTransaction, requestNumber, value, payerName, payerTaxId } = req.body;
 
         if (statusTransaction === 'PAID_OUT') {
+            console.log('paidou');
             // Expressão regular para encontrar o padrão "userId-N", onde N é um número com um ou mais dígitos
             const regex = /([a-zA-Z0-9]+)-\d+$/;
             const userIdMatch = requestNumber.match(regex);
@@ -86,10 +88,9 @@ export const webhookPix = async (req, res, next) => {
 
             next();
         } else {
-            res.status(200)
+            console.log('nao paidou');
+            res.status(200).end();
         }
-
-        next();
     } catch (err) {
         res.status(500).json({ error: "Erro ao processar webhook Pix" });
     }

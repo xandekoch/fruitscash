@@ -9,9 +9,11 @@ export const createDeposit = async (req, res) => {
     session.startTransaction();
 
     try {
+        console.log('createDeposit init')
         const { idTransaction, userId, operationAmount, cpf, name } = req.body;
         const operation = 'deposit';
         const status = 'concluded';
+
         console.log(idTransaction, userId, operationAmount, cpf, name)
 
         const newDeposit = new Transaction({
@@ -39,29 +41,29 @@ export const createDeposit = async (req, res) => {
         try {
             if (user.referrerUser) {
                 const referrer = await User.findById(user.referrerUser).session(session);
-    
+
                 if (!referrer) {
                     throw new Error('Referrer not found');
                 }
-    
+
                 const affiliateOperationAmount = operationAmount * process.env.CPA_PERCENTAGE;
-    
+
                 const newAffiliateOperation = new affiliateOperation({
                     userId: referrer._id,
                     referredUserId: user._id,
                     operation: 'cpa',
                     operationAmount: affiliateOperationAmount
                 });
-    
+
                 await newAffiliateOperation.save({ session });
-    
+
                 referrer.cpaBalance += affiliateOperationAmount;
                 referrer.affiliateOperations.push(newAffiliateOperation._id);
-    
+
                 await referrer.save({ session });
             }
         } catch (err) {
-            
+            console.log(err)
         }
 
         await user.save({ session });
@@ -69,8 +71,11 @@ export const createDeposit = async (req, res) => {
         await session.commitTransaction();
         session.endSession();
 
-        return res.status(200)
+        console.log('terminou a deposit session')
+
+        return res.status(200).json({ newDeposit })
     } catch (err) {
+        console.log(err.message)
         await session.abortTransaction();
         session.endSession();
         return res.status(500).json({ error: err.message });
@@ -136,7 +141,7 @@ export const createAffiliateWithdraw = async (req, res) => {
         if (!user) {
             throw new Error('User not found');
         }
-        
+
         let totalBalance = user.cpaBalance + user.revShareBalance;
         if (totalBalance < operationAmount) {
             throw new Error('Insufficient affiliate balance');
