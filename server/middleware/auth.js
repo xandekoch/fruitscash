@@ -27,7 +27,6 @@ export const verifyToken = (req, res, next) => {
         const userId = decoded.id;''
         
         if (req.params.userId !== userId) {
-            console.log(userId);
             return res.status(403).json({ error: "Unauthorized" });
         }
 

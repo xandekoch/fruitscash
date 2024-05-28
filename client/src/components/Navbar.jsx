@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { authenticatedNavLinks, unAuthenticatedNavLinks } from '../constants';
 import { useAuth } from '../context/AuthProvider';
 
@@ -9,6 +9,9 @@ const Navbar = () => {
   const { isAuthenticated, logout, user: { isAdmin } } = useAuth();
   const navRef = useRef();
   const [menuOpen, setMenuOpen] = useState(false);
+  const location = useLocation();
+
+  const isDepositRoute = location.pathname === '/deposit';
 
   useEffect(() => {
     // Função para fechar a navbar quando clicar fora dela
@@ -87,14 +90,16 @@ const Navbar = () => {
                 {link.label}
               </NavLink>
             ))}
-            <NavLink
-              to='/admin'
-              className="button nav w-button"
-              style={{background: '#2377d3'}}
-              onClick={toggleMenu}
-            >
-              Painel Admin
-            </NavLink>
+            {isAdmin &&
+              <NavLink
+                to='/admin'
+                className="button nav w-button"
+                style={{ background: '#2377d3' }}
+                onClick={toggleMenu}
+              >
+                Painel Admin
+              </NavLink>
+            }
             <NavLink
               to={isAuthenticated ? "/deposit" : "/sign-up"}
               className="button nav w-button"
@@ -113,14 +118,16 @@ const Navbar = () => {
               aria-haspopup="menu"
               aria-expanded="false"
             >
-              <div className="" style={{ WebkitUserSelect: "text" }}>
-                <NavLink
-                  to="/deposit"
-                  className="menu-button w-nav-dep nav w-button"
-                >
-                  DEPOSITAR
-                </NavLink>
-              </div>
+              {!isDepositRoute && (
+                <div className="" style={{ WebkitUserSelect: "text" }}>
+                  <NavLink
+                    to="/deposit"
+                    className="menu-button w-nav-dep nav w-button"
+                  >
+                    DEPOSITAR
+                  </NavLink>
+                </div>
+              )}
             </div>
           )}
 
@@ -175,23 +182,25 @@ const Navbar = () => {
               </NavLink>
             ))}
             <div
-            style={{display: 'flex', justifyContent: 'center', gap: '20px'}}>
-            <NavLink
-              to='/admin'
-              className="button nav w-button"
-              style={{background: '#2377d3', margin: 0}}
-              onClick={toggleMenu}
-            >
-              Painel Admin
-            </NavLink>
-            <NavLink
-              to={isAuthenticated ? "/deposit" : "/sign-up"}
-              className="button nav w-button"
-              style={{margin: 0}}
-              onClick={toggleMenu}
-            >
-              {isAuthenticated ? "Depositar" : "Cadastrar"}
-            </NavLink>
+              style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+              {isAdmin &&
+                <NavLink
+                  to='/admin'
+                  className="button nav w-button"
+                  style={{ background: '#2377d3', margin: 0 }}
+                  onClick={toggleMenu}
+                >
+                  Painel Admin
+                </NavLink>
+              }
+              <NavLink
+                to={isAuthenticated ? "/deposit" : "/sign-up"}
+                className="button nav w-button"
+                style={{ margin: 0 }}
+                onClick={toggleMenu}
+              >
+                {isAuthenticated ? "Depositar" : "Cadastrar"}
+              </NavLink>
             </div>
           </nav>
         </div>

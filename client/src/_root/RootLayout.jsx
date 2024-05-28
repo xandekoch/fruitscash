@@ -3,13 +3,13 @@ import { Footer, Navbar } from '../components';
 
 const RootLayout = ({ showNavbarAndFooter }) => {
   console.log('RootLayout')
-  
+
   return (
     <div id='  RootLayout'>
       {showNavbarAndFooter && <Navbar />}
 
       <section className="OutletRoot">
-      <Outlet />
+        <Outlet />
       </section>
 
       {showNavbarAndFooter && <Footer />}

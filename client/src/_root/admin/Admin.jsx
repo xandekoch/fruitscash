@@ -53,7 +53,7 @@ const Admin = () => {
             <ul>
                 {users.map(user => (
                     <li key={user._id}>
-                        {user.name} - Influenciador: {user.isInfluencer ? 'Sim' : 'Não'} - Admin: {user.isAdmin ? 'Sim' : 'Não'}
+                        {user.email} - Influenciador: {user.isInfluencer ? 'Sim' : 'Não'} - Admin: {user.isAdmin ? 'Sim' : 'Não'}
                         <button onClick={() => handleSetInfluencer(user._id)}>Definir como Influenciador</button>
                         <button onClick={() => handleSetBalance(user._id)}>Definir Saldo</button>
                     </li>

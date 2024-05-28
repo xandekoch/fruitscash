@@ -30,3 +30,13 @@ export const getBalance = async () => {
         throw new Error(error.response.data.error || 'Erro ao buscar saldo.');
     }
 };
+
+export const getAffiliateData = async () => {
+    try {
+        const userId = JSON.parse(localStorage.getItem('session'))?.user?._id || '';
+        const response = await api.get(`/users/getAffiliateData/${userId}`);
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response.data.error || 'Erro ao buscar dados de afiliado.');
+    }
+}

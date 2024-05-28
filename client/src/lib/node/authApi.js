@@ -33,7 +33,7 @@ export const login = async (userData) => {
 /* UPDATE */
 export const recoverPassword = async (email) => {
     try {
-        const response = await api.post(`/auth/recoverPassword/${email}`);
+        const response = await api.post('/auth/recoverPassword', {email});
         return response.data;
     } catch (error) {
         throw new Error(error.response.data.msg || 'Erro ao solicitar recuperação de senha');

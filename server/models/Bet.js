@@ -11,7 +11,15 @@ const BetSchema = new mongoose.Schema({
         enum: ['win', 'loss'],
         required: true,
     },
-    betAmount: {
+    betAmount: { // Sum of real and bonus
+        type: Number,
+        required: true,
+    },
+    realBetAmount: {
+        type: Number,
+        required: true,
+    },
+    bonusBetAmount: {
         type: Number,
         required: true,
     },

@@ -1,10 +1,22 @@
+import { useEffect, useState } from "react";
 import {  useAuth } from "../context/AuthProvider";
 import { backendConfig } from "../lib/node/config";
+import { getAffiliateData } from "../lib/node/userApi";
 
 const Affiliate = () => {
   console.log('Affiliate')
-  const userId = useAuth(user.userId);
-  const url = backendConfig.frontendUrl;
+  const { user: { userId } } = useAuth();
+  const baseUrl = backendConfig.frontendUrl;
+  const [affiliateData, setAffiliateData] = useState({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+        const affiliateData = await getAffiliateData();
+        setAffiliateData(affiliateData);
+    };
+
+    fetchData();
+}, []);
 
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text)
@@ -19,7 +31,7 @@ const Affiliate = () => {
   };
   
   const handleCopyLink = () => {
-    const affiliateLink = `https://${url}/user/register?code=${userId}`;
+    const affiliateLink = `${baseUrl}/sign-up?code=${userId}`;
     copyToClipboard(affiliateLink);
   };
   return (
@@ -39,7 +51,7 @@ const Affiliate = () => {
           </p>
           <p>
             Seu link de divulgação é: <br />
-            https://{url}/user/register?code={userId}
+            {baseUrl}/sign-up?code={userId}
           </p>
           <br />
           <button onClick={handleCopyLink} className="primary-button dark w-button">
@@ -55,38 +67,38 @@ const Affiliate = () => {
               </div>
             </div>
             <div className="rarity-row roboto-type">
-              <div className="rarity-number full">Saldo disponível: </div>
-              <div className="padded">0,00</div>
+              <div className="rarity-number full">Saldo Total: </div>
+              <div className="padded">R$ {affiliateData.cpaBalance + affiliateData.revShareBalance}</div>
             </div>
             <div className="w-layout-grid grid">
               <div>
                 <div className="rarity-row blue">
-                  <div className="rarity-number">Cadastro ativo</div>
-                  <div>R$0,00</div>
+                  <div className="rarity-number">CPA</div>
+                  <div>R$ {affiliateData.cpaBalance}</div>
                 </div>
                 <div className="rarity-row">
-                  <div className="rarity-number">Recorrência</div>
-                  <div>R$0,00</div>
+                  <div className="rarity-number">Revenue Share</div>
+                  <div>R$ {affiliateData.revShareBalance}</div>
                 </div>
               </div>
               <div>
                 <div className="rarity-row blue">
                   <div className="rarity-number">Cadastros ativos</div>
-                  <div>0 cadastros</div>
+                  <div>{affiliateData.referredUsers} cadastros</div>
                 </div>
                 <div className="rarity-row">
-                  <div className="rarity-number">Valor por ativo</div>
-                  <div>R$ 18.00</div>
+                  <div className="rarity-number">% CPA</div>
+                  <div>10%</div>
                 </div>
                 <div className="rarity-row blue">
-                  <div className="rarity-number">% de Recorrência</div>
-                  <div>10.00%</div>
+                  <div className="rarity-number">% Revenue Share</div>
+                  <div>10%</div>
                 </div>
               </div>
             </div>
             <div className="grid-box">
               <a
-                href="payoutaffiliate"
+                href="payout-affiliate"
                 className="primary-button w-button"
               >
                 Sacar saldo disponível

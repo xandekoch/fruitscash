@@ -3,17 +3,23 @@ import { verifyToken } from "../middleware/auth.js";
 import { 
     createDeposit,
     createWithdraw,
-    createAffiliateWithdraw
+    createAffiliateWithdraw,
+    getWithdrawals,
 } from "../controllers/transactions.js";
+import { generatePaymentCode, webhookPix } from "../middleware/suitPay.js";
 
 const router = Express.Router();
 
 /* CREATE */
-router.post("/createDeposit/:userId", verifyToken, createDeposit);
+router.post("/createDeposit/:userId", verifyToken, generatePaymentCode);
+router.post("/webhookPix", webhookPix, createDeposit);
+
 router.post("/createWithdraw/:userId", verifyToken, createWithdraw);
 router.post("/createAffiliateWithdraw/:userId", verifyToken, createAffiliateWithdraw);
 
+
 /* READ */
+router.get("/getWithdrawals/:userId", verifyToken, getWithdrawals);
 
 /* UPDATE */
 

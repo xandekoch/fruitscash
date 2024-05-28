@@ -1,10 +1,23 @@
 import mongoose from "mongoose";
 
 const TransactionSchema = new mongoose.Schema({
+    suitPayTransactionId: {
+        type: String,
+        default: '',
+        unique: true,
+    },
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true,
+    },
+    name: {
+        type: String,
+        default: '',
+    },
+    cpf: {
+        type: String,
+        default: '',
     },
     operation: {
         type: String,

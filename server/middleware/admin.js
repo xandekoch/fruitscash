@@ -28,14 +28,14 @@ export const isAdmin = (req, res, next) => {
         
         if (req.params.adminId !== adminId) {
             console.log(adminId);
-            return res.status(403).json({ error: "Unauthorized" });
+            return res.status(403).json({ error: "Unauthorized: User is not the same" });
         }
 
         const isAdmin = decoded.isAdmin;
         console.log('isAdmin', isAdmin)
         
         if (!isAdmin) {
-            return res.status(403).json({ error: "Unauthorized" });
+            return res.status(403).json({ error: "Unauthorized: User is not an Admin" });
         }
 
         next();

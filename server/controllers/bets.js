@@ -14,6 +14,10 @@ export const createBet = async (req, res) => {
         const { betAmount } = req.body;
         const returnedAmount = 0;
         const outcomeAmount = returnedAmount - betAmount;
+        let isBonus = 'balance';
+        let userBalance = 0; // just to save the balance in case of hybrid bets
+        let remainingBetAmount = 0;
+        let bet = 0;
 
         const user = await User.findById(userId).session(session);
         if (!user) {
@@ -27,15 +31,29 @@ export const createBet = async (req, res) => {
         }
 
         // Deduct betAmount from bonusBalance first, then from balance if needed
-        if (user.bonusBalance >= betAmount) {
+        if (user.balance >= betAmount) {
+            user.balance -= betAmount;
+
+        } else if (user.balance === 0) {
+            isBonus = 'bonus';
             user.bonusBalance -= betAmount;
         } else {
-            const remainingBetAmount = betAmount - user.bonusBalance;
-            user.bonusBalance = 0;
-            user.balance -= remainingBetAmount;
+            isBonus = 'hybrid';
+            remainingBetAmount = betAmount - user.balance;
+            userBalance = user.balance;
+            user.balance = 0;
+            user.bonusBalance -= remainingBetAmount;
         }
 
-        const bet = new Bet({ userId, betAmount, result: 'loss', returnedAmount, outcomeAmount });
+        if (isBonus === 'balance') {
+            bet = new Bet({ userId, betAmount, realBetAmount: betAmount, bonusBetAmount: 0, result: 'loss', returnedAmount, outcomeAmount });
+        } else if (isBonus === 'hybrid') {
+            bet = new Bet({ userId, betAmount, realBetAmount: userBalance, bonusBetAmount: remainingBetAmount, result: 'loss', returnedAmount, outcomeAmount });
+        } else if (isBonus === 'bonus') {
+            bet = new Bet({ userId, betAmount, realBetAmount: 0, bonusBetAmount: betAmount, result: 'loss', returnedAmount, outcomeAmount });
+        }
+
+
         await bet.save({ session });
 
         user.bets.push(bet._id);
@@ -44,39 +62,11 @@ export const createBet = async (req, res) => {
         await session.commitTransaction();
         res.status(201).json({ bet });
 
-        // Schedule affiliate operation to run after 15 minutes
-        schedule.scheduleJob(bet._id.toString(), new Date(Date.now() + 15 * 60000), async () => {
-            const session = await mongoose.startSession();
-            session.startTransaction();
-            try {
-                const updatedBet = await Bet.findById(bet._id).session(session);
-                if (updatedBet.result === 'loss') {
-                    const referrerUser = await User.findById(user.referrerUser).session(session);
-                    if (referrerUser) {
-                        const operationAmount = betAmount * 0.1;
-                        const newAffiliateOperation = new AffiliateOperation({
-                            userId: referrerUser._id,
-                            referredUserId: userId,
-                            operation: 'revShare',
-                            operationAmount,
-                        });
-
-                        await newAffiliateOperation.save({ session });
-
-                        referrerUser.affiliateBalance += operationAmount;
-                        referrerUser.affiliateOperations.push(newAffiliateOperation._id);
-                        await referrerUser.save({ session });
-
-                        await session.commitTransaction();
-                    }
-                }
-            } catch (error) {
-                await session.abortTransaction();
-                console.error('Error executing scheduled affiliate operation:', error);
-            } finally {
-                session.endSession();
-            }
-        });
+        if (isBonus === 'hybrid') {
+            scheduleAffiliate(bet, user, betAmount = userBalance, userId);
+        } else if (isBonus === 'balance') {
+            scheduleAffiliate(bet, user, betAmount, userId);
+        }
 
     } catch (err) {
         await session.abortTransaction();
@@ -84,47 +74,88 @@ export const createBet = async (req, res) => {
     } finally {
         session.endSession();
     }
+}
+
+const scheduleAffiliate = async (bet, user, betAmount, userId) => {
+    const scheduledTime = new Date(Date.now() + 1 * 15 * 1000);
+    schedule.scheduleJob(scheduledTime, async () => {
+        console.log('init')
+        const session = await mongoose.startSession();
+        session.startTransaction();
+        console.log('começou a transação')
+        try {
+            const updatedBet = await Bet.findById(bet._id).session(session);
+            console.log('bet: ', updatedBet)
+            console.log('bet.result: ', updatedBet.result)
+            if (updatedBet.result === 'loss') {
+                console.log('deu loss')
+                const referrerUser = await User.findById(user.referrerUser).session(session);
+                if (referrerUser) {
+                    const operationAmount = betAmount * process.env.REVSHARE_PERCENTAGE;
+                    const newAffiliateOperation = new AffiliateOperation({
+                        userId: referrerUser._id,
+                        referredUserId: userId,
+                        operation: 'revShare',
+                        operationAmount,
+                    });
+
+                    await newAffiliateOperation.save({ session });
+
+                    referrerUser.revShareBalance += operationAmount;
+                    referrerUser.affiliateOperations.push(newAffiliateOperation._id);
+                    await referrerUser.save({ session });
+
+                    await session.commitTransaction();
+                }
+            }
+        } catch (error) {
+            await session.abortTransaction();
+            console.error('Error executing scheduled affiliate operation:', error);
+        } finally {
+            session.endSession();
+        }
+    })
 }
 
 /* UPDATE */
 export const updateBet = async (req, res) => {
-    const session = await mongoose.startSession();
-    session.startTransaction();
+        const session = await mongoose.startSession();
+        session.startTransaction();
 
-    try {
-        const { userId, betId } = req.params;
-        const { score } = req.body;
-        const returnedAmount = score;
+        try {
+            const { userId, betId } = req.params;
+            const { score } = req.body;
+            const returnedAmount = score;
 
-        const bet = await Bet.findById(betId).select('betAmount').session(session);
+            const bet = await Bet.findById(betId).select('betAmount').session(session);
 
-        if (!bet) {
-            return res.status(404).json({ error: 'Aposta não encontrada' });
+            if (!bet) {
+                return res.status(404).json({ error: 'Aposta não encontrada' });
+            }
+
+            const betAmount = bet.betAmount;
+            const outcomeAmount = returnedAmount - betAmount;
+
+            bet.result = 'win';
+            bet.returnedAmount = returnedAmount;
+            bet.outcomeAmount = outcomeAmount;
+
+            await bet.save({ session });
+
+            const user = await User.findById(userId).session(session);
+            if (!user) {
+                throw new Error('User not found');
+            }
+
+            user.balance += score;
+            await user.save({ session });
+
+            await session.commitTransaction();
+            res.status(201).json({ bet });
+        } catch (err) {
+            await session.abortTransaction();
+            res.status(500).json({ error: err.message });
+        } finally {
+            session.endSession();
         }
-
-        const betAmount = bet.betAmount;
-        const outcomeAmount = returnedAmount - betAmount;
-
-        bet.result = 'win';
-        bet.returnedAmount = returnedAmount;
-        bet.outcomeAmount = outcomeAmount;
-
-        await bet.save({ session });
-
-        const user = await User.findById(userId).session(session);
-        if (!user) {
-            throw new Error('User not found');
-        }
-
-        user.balance += score;
-        await user.save({ session });
-
-        await session.commitTransaction();
-        res.status(201).json({ bet });
-    } catch (err) {
-        await session.abortTransaction();
-        res.status(500).json({ error: err.message });
-    } finally {
-        session.endSession();
     }
-}

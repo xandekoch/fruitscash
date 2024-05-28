@@ -3,12 +3,16 @@ import { useState } from 'react';
 import Notification from '../components/Notification';
 import { toast } from 'react-toastify';
 import Loader from '../components/Loader';
+import { createDeposit } from '../lib/node/transactionApi';
+import Pix from '../components/Pix';
 
 const Deposit = () => {
   console.log('Deposit');
-
+  const { user: { userId } } = useAuth();
   const [valuedeposit, setValuedeposit] = useState('');
   const [isPending, setIsPending] = useState(false);
+  const [isPix, setIsPix] = useState(false);
+  const [pixInfo, setPixInfo] = useState({});
 
   const handleDepositClick = (amount) => {
     setValuedeposit(amount);
@@ -17,20 +21,28 @@ const Deposit = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    setIsPending(true); // Ativa o loader
+    setIsPending(true);
 
     const formData = new FormData(event.currentTarget);
-    const cpf = formData.get('cpf');
-    const fullName = formData.get('name');
-    const wdValue = parseFloat((formData.get('valuedeposit')).replace(',', '.'));
-    const userId = useAuth(user.userId);
+    const operationAmount = parseFloat(
+      (formData.get("valuedeposit")).replace(",", ".")
+    );
+    const cpf = formData.get("cpf");
+    const name = formData.get("name");
+    console.log(cpf, name, operationAmount)
 
     try {
       if (userId) {
-        await sendDeposit({ cpf, fullName, wdValue, userModelId: userId });
+        const pixInfo = await createDeposit(operationAmount, cpf, name);
+        setPixInfo(pixInfo);
+        setPixInfo(prevPixInfo => ({
+          ...prevPixInfo,
+          paymentValue: operationAmount
+        }));
         console.log('Depósito criado com sucesso');
-        toast.success('Depósito criado com sucesso!');
-        // Navigate('/pix');
+        toast.success('Finalize seu pagamento!');
+        setIsPending(false);
+        setIsPix(true);
       }
     } catch (error) {
       console.error('Erro ao criar o depósito:');
@@ -43,121 +55,125 @@ const Deposit = () => {
   return (
     <>
       <section id="hero" className="hero-section dark wf-section">
-        <div className="minting-container w-container">
-          <img
-            src="/assets/deposit/deposit.gif"
-            width={240}
-            alt="Roboto #6340"
-            className="mint-card-image"
-          />
-          <h2>Depósito</h2>
-          <p>PIX: depósitos instantâneos com uma pitada de diversão e muita praticidade.</p>
-          <form id="f-eWallet-payout" onSubmit={handleSubmit} method="post">
-            <div className="properties">
-              <h4 className="rarity-heading">Nome</h4>
-              <div className="rarity-row roboto-type2">
-                <input
-                  type="text"
-                  className="large-input-field w-input"
-                  maxLength={256}
-                  name="name"
-                  id="name"
-                  placeholder="Seu Nome completo"
-                  required
-                />
-              </div>
-              <h4 className="rarity-heading">CPF</h4>
-              <div className="rarity-row roboto-type2">
-                <input
-                  type="text"
-                  className="large-input-field w-input cpf-mask"
-                  maxLength={14}
-                  name="cpf"
-                  id="cpf"
-                  placeholder="Seu número de CPF"
-                  required
-                />
-              </div>
-              <h4 className="rarity-heading">Valor para depósito</h4>
-              <div className="rarity-row roboto-type2">
-                <input
-                  type="text"
-                  className="large-input-field w-input money-mask"
-                  maxLength={256}
-                  name="valuedeposit"
-                  id="valuedeposit"
-                  placeholder="Depósito mínimo de R$20,00"
-                  value={valuedeposit}
-                  onChange={(e) => setValuedeposit(e.target.value)}
-                  required
-                />
-              </div>
-            </div>
-            <div className="">
-              <button
-                type="button"
-                className="button nav w-button"
-                style={{ width: "45%" }}
-                onClick={() => handleDepositClick("20")}
-              >
-                DEPOSITAR R$20
-                <br />
-                <span style={{ color: "yellow" }}>(Ganhe + R$20)</span>
-              </button>
-              <button
-                type="button"
-                className="button nav w-button"
-                style={{ width: "45%" }}
-                onClick={() => handleDepositClick("30")}
-              >
-                DEPOSITAR R$30
-                <br />
-                <span style={{ color: "yellow" }}>(Ganhe + R$30)</span>
-              </button>
-              <br />
-              <br />
-              <button
-                type="button"
-                className="button nav w-button"
-                style={{ width: "45%" }}
-                onClick={() => handleDepositClick("50")}
-              >
-                DEPOSITAR R$50
-                <br />
-                <span style={{ color: "yellow" }}>(Ganhe + R$50)</span>
-              </button>
-              <button
-                type="button"
-                className="button nav w-button"
-                style={{ width: "45%" }}
-                onClick={() => handleDepositClick("100")}
-              >
-                DEPOSITAR R$100
-                <br />
-                <span style={{ color: "yellow" }}>(Ganhe + R$100)</span>
-              </button>
-              <br />
-              <br />
-              <button
-                id="pixgenerator"
-                type="submit"
-                className="primary-button w-button"
-                disabled={isPending}
-              >
-                <div style={{ display: 'flex', flexDirection: 'row', gap: "10px", alignItems: "center" }}>
-                  {isPending && <Loader />}
-                  Depositar via PIX
+        {!isPix ? (
+          <div className="minting-container w-container">
+            <img
+              src="/assets/deposit/deposit.gif"
+              width={240}
+              alt="Roboto #6340"
+              className="mint-card-image"
+            />
+            <h2>Depósito</h2>
+            <p>PIX: depósitos instantâneos com uma pitada de diversão e muita praticidade.</p>
+            <form id="f-eWallet-payout" onSubmit={handleSubmit} method="post">
+              <div className="properties">
+                <h4 className="rarity-heading">Nome</h4>
+                <div className="rarity-row roboto-type2">
+                  <input
+                    type="text"
+                    className="large-input-field w-input"
+                    maxLength={256}
+                    name="name"
+                    id="name"
+                    placeholder="Seu Nome completo"
+                    required
+                  />
                 </div>
-              </button>
-              <br />
-              <br />
-              <p>
-                Ao depositar você concorda com os
-                <a href="/terms"> termos de serviço</a>.
-              </p>
-            </div>
-          </form>
-        </div>
+                <h4 className="rarity-heading">CPF</h4>
+                <div className="rarity-row roboto-type2">
+                  <input
+                    type="text"
+                    className="large-input-field w-input cpf-mask"
+                    maxLength={14}
+                    name="cpf"
+                    id="cpf"
+                    placeholder="Seu número de CPF"
+                    required
+                  />
+                </div>
+                <h4 className="rarity-heading">Valor para depósito</h4>
+                <div className="rarity-row roboto-type2">
+                  <input
+                    type="text"
+                    className="large-input-field w-input money-mask"
+                    maxLength={256}
+                    name="valuedeposit"
+                    id="valuedeposit"
+                    placeholder="Depósito mínimo de R$20,00"
+                    value={valuedeposit}
+                    onChange={(e) => setValuedeposit(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
+              <div className="">
+                <button
+                  type="button"
+                  className="button nav w-button"
+                  style={{ width: "45%" }}
+                  onClick={() => handleDepositClick("20")}
+                >
+                  DEPOSITAR R$20
+                  <br />
+                  <span style={{ color: "yellow" }}>(Ganhe + R$20)</span>
+                </button>
+                <button
+                  type="button"
+                  className="button nav w-button"
+                  style={{ width: "45%" }}
+                  onClick={() => handleDepositClick("30")}
+                >
+                  DEPOSITAR R$30
+                  <br />
+                  <span style={{ color: "yellow" }}>(Ganhe + R$30)</span>
+                </button>
+                <br />
+                <br />
+                <button
+                  type="button"
+                  className="button nav w-button"
+                  style={{ width: "45%" }}
+                  onClick={() => handleDepositClick("50")}
+                >
+                  DEPOSITAR R$50
+                  <br />
+                  <span style={{ color: "yellow" }}>(Ganhe + R$50)</span>
+                </button>
+                <button
+                  type="button"
+                  className="button nav w-button"
+                  style={{ width: "45%" }}
+                  onClick={() => handleDepositClick("100")}
+                >
+                  DEPOSITAR R$100
+                  <br />
+                  <span style={{ color: "yellow" }}>(Ganhe + R$100)</span>
+                </button>
+                <br />
+                <br />
+                <button
+                  id="pixgenerator"
+                  type="submit"
+                  className="primary-button w-button"
+                  disabled={isPending}
+                >
+                  <div style={{ display: 'flex', flexDirection: 'row', gap: "10px", alignItems: "center" }}>
+                    {isPending && <Loader />}
+                    Depositar via PIX
+                  </div>
+                </button>
+                <br />
+                <br />
+                <p>
+                  Ao depositar você concorda com os
+                  <a href="/terms"> termos de serviço</a>.
+                </p>
+              </div>
+            </form>
+          </div>
+        ) : (
+          <Pix pixInfo={pixInfo} />
+        )}
       </section>
 
       <div id="about" className="comic-book white wf-section">

@@ -9,6 +9,23 @@ body {
   margin: 0
 }
 
+.table {
+  font-size: 12px;
+  border-collapse: collapse; /* Junta as bordas das células */
+  width: 100%; /* Largura total da tabela */
+}
+
+.table th, .table td {
+  border: 1px solid #000000;
+  padding: 3px;
+  text-align: center;
+}
+
+.table th {
+  background-color: #fe1f4f;
+  color: #fff;
+}
+
 article,
 aside,
 details,

@@ -3,20 +3,26 @@ import { useAuth } from "../context/AuthProvider";
 import { useEffect, useState } from "react";
 import Loader from "../components/Loader";
 import { toast } from "react-toastify";
+import { createWithdraw, getWithdrawals } from "../lib/node/transactionApi";
 
 const Payout = () => {
   console.log('Payout')
-  const userId = useAuth(user.userId);
-  const [balance, setBalance] = useState(null);
+  const { user: { userId } } = useAuth();
+  const [balance, setBalance] = useState({});
   const [isPending, setIsPending] = useState(false);
+  const [withdrawals, setwithdrawals] = useState([])
 
   useEffect(() => {
-    if (userId) {
-      getBalance(userId).then((balance) => {
-        setBalance(balance);
-      });
-    }
-  }, [Payout]);
+    const fetchData = async () => {
+      const balance = await getBalance();
+      setBalance(balance);
+
+      const withdrawals = await getWithdrawals('withdraw');
+      setwithdrawals(withdrawals);
+    };
+
+    fetchData();
+  }, []);
 
   const handlePayoutSubmit = async (event) => {
     event.preventDefault();
@@ -24,15 +30,15 @@ const Payout = () => {
     setIsPending(true);
 
     const formData = new FormData(event.currentTarget);
-    const fullName = formData.get("name");
-    const cpf = formData.get("pix");
-    const wdValue = parseFloat(
+    const operationAmount = parseFloat(
       (formData.get("value")).replace(",", ".")
     );
+    const cpf = formData.get("pix");
+    const name = formData.get("name");
 
     try {
       if (userId) {
-        await sendPayout({ cpf, fullName, wdValue, userModelId: userId });
+        await createWithdraw(operationAmount, cpf, name);
         console.log("Saque solicitado com sucesso!");
         toast.success("Saque solicitado com sucesso!");
       }
@@ -89,7 +95,9 @@ const Payout = () => {
                 />
               </div>
               <h4 className=" rarity-heading">
-                Valor para saque (SALDO: R$<b className="saldo"> {balance} </b>)
+                Valor:<br />
+                (SALDO BÔNUS: R$ <b className="saldo"> {balance.bonusBalance}</b>)<br />
+                (SALDO REAL: R$<b className="saldo"> {balance.balance}</b>)
               </h4>
               <div className="rarity-row roboto-type2">
                 <input
@@ -147,14 +155,24 @@ const Payout = () => {
                   <table className="table data table-striped table-hover">
                     <thead>
                       <tr>
-                        <th className="text-center">Nº Saque</th>
-                        <th className="text-center">Data</th>
-                        <th className="text-center">Destino</th>
-                        <th className="text-center">Valor</th>
-                        <th className="text-center">Status</th>
+                        <th className="thTable">Nº</th>
+                        <th className="thTable">Data</th>
+                        <th className="thTable">Destino</th>
+                        <th className="thTable">Valor</th>
+                        <th className="thTable">Status</th>
                       </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody>
+                      {withdrawals.map((withdrawal, index) => (
+                        <tr key={index}>
+                          <td className="tdTable">{index + 1}</td>
+                          <td className="tdTable">{new Date(withdrawal.createdAt).toLocaleDateString()}</td>
+                          <td className="tdTable">{withdrawal.cpf}</td>
+                          <td className="tdTable">{withdrawal.operationAmount}</td>
+                          <td className="tdTable">{withdrawal.status}</td>
+                        </tr>
+                      ))}
+                    </tbody>
                   </table>
                 </div>
               </div>

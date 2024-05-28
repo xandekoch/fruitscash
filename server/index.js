@@ -22,12 +22,30 @@ app.use(morgan("combined"));
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 
+const allowedOrigins = [
+    '*',
+    process.env.CLIENT_URL,
+    'http://162.243.162.250',
+    'http://192.34.62.86',
+    'http://137.184.60.127',
+    'http://159.223.100.252',
+    'http://157.245.93.131',
+    'http://208.68.39.149'
+];
+
 app.use(cors({
-    origin: ['http://localhost:5173', process.env.CLIENT_URL],
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes('*') || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     credentials: true,
     optionsSuccessStatus: 200
 }));
+
 
 /* ROUTES */
 app.use("/admin", adminRoutes);
@@ -39,7 +57,7 @@ app.use("/affiliateOperations", affiliateOperationRoutes);
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 6001;
-mongoose.connect(process.env.MONGO_URL, {dbName: 'fruitscash'}).then(() => {
+mongoose.connect(process.env.MONGO_URL, { dbName: 'fruitscash' }).then(() => {
     console.log("Connected to MongoDB");
     app.listen(PORT, () => {
         console.log(`Server running on port ${PORT}`);

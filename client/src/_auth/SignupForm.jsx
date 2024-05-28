@@ -15,7 +15,7 @@ const SignupForm = () => {
   const [isPending, setIsPending] = useState(false);
   const { authenticate } = useAuth();
   const navigate = useNavigate();
-  const code = new URLSearchParams(window.location.search).get('code');
+  const code = localStorage.getItem('code') || '';
 
 
   const handleSubmit = async (event) => {

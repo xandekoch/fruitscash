@@ -34,7 +34,11 @@ const UserSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
-    affiliateBalance: {
+    cpaBalance: {
+        type: Number,
+        default: 0,
+    },
+    revShareBalance: {
         type: Number,
         default: 0,
     },
@@ -59,7 +63,7 @@ const UserSchema = new mongoose.Schema({
         default: [],
     },
     referrerUser: {
-        type: [mongoose.Schema.Types.ObjectId],
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         default: undefined,
     },

@@ -9,13 +9,16 @@ export const createDeposit = async (req, res) => {
     session.startTransaction();
 
     try {
-        const { userId } = req.params;
-        const { operationAmount } = req.body;
+        const { idTransaction, userId, operationAmount, cpf, name } = req.body;
         const operation = 'deposit';
         const status = 'concluded';
+        console.log(idTransaction, userId, operationAmount, cpf, name)
 
         const newDeposit = new Transaction({
+            suitPayTransactionId: idTransaction,
             userId,
+            name: name,
+            cpf: cpf,
             operation,
             operationAmount,
             status
@@ -33,28 +36,32 @@ export const createDeposit = async (req, res) => {
         user.bonusBalance += operationAmount;
         user.transactions.push(newDeposit._id);
 
-        if (user.referrerId) {
-            const referrer = await User.findById(user.referrerId).session(session);
-
-            if (!referrer) {
-                throw new Error('Referrer not found');
+        try {
+            if (user.referrerUser) {
+                const referrer = await User.findById(user.referrerUser).session(session);
+    
+                if (!referrer) {
+                    throw new Error('Referrer not found');
+                }
+    
+                const affiliateOperationAmount = operationAmount * process.env.CPA_PERCENTAGE;
+    
+                const newAffiliateOperation = new affiliateOperation({
+                    userId: referrer._id,
+                    referredUserId: user._id,
+                    operation: 'cpa',
+                    operationAmount: affiliateOperationAmount
+                });
+    
+                await newAffiliateOperation.save({ session });
+    
+                referrer.cpaBalance += affiliateOperationAmount;
+                referrer.affiliateOperations.push(newAffiliateOperation._id);
+    
+                await referrer.save({ session });
             }
-
-            const affiliateOperationAmount = operationAmount * 0.1;
-
-            const newAffiliateOperation = new affiliateOperation({
-                userId: referrer._id,
-                referredUserId: user._id,
-                operation: 'cpa',
-                operationAmount: affiliateOperationAmount
-            });
-
-            await newAffiliateOperation.save({ session });
-
-            referrer.affiliateBalance += affiliateOperationAmount;
-            referrer.affiliateOperations.push(newAffiliateOperation._id);
-
-            await referrer.save({ session });
+        } catch (err) {
+            
         }
 
         await user.save({ session });
@@ -62,7 +69,51 @@ export const createDeposit = async (req, res) => {
         await session.commitTransaction();
         session.endSession();
 
-        res.status(201).json({ newDeposit });
+        return res.status(200)
+    } catch (err) {
+        await session.abortTransaction();
+        session.endSession();
+        return res.status(500).json({ error: err.message });
+    }
+}
+
+export const createWithdraw = async (req, res) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+        const { userId } = req.params;
+        const { operationAmount, cpf, name } = req.body;
+        const operation = 'withdraw';
+        const status = 'pending';
+
+        const user = await User.findById(userId).session(session);
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        if (user.balance < operationAmount) {
+            throw new Error('Insufficient balance');
+        }
+
+        const newWithdraw = new Transaction({
+            userId,
+            name,
+            cpf,
+            operation,
+            operationAmount,
+            status
+        });
+
+        await newWithdraw.save({ session });
+
+        user.balance -= operationAmount;
+        await user.save({ session });
+
+        await session.commitTransaction();
+        session.endSession();
+
+        res.status(201).json({ newWithdraw });
     } catch (err) {
         await session.abortTransaction();
         session.endSession();
@@ -71,17 +122,71 @@ export const createDeposit = async (req, res) => {
     }
 }
 
-export const createWithdraw = async (req, res) => {
-    try {
+export const createAffiliateWithdraw = async (req, res) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
 
+    try {
+        const { userId } = req.params;
+        const { operationAmount, cpf, name } = req.body;
+        const operation = 'affiliateWithdraw';
+        const status = 'pending';
+
+        const user = await User.findById(userId).session(session);
+        if (!user) {
+            throw new Error('User not found');
+        }
+        
+        let totalBalance = user.cpaBalance + user.revShareBalance;
+        if (totalBalance < operationAmount) {
+            throw new Error('Insufficient affiliate balance');
+        }
+
+        // Deduzir primeiro do cpaBalance se houver saldo suficiente
+        if (user.cpaBalance >= operationAmount) {
+            user.cpaBalance -= operationAmount;
+        } else {
+            // Se não houver saldo suficiente em cpaBalance, deduzir do revShareBalance
+            operationAmount -= user.cpaBalance;
+            user.cpaBalance = 0;
+            user.revShareBalance -= operationAmount;
+        }
+
+        const newWithdraw = new Transaction({
+            userId,
+            name,
+            cpf,
+            operation,
+            operationAmount,
+            status
+        });
+
+        await newWithdraw.save({ session });
+        await user.save({ session });
+
+        await session.commitTransaction();
+        session.endSession();
+
+        res.status(201).json({ newWithdraw });
     } catch (err) {
+        await session.abortTransaction();
+        session.endSession();
+
         res.status(500).json({ error: err.message });
     }
 }
 
-export const createAffiliateWithdraw = async (req, res) => {
+/* READ */
+export const getWithdrawals = async (req, res) => {
     try {
+        const { userId } = req.params;
+        const { operation } = req.query;
 
+        const withdrawals = await Transaction.find({ userId, operation: operation })
+            .select('cpf operationAmount status createdAt')
+            .sort({ createdAt: -1 });
+
+        res.status(200).json(withdrawals);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

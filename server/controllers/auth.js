@@ -2,8 +2,12 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 import User from '../models/User.js';
+import mongoose from 'mongoose';
 
 export const register = async (req, res) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
     try {
         const {
             email,
@@ -19,14 +23,33 @@ export const register = async (req, res) => {
             password: passwordHash,
         });
 
-        if(code) newUser.referrerUser = code;
+        await newUser.save({ session });
 
-        await newUser.save();
-        res.status(201).json({message: 'Conta criada com sucesso.'});
+        if (code) {
+            try {
+                const referrerUser = await User.findById(code).session(session);
+                if (referrerUser) {
+                    referrerUser.referredUsers.push(newUser._id);
+                    await referrerUser.save({ session });
+    
+                    newUser.referrerUser = code;
+                    await newUser.save({ session });
+                }
+            } catch (error) {
+                
+            }
+        }
+
+        await session.commitTransaction();
+        res.status(201).json({ message: 'Conta criada com sucesso.' });
     } catch (err) {
+        await session.abortTransaction();
         res.status(500).json({ error: err.message });
+    } finally {
+        session.endSession();
     }
 }
+
 
 export const login = async (req, res) => {
     try {

@@ -7,13 +7,14 @@ import Loader from '../components/Loader';
 import Notification from '../components/Notification';
 import { toast } from 'react-toastify';
 import { getBalance } from '../lib/node/userApi';
+import OnlineUsers from '../components/OnlineUsers';
 
 const Play = ({ setShowNavbarAndFooter }) => {
   console.log('Play');
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [betAmount, setBetAmount] = useState(5);
   const { user: { userId, isInfluencer } } = useAuth();
-  const [balance, setBalance] = useState(0);
+  const [balance, setBalance] = useState(null);
   const accessToken = getAccessToken();
   const [mode, setMode] = useState('default');
   const [testPayMode, setTestPayMode] = useState('');
@@ -154,9 +155,8 @@ const Play = ({ setShowNavbarAndFooter }) => {
                     <input
                       type="number"
                       className="large-input-field w-input"
-                      max={25}
+                      max={100}
                       min={1}
-                      step={1}
                       name="bet"
                       id="bet"
                       required
@@ -209,31 +209,9 @@ const Play = ({ setShowNavbarAndFooter }) => {
                 </form>
               )}
 
-              <p>Valores para jogar: R$1.00 à R$25.00</p>
+              <p>Valores para jogar: R$1.00 à R$100.00</p>
             </div>
-            <div
-              id="wins"
-              style={{
-                display: "block",
-                width: 240,
-                fontSize: 12,
-                padding: "5px 0",
-                textAlign: "center",
-                lineHeight: 1,
-                backgroundColor: "#FFC107",
-                borderRadius: 10,
-                border: "3px solid #1f2024",
-                boxShadow: "-3px 3px 0 0px #1f2024",
-                margin: "-24px auto 0 auto",
-                zIndex: 1000
-              }}
-            >
-              Usuários Online
-              <br />
-              {Math.floor(Math.random() * (25000 - 15000 + 1)) + 15000}
-            </div>
-
-
+            <OnlineUsers />
           </section>
 
           <Notification />
