@@ -25,7 +25,7 @@ export const generatePaymentCode = async (req, res) => {
             requestNumber: requestNumber,
             dueDate: dueDate,
             amount: operationAmount,
-            // callbackUrl: `${process.env.SERVER_URL}/transactions/createDeposit`,
+            callbackUrl: `${process.env.SERVER_URL}/transactions/createDeposit`,
             client: {
                 name,
                 document: cpf,

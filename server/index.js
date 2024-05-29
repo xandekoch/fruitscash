@@ -23,7 +23,6 @@ app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 
 const allowedOrigins = [
-    'http://localhost:5173',
     process.env.CLIENT_URL,
     'https://162.243.162.250',
     'https://192.34.62.86',
@@ -34,9 +33,7 @@ const allowedOrigins = [
 ];
 
 app.use(cors({
-    origin: function (origin, callback) {
-        callback(null, origin); // Permite todas as origens
-    },
+    origin: allowedOrigins,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     credentials: true,
     optionsSuccessStatus: 200
@@ -53,7 +50,7 @@ app.use("/affiliateOperations", affiliateOperationRoutes);
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 6001;
-mongoose.connect(process.env.MONGO_URL, { dbName: 'fruitscash' }).then(() => {
+mongoose.connect(process.env.MONGO_URL, { dbName: process.env.MONGO_DATABASE }).then(() => {
     console.log("Connected to MongoDB");
     app.listen(PORT, () => {
         console.log(`Server running on port ${PORT}`);

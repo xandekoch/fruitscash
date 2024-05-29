@@ -32,7 +32,7 @@ const Deposit = () => {
     try {
       if (userId && operationAmount >= 20) {
         const pixInfo = await generatePaymentCode(operationAmount, cpf, name);
-        await createDeposit(operationAmount, cpf, name);
+        // await createDeposit(operationAmount, cpf, name);
         setPixInfo(pixInfo);
         setPixInfo(prevPixInfo => ({
           ...prevPixInfo,

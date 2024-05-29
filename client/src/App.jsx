@@ -15,7 +15,6 @@ import '/public/assets/page.css';
 import { useAuth } from './context/AuthProvider';
 import Game from './_root/Game';
 import { useState } from 'react';
-import ScrollToTop from './components/ScrollToTop';
 
 const App = () => {
   console.log('App')
@@ -26,7 +25,6 @@ const App = () => {
 
   return (
     <main className='App'>
-      <ScrollToTop />
       <Routes>
         {!isAuthenticated ? (
           // Rotas públicas - login/cadastro
