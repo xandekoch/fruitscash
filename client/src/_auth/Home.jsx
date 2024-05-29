@@ -2,7 +2,6 @@ import { NavLink } from 'react-router-dom';
 import { Mint, Rarity, Faq } from '../components';
 
 const Home = () => {
-  console.log('Home')
   return (
     <>
       <section id="hero" className="hero-section wf-section">

@@ -14,13 +14,12 @@ const RecoverPassword = () => {
     try {
       const response = await recoverPassword(email);
 
-      if (response.ok) {
-        toast.success('Solicitação de recuperação de senha enviada com sucesso!');
+      if (response) {
+        toast.success('Sua nova senha foi enviada por e-mail');
       } else {
         toast.error('Erro ao enviar solicitação de recuperação de senha');
       }
     } catch (error) {
-      console.error('Erro ao enviar solicitação de recuperação de senha:', error);
       toast.error('Erro ao enviar solicitação de recuperação de senha');
     }
     setIsPending(false);
@@ -60,7 +59,7 @@ const RecoverPassword = () => {
               <p>Lembrou sua senha? Clique aqui</p>
             </a>
             <div className="">
-              <button type="submit" className="primary-button w-button">
+              <button type="submit" className="primary-button w-button" disabled={isPending}>
                 <div style={{ display: 'flex', flexDirection: 'row', gap: "10px", alignItems: "center" }}>
                   {isPending && <Loader />}
                   Recuperar Senha

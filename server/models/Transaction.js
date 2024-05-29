@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 const TransactionSchema = new mongoose.Schema({
     suitPayTransactionId: {
         type: String,
-        default: '',
         unique: true,
     },
     userId: {
@@ -27,6 +26,8 @@ const TransactionSchema = new mongoose.Schema({
     operationAmount: {
         type: Number,
         required: true,
+        get: v => parseFloat(v.toFixed(2)),
+        set: v => parseFloat(v.toFixed(2))
     },
     status: {
         type: String,

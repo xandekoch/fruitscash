@@ -29,18 +29,26 @@ const UserSchema = new mongoose.Schema({
     balance: {
         type: Number,
         default: 0,
+        get: v => parseFloat(v.toFixed(2)),
+        set: v => parseFloat(v.toFixed(2))
     },
     bonusBalance: {
         type: Number,
         default: 0,
+        get: v => parseFloat(v.toFixed(2)),
+        set: v => parseFloat(v.toFixed(2))
     },
     cpaBalance: {
         type: Number,
         default: 0,
+        get: v => parseFloat(v.toFixed(2)),
+        set: v => parseFloat(v.toFixed(2))
     },
     revShareBalance: {
         type: Number,
         default: 0,
+        get: v => parseFloat(v.toFixed(2)),
+        set: v => parseFloat(v.toFixed(2))
     },
     bets: {
         type: [mongoose.Schema.Types.ObjectId],

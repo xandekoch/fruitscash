@@ -4,7 +4,6 @@ import { backendConfig } from "../lib/node/config";
 import { getAffiliateData } from "../lib/node/userApi";
 
 const Affiliate = () => {
-  console.log('Affiliate')
   const { user: { userId } } = useAuth();
   const baseUrl = backendConfig.frontendUrl;
   const [affiliateData, setAffiliateData] = useState({});
@@ -21,8 +20,7 @@ const Affiliate = () => {
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text)
       .then(() => {
-        console.log('Texto copiado para a área de transferência:', text);
-        alert('Link copiado para a área de transferência!');
+        alert('Link copiado!');
       })
       .catch((error) => {
         console.error('Erro ao copiar texto:', error);
@@ -104,7 +102,7 @@ const Affiliate = () => {
                 Sacar saldo disponível
               </a>
               <a
-                href="https://wa.me/5521970707070?text=Preciso%20de%20ajuda%20no%20FruitsCash!"
+                href={`${backendConfig.affiliateSupportContactLink}`}
                 target="_blank"
                 className="primary-button dark w-button"
               >

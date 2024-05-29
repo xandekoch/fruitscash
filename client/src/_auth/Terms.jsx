@@ -1,5 +1,4 @@
 const Terms = () => {
-  console.log('Terms')
   return (
     <section id="hero" className="hero-section dark wf-section">
       <div className="minting-container w-container">

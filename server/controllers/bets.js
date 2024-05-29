@@ -9,17 +9,17 @@ export const createBet = async (req, res) => {
     const session = await mongoose.startSession();
     session.startTransaction();
 
+    const { userId } = req.params;
+    let { betAmount } = req.body;
+    const returnedAmount = 0;
+    const outcomeAmount = returnedAmount - betAmount;
+    let isBonus = 'balance';
+    let userBalance = 0; // just to save the balance in case of hybrid bets
+    let remainingBetAmount = 0;
+    let bet = 0;
+    let user = {};
     try {
-        const { userId } = req.params;
-        const { betAmount } = req.body;
-        const returnedAmount = 0;
-        const outcomeAmount = returnedAmount - betAmount;
-        let isBonus = 'balance';
-        let userBalance = 0; // just to save the balance in case of hybrid bets
-        let remainingBetAmount = 0;
-        let bet = 0;
-
-        const user = await User.findById(userId).session(session);
+        user = await User.findById(userId).session(session);
         if (!user) {
             throw new Error('User not found');
         }
@@ -60,19 +60,24 @@ export const createBet = async (req, res) => {
         await user.save({ session });
 
         await session.commitTransaction();
+        session.endSession();
+
+        console.log('terminou a session');
         res.status(201).json({ bet });
 
+        console.log('mandou a res 200');
+
+    } catch (err) {
+        await session.abortTransaction();
+        session.endSession();
+        res.status(500).json({ error: err.message });
+    } finally {
+        console.log('finally');
         if (isBonus === 'hybrid') {
             scheduleAffiliate(bet, user, betAmount = userBalance, userId);
         } else if (isBonus === 'balance') {
             scheduleAffiliate(bet, user, betAmount, userId);
         }
-
-    } catch (err) {
-        await session.abortTransaction();
-        res.status(500).json({ error: err.message });
-    } finally {
-        session.endSession();
     }
 }
 
@@ -95,11 +100,14 @@ const scheduleAffiliate = async (bet, user, betAmount, userId) => {
                     const newAffiliateOperation = new AffiliateOperation({
                         userId: referrerUser._id,
                         referredUserId: userId,
+                        betId: bet._id,
                         operation: 'revShare',
                         operationAmount,
                     });
 
                     await newAffiliateOperation.save({ session });
+
+                    console.log(newAffiliateOperation);
 
                     referrerUser.revShareBalance += operationAmount;
                     referrerUser.affiliateOperations.push(newAffiliateOperation._id);

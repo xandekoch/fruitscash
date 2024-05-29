@@ -66,7 +66,6 @@ const Navbar = () => {
               alt=""
               className="image-6"
             />
-            <div className="nav-link logo">FruitsCash</div>
           </NavLink>
           <nav
             role="navigation"

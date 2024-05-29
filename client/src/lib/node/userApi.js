@@ -6,10 +6,6 @@ const baseURL = backendConfig.backendUrl;
 
 const api = axios.create({
     baseURL,
-    headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${getAccessToken()}`,
-    },
 });
 
 axios.defaults.withCredentials = true;
@@ -34,7 +30,13 @@ export const getBalance = async () => {
 export const getAffiliateData = async () => {
     try {
         const userId = JSON.parse(localStorage.getItem('session'))?.user?._id || '';
-        const response = await api.get(`/users/getAffiliateData/${userId}`);
+        const token = getAccessToken();
+        const response = await api.get(`/users/getAffiliateData/${userId}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+        });
         return response.data;
     } catch (error) {
         throw new Error(error.response.data.error || 'Erro ao buscar dados de afiliado.');

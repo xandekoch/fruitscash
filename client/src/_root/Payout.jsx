@@ -6,7 +6,6 @@ import { toast } from "react-toastify";
 import { createWithdraw, getWithdrawals } from "../lib/node/transactionApi";
 
 const Payout = () => {
-  console.log('Payout')
   const { user: { userId } } = useAuth();
   const [balance, setBalance] = useState({});
   const [isPending, setIsPending] = useState(false);
@@ -22,7 +21,7 @@ const Payout = () => {
     };
 
     fetchData();
-  }, []);
+  }, [isPending === false]);
 
   const handlePayoutSubmit = async (event) => {
     event.preventDefault();
@@ -37,10 +36,17 @@ const Payout = () => {
     const name = formData.get("name");
 
     try {
-      if (userId) {
-        await createWithdraw(operationAmount, cpf, name);
-        console.log("Saque solicitado com sucesso!");
-        toast.success("Saque solicitado com sucesso!");
+      if (userId && operationAmount >= 50) {
+        if (balance.balance >= operationAmount) {
+          await createWithdraw(operationAmount, cpf, name);
+          toast.success("Saque solicitado com sucesso");
+        } else {
+          toast.error('Saldo Real Insuficiente');
+          setIsPending(false);
+        }
+      } else {
+        toast.error('Valor inferior a R$ 50');
+        setIsPending(false);
       }
     } catch (error) {
       console.error("Erro ao sacar:", error);

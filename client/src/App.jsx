@@ -15,17 +15,18 @@ import '/public/assets/page.css';
 import { useAuth } from './context/AuthProvider';
 import Game from './_root/Game';
 import { useState } from 'react';
-import Admin from './_root/admin/Admin';
+import ScrollToTop from './components/ScrollToTop';
 
 const App = () => {
   console.log('App')
-  const { isAuthenticated, user: {isAdmin} } = useAuth();
+  const { isAuthenticated } = useAuth();
   const [showNavbarAndFooter, setShowNavbarAndFooter] = useState(true);
   const code = new URLSearchParams(window.location.search).get('code');
   if(code) localStorage.setItem('code', code);
 
   return (
     <main className='App'>
+      <ScrollToTop />
       <Routes>
         {!isAuthenticated ? (
           // Rotas públicas - login/cadastro
@@ -38,7 +39,6 @@ const App = () => {
           </Route>
         ) : (
           // Rotas privadas - apenas quando estiver logado
-          <>
           <Route path='/' element={<RootLayout showNavbarAndFooter={showNavbarAndFooter} />}>
             <Route index element={<Play setShowNavbarAndFooter={setShowNavbarAndFooter} />} />
             <Route path='/deposit' element={<Deposit />} />
@@ -48,11 +48,6 @@ const App = () => {
             <Route path='/terms' element={<Terms />} />
             <Route element={<Game betAmount={5} mode={"default"} />} />
           </Route>
-            {isAdmin && 
-            <Route path='/admin' element={<Admin />}>
-
-            </Route>}
-          </>
         )}
         {/* Rota de redirecionamento */}
         {/* <Route path="*" element={<Navigate to="/" />} /> */}

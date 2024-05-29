@@ -14,22 +14,32 @@ const BetSchema = new mongoose.Schema({
     betAmount: { // Sum of real and bonus
         type: Number,
         required: true,
+        get: v => parseFloat(v.toFixed(2)),
+        set: v => parseFloat(v.toFixed(2))
     },
     realBetAmount: {
         type: Number,
         required: true,
+        get: v => parseFloat(v.toFixed(2)),
+        set: v => parseFloat(v.toFixed(2))
     },
     bonusBetAmount: {
         type: Number,
         required: true,
+        get: v => parseFloat(v.toFixed(2)),
+        set: v => parseFloat(v.toFixed(2))
     },
     returnedAmount: {
         type: Number,
         required: true,
+        get: v => parseFloat(v.toFixed(2)),
+        set: v => parseFloat(v.toFixed(2))
     },
     outcomeAmount: {
         type: Number,
         required: true,
+        get: v => parseFloat(v.toFixed(2)),
+        set: v => parseFloat(v.toFixed(2))
     },
 }, { timestamps: true });
 

@@ -108,7 +108,7 @@ export const recoverPassword = async (req, res) => {
 
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(404).json({ error: 'Usuário não encontrado' });
+            return res.status(404).json({ error: 'User not found' });
         }
 
         const newPassword = generateRandomPassword();
@@ -120,8 +120,10 @@ export const recoverPassword = async (req, res) => {
         await user.save();
 
         await sendEmail(email, 'Recuperação de Senha', `Sua nova senha é: ${newPassword}`);
+        delete user.password;
+        delete {newPassword};
 
-        res.status(200).json({ message: 'Nova senha gerada e enviada por e-mail' });
+        res.status(200).json({ message: 'New passwd generated' });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

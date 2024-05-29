@@ -6,7 +6,6 @@ import { toast } from "react-toastify";
 import { createAffiliateWithdraw, getWithdrawals } from "../lib/node/transactionApi";
 
 const Payout = () => {
-    console.log('Payout')
     const { user: { userId } } = useAuth();
     const [balance, setBalance] = useState({});
     const [isPending, setIsPending] = useState(false);
@@ -22,7 +21,7 @@ const Payout = () => {
         };
 
         fetchData();
-    }, []);
+    }, [isPending === false]);
 
     const handlePayoutSubmit = async (event) => {
         event.preventDefault();
@@ -37,10 +36,17 @@ const Payout = () => {
         const name = formData.get("name");
 
         try {
-            if (userId) {
-                await createAffiliateWithdraw(operationAmont, cpf, name);
-                console.log("Saque solicitado com sucesso!");
-                toast.success("Saque solicitado com sucesso!");
+            if (userId && operationAmont >= 50) {
+                if (balance.revShareBalance + balance.cpaBalance >= operationAmont) {
+                    await createAffiliateWithdraw(operationAmont, cpf, name);
+                    toast.success("Saque solicitado com sucesso");
+                } else {
+                    toast.error('Saldo Afiliado Insuficiente');
+                    setIsPending(false);
+                }
+            } else {
+                toast.error('Valor inferior a R$ 50');
+                setIsPending(false);
             }
         } catch (error) {
             console.error("Erro ao sacar:", error);
@@ -141,7 +147,7 @@ const Payout = () => {
                         alt="Robopet 6340"
                         className="mint-card-image"
                     />
-                    <h2>Histórico financeiro</h2>
+                    <h2>Histórico financeiro afiliado</h2>
                     <p className="paragraph">
                         As retiradas para sua conta bancária são processadas em até 1 hora e 30
                         minutos.

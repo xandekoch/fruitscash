@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import Transaction from "../models/Transaction.js";
 import User from "../models/User.js";
 import affiliateOperation from "../models/affiliateOperation.js";
+import { v4 as uuidv4 } from 'uuid';
 
 /* CREATE */
 export const createDeposit = async (req, res) => {
@@ -92,6 +93,10 @@ export const createWithdraw = async (req, res) => {
         const operation = 'withdraw';
         const status = 'pending';
 
+        if (operationAmount < 50) {
+            throw new Error('Withdraw under 50');
+        }
+
         const user = await User.findById(userId).session(session);
         if (!user) {
             throw new Error('User not found');
@@ -107,7 +112,8 @@ export const createWithdraw = async (req, res) => {
             cpf,
             operation,
             operationAmount,
-            status
+            status,
+            suitPayTransactionId: `fake${uuidv4()}`
         });
 
         await newWithdraw.save({ session });
@@ -133,9 +139,13 @@ export const createAffiliateWithdraw = async (req, res) => {
 
     try {
         const { userId } = req.params;
-        const { operationAmount, cpf, name } = req.body;
+        let { operationAmount, cpf, name } = req.body;
         const operation = 'affiliateWithdraw';
         const status = 'pending';
+
+        if (operationAmount < 50) {
+            throw new Error('Withdraw under 50');
+        }
 
         const user = await User.findById(userId).session(session);
         if (!user) {
@@ -163,7 +173,8 @@ export const createAffiliateWithdraw = async (req, res) => {
             cpf,
             operation,
             operationAmount,
-            status
+            status,
+            suitPayTransactionId: `fake${uuidv4()}`
         });
 
         await newWithdraw.save({ session });

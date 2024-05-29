@@ -25,7 +25,7 @@ export const generatePaymentCode = async (req, res) => {
             requestNumber: requestNumber,
             dueDate: dueDate,
             amount: operationAmount,
-            callbackUrl: `${process.env.SERVER_URL}/transactions/createDeposit`,
+            // callbackUrl: `${process.env.SERVER_URL}/transactions/createDeposit`,
             client: {
                 name,
                 document: cpf,
@@ -52,6 +52,7 @@ export const generatePaymentCode = async (req, res) => {
             })
             .catch(function (error) {
                 console.log(error);
+                res.status(500).json({ error: error.message });
             });
 
     } catch (error) {

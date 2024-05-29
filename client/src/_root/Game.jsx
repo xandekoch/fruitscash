@@ -18,10 +18,6 @@ const Game = ({ betAmount, mode }) => {
     };
   }, []);
 
-  useEffect(() => {
-    console.log("isLandscape:", isLandscape);
-  }, [isLandscape]);
-
   const aspectRatio = 9 / 16; // Proporção desejada
 
   const { unityProvider, sendMessage } = useUnityContext({
@@ -35,7 +31,6 @@ const Game = ({ betAmount, mode }) => {
     if (unityProvider) {
       sendMessage("Game Manager", "SetGoal", betAmount);
       sendMessage("Spawner", "SetMode", mode);
-      console.log(betAmount, mode)
     }
   }, [unityProvider, sendMessage]);
 

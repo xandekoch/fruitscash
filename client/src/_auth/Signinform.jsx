@@ -7,7 +7,6 @@ import Loader from '../components/Loader.jsx';
 import { login } from '../lib/node/authApi.js';
 
 const SigninForm = () => {
-  console.log('SigninForm')
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);

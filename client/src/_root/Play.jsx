@@ -10,11 +10,10 @@ import { getBalance } from '../lib/node/userApi';
 import OnlineUsers from '../components/OnlineUsers';
 
 const Play = ({ setShowNavbarAndFooter }) => {
-  console.log('Play');
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [betAmount, setBetAmount] = useState(5);
   const { user: { userId, isInfluencer } } = useAuth();
-  const [balance, setBalance] = useState(null);
+  const [balance, setBalance] = useState(0);
   const accessToken = getAccessToken();
   const [mode, setMode] = useState('default');
   const [testPayMode, setTestPayMode] = useState('');
@@ -31,24 +30,23 @@ const Play = ({ setShowNavbarAndFooter }) => {
           } else {
             setMode('default');
           }
-          console.log('mode', mode)
         });
       }, 1000);
     }
   }, [userId, isFullscreen, accessToken]);
-  
+
 
   // Recebe GAIN ou LOSS do resultado do jogo
   window.ReceiveScore = (descriptionScore) => {
-    console.log("Score recebido:", descriptionScore);
     const [descriptionString, scoreString] = descriptionScore.split(';');
     const scoreFormatted = scoreString.replace(/\s/g, '').replace(',', '.');
     const score = Number(scoreFormatted);
     const description = descriptionString.toUpperCase();
-    console.log(description, score)
 
     if (testPayMode === 'PAY' && description === 'GAIN') {
       handleApi({ score });
+    } else if (description === 'GAIN') {
+      toast.success(`Você poderia ter ganho R$${score}`)
     }
 
     setTimeout(() => {
@@ -65,15 +63,13 @@ const Play = ({ setShowNavbarAndFooter }) => {
       setBetId(response.bet._id)
 
       if (response) {
-        toast.success("Iniciando o jogo");
         setIsFullscreen(true);
         setShowNavbarAndFooter(false);
       } else {
-        console.error('Erro ao processar a solicitação: A requisição não foi bem-sucedida');
         toast.error("Erro ao iniciar o jogo");
       }
     } catch (error) {
-      console.error('Erro ao processar a solicitação:', error);
+      console.error('Error:', error);
       toast.error("Erro ao iniciar o jogo");
     }
     setIsPending(false);
@@ -140,11 +136,9 @@ const Play = ({ setShowNavbarAndFooter }) => {
                   e.preventDefault();
 
                   if (balance !== null && betAmount <= balance) {
-                    console.log(`Aposta: ${betAmount}, saldo: ${balance}`);
                     setTestPayMode('PAY');
                     handleSubmit({ betAmount });
                   } else {
-                    console.log('Saldo insuficiente');
                     toast.error("Saldo insuficiente");
                   }
                 }}

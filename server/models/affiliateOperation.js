@@ -12,6 +12,11 @@ const AffiliateOperationSchema = new mongoose.Schema({
         ref: 'User',
         required: true,
     },
+    betId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Bet',
+        required: true,
+    },
     operation: {
         type: String,
         enum: ['cpa', 'revShare'],
@@ -20,6 +25,8 @@ const AffiliateOperationSchema = new mongoose.Schema({
     operationAmount: {
         type: Number,
         required: true,
+        get: v => parseFloat(v.toFixed(2)),
+        set: v => parseFloat(v.toFixed(2))
     },
 }, { timestamps: true });
 

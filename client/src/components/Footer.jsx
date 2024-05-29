@@ -1,3 +1,5 @@
+import { backendConfig } from "../lib/node/config"
+
 const Footer = () => {
   return (
     <div className="footer-section wf-section">
@@ -13,7 +15,7 @@ const Footer = () => {
             <strong className="bold-white-link">Termos de uso</strong>
           </a>
         </div>
-        <div className="follow-test">sac.fruitscash@gmail.com</div>
+        <div className="follow-test">{backendConfig.supportEmail}</div>
         <div className="follow-test">
           <a href="#" /* target="_blank" */>
             <img

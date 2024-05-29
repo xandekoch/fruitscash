@@ -3,11 +3,10 @@ import { useState } from 'react';
 import Notification from '../components/Notification';
 import { toast } from 'react-toastify';
 import Loader from '../components/Loader';
-import { generatePaymentCode } from '../lib/node/transactionApi';
+import { createDeposit, generatePaymentCode } from '../lib/node/transactionApi';
 import Pix from '../components/Pix';
 
 const Deposit = () => {
-  console.log('Deposit');
   const { user: { userId } } = useAuth();
   const [valuedeposit, setValuedeposit] = useState('');
   const [isPending, setIsPending] = useState(false);
@@ -29,23 +28,25 @@ const Deposit = () => {
     );
     const cpf = formData.get("cpf");
     const name = formData.get("name");
-    console.log(cpf, name, operationAmount)
 
     try {
-      if (userId) {
+      if (userId && operationAmount >= 20) {
         const pixInfo = await generatePaymentCode(operationAmount, cpf, name);
+        await createDeposit(operationAmount, cpf, name);
         setPixInfo(pixInfo);
         setPixInfo(prevPixInfo => ({
           ...prevPixInfo,
           paymentValue: operationAmount
         }));
-        console.log('Depósito criado com sucesso');
         toast.success('Finalize seu pagamento!');
         setIsPending(false);
         setIsPix(true);
+      } else {
+        toast.error('Valor inferior a R$ 20');
+        setIsPending(false);
       }
     } catch (error) {
-      console.error('Erro ao criar o depósito:');
+      console.error('Erro ao criar o depósito:', error);
       toast.error('Erro ao criar o depósito');
 
       setIsPending(false);
