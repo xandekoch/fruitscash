@@ -6,14 +6,12 @@ export const generatePaymentCode = async (req, res) => {
         const { userId } = req.params;
         const { operationAmount, cpf, name } = req.body;
 
-        // Busca o usuário pelo userId
         const user = await User.findById(userId);
 
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
 
-        // Filtra as transações do tipo 'deposit'
         const depositTransactions = user.transactions.filter(transaction => transaction.operation === 'deposit');
         const depositCount = depositTransactions.length;
 
@@ -72,11 +70,9 @@ export const generatePaymentCode = async (req, res) => {
 
 export const webhookPix = async (req, res, next) => {
     try {
-        console.log('webHookPix porraaa!')
         const { statusTransaction, requestNumber, value, payerName, payerTaxId } = req.body;
 
         if (statusTransaction === 'PAID_OUT') {
-            console.log('paidou');
             // Expressão regular para encontrar o padrão "userId-N", onde N é um número com um ou mais dígitos
             const regex = /([a-zA-Z0-9]+)-\d+$/;
             const userIdMatch = requestNumber.match(regex);
@@ -89,10 +85,9 @@ export const webhookPix = async (req, res, next) => {
 
             next();
         } else {
-            console.log('nao paidou');
             res.status(200).end();
         }
     } catch (err) {
-        res.status(500).json({ error: "Erro ao processar webhook Pix" });
+        res.status(500).json({ error: "Erro ao processar webHook Pix" });
     }
 };

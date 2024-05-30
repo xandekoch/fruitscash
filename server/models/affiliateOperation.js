@@ -15,7 +15,10 @@ const AffiliateOperationSchema = new mongoose.Schema({
     betId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Bet',
-        required: true,
+    },
+    transactionId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Transaction',
     },
     operation: {
         type: String,

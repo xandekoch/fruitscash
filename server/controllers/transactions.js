@@ -47,11 +47,16 @@ export const createDeposit = async (req, res) => {
                     throw new Error('Referrer not found');
                 }
 
+                if (!referrer.isComissionEnabled) {
+                    throw new Error('Comission disabled for this user');
+                }
+
                 const affiliateOperationAmount = operationAmount * process.env.CPA_PERCENTAGE;
 
                 const newAffiliateOperation = new affiliateOperation({
                     userId: referrer._id,
                     referredUserId: user._id,
+                    transactionId: newDeposit._id,
                     operation: 'cpa',
                     operationAmount: affiliateOperationAmount
                 });

@@ -64,18 +64,15 @@ export const createBet = async (req, res) => {
 
         console.log('terminou a session');
         res.status(201).json({ bet });
-
-        console.log('mandou a res 200');
-
     } catch (err) {
         await session.abortTransaction();
         session.endSession();
         res.status(500).json({ error: err.message });
     } finally {
         console.log('finally');
-        if (isBonus === 'hybrid') {
+        if (isBonus === 'hybrid' && user.referrerUser) {
             scheduleAffiliate(bet, user, betAmount = userBalance, userId);
-        } else if (isBonus === 'balance') {
+        } else if (isBonus === 'balance' && user.referrerUser) {
             scheduleAffiliate(bet, user, betAmount, userId);
         }
     }
@@ -83,19 +80,18 @@ export const createBet = async (req, res) => {
 
 const scheduleAffiliate = async (bet, user, betAmount, userId) => {
     const scheduledTime = new Date(Date.now() + 1 * 15 * 1000);
+
     schedule.scheduleJob(scheduledTime, async () => {
-        console.log('init')
         const session = await mongoose.startSession();
         session.startTransaction();
-        console.log('começou a transação')
+        console.log('Schedule started')
         try {
             const updatedBet = await Bet.findById(bet._id).session(session);
-            console.log('bet: ', updatedBet)
-            console.log('bet.result: ', updatedBet.result)
+            
             if (updatedBet.result === 'loss') {
-                console.log('deu loss')
                 const referrerUser = await User.findById(user.referrerUser).session(session);
-                if (referrerUser) {
+
+                if (referrerUser.isComissionEnabled) {
                     const operationAmount = betAmount * process.env.REVSHARE_PERCENTAGE;
                     const newAffiliateOperation = new AffiliateOperation({
                         userId: referrerUser._id,

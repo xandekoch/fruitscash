@@ -1,10 +1,10 @@
 # Etapa de build
 FROM node:alpine as build
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Copia os arquivos package.json e package-lock.json para o diretório de trabalho
-COPY package*.json ./
+COPY package.json .
 
 # Instala as dependências
 RUN npm install
@@ -16,4 +16,4 @@ COPY . .
 EXPOSE 3001
 
 # Comando para iniciar o servidor
-CMD ["node", "index.js"]
+CMD ["npm", "start"]

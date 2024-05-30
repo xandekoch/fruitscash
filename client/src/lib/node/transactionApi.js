@@ -29,6 +29,7 @@ export const generatePaymentCode = async (operationAmount, cpf, name) => {
     }
 };
 
+// Just for tests, create the deposit on database without real payment
 export const createDeposit = async (operationAmount, cpf, name) => {
     try {
         const userId = JSON.parse(localStorage.getItem('session'))?.user?._id || '';

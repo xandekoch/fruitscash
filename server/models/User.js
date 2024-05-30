@@ -38,6 +38,10 @@ const UserSchema = new mongoose.Schema({
         get: v => parseFloat(v.toFixed(2)),
         set: v => parseFloat(v.toFixed(2))
     },
+    isComissionEnabled: {
+        type: Boolean,
+        default: true,
+    },t
     cpaBalance: {
         type: Number,
         default: 0,
