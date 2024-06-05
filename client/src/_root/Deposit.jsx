@@ -1,38 +1,44 @@
 import { useAuth } from '../context/AuthProvider';
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import InputMask from 'react-input-mask';
 import Notification from '../components/Notification';
 import { toast } from 'react-toastify';
 import Loader from '../components/Loader';
 import { createDeposit, generatePaymentCode } from '../lib/node/transactionApi';
 import Pix from '../components/Pix';
 
+const depositSchema = z.object({
+  name: z.string().min(1, { message: 'Nome é obrigatório' }),
+  cpf: z.string().regex(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, { message: 'CPF inválido' }),
+  valuedeposit: z
+    .string()
+    .regex(/^\d+(\.\d{1,2})?$/, { message: 'Valor deve ser um número válido' })
+    .refine(value => parseFloat(value.replace(",", ".")) >= 20, { message: 'Depósito mínimo de R$20,00' })
+});
+
 const Deposit = () => {
   const { user: { userId } } = useAuth();
-  const [valuedeposit, setValuedeposit] = useState('');
   const [isPending, setIsPending] = useState(false);
   const [isPix, setIsPix] = useState(false);
   const [pixInfo, setPixInfo] = useState({});
 
-  const handleDepositClick = (amount) => {
-    setValuedeposit(amount);
-  };
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm({
+    resolver: zodResolver(depositSchema)
+  });
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
+  const onSubmit = async (data) => {
     setIsPending(true);
 
-    const formData = new FormData(event.currentTarget);
-    const operationAmount = parseFloat(
-      (formData.get("valuedeposit")).replace(",", ".")
-    );
-    const cpf = formData.get("cpf");
-    const name = formData.get("name");
+    const { valuedeposit, cpf, name } = data;
+    const operationAmount = parseFloat(valuedeposit.replace(",", "."));
 
     try {
       if (userId && operationAmount >= 20) {
-        const pixInfo = await generatePaymentCode(operationAmount, cpf, name);
-        await createDeposit(operationAmount, cpf, name);
+        const pixInfo = await generatePaymentCode(operationAmount, cpf.replace(/[^\d]/g, ''), name);
+        // await createDeposit(operationAmount, cpf.replace(/[^\d]/g, ''), name);
         setPixInfo(pixInfo);
         setPixInfo(prevPixInfo => ({
           ...prevPixInfo,
@@ -48,10 +54,13 @@ const Deposit = () => {
     } catch (error) {
       console.error('Erro ao criar o depósito:', error);
       toast.error('Erro ao criar o depósito');
-
       setIsPending(false);
     }
-  }
+  };
+
+  const handleDepositClick = (amount) => {
+    setValue('valuedeposit', amount.toString());
+  };
 
   return (
     <>
@@ -66,7 +75,7 @@ const Deposit = () => {
             />
             <h2>Depósito</h2>
             <p>PIX: depósitos instantâneos com uma pitada de diversão e muita praticidade.</p>
-            <form id="f-eWallet-payout" onSubmit={handleSubmit} method="post">
+            <form id="f-eWallet-payout" onSubmit={handleSubmit(onSubmit)} method="post">
               <div className="properties">
                 <h4 className="rarity-heading">Nome</h4>
                 <div className="rarity-row roboto-type2">
@@ -74,23 +83,20 @@ const Deposit = () => {
                     type="text"
                     className="large-input-field w-input"
                     maxLength={256}
-                    name="name"
-                    id="name"
                     placeholder="Seu Nome completo"
-                    required
+                    {...register('name')}
                   />
+                  {errors.name && <span>{errors.name.message}</span>}
                 </div>
                 <h4 className="rarity-heading">CPF</h4>
                 <div className="rarity-row roboto-type2">
-                  <input
-                    type="text"
+                  <InputMask
+                    mask="999.999.999-99"
                     className="large-input-field w-input cpf-mask"
-                    maxLength={14}
-                    name="cpf"
-                    id="cpf"
                     placeholder="Seu número de CPF"
-                    required
+                    {...register('cpf')}
                   />
+                  {errors.cpf && <span>{errors.cpf.message}</span>}
                 </div>
                 <h4 className="rarity-heading">Valor para depósito</h4>
                 <div className="rarity-row roboto-type2">
@@ -98,13 +104,10 @@ const Deposit = () => {
                     type="text"
                     className="large-input-field w-input money-mask"
                     maxLength={256}
-                    name="valuedeposit"
-                    id="valuedeposit"
                     placeholder="Depósito mínimo de R$20,00"
-                    value={valuedeposit}
-                    onChange={(e) => setValuedeposit(e.target.value)}
-                    required
+                    {...register('valuedeposit')}
                   />
+                  {errors.valuedeposit && <span>{errors.valuedeposit.message}</span>}
                 </div>
               </div>
               <div className="">
@@ -212,7 +215,7 @@ const Deposit = () => {
       </div>
       <Notification />
     </>
-  )
+  );
 }
 
-export default Deposit
+export default Deposit;

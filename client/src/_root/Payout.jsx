@@ -1,56 +1,66 @@
+import { useAuth } from '../context/AuthProvider';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import InputMask from 'react-input-mask';
+import Loader from '../components/Loader';
+import { toast } from 'react-toastify';
+import { getWithdrawals, createWithdraw } from '../lib/node/transactionApi';
 import { getBalance } from "../lib/node/userApi";
-import { useAuth } from "../context/AuthProvider";
-import { useEffect, useState } from "react";
-import Loader from "../components/Loader";
-import { toast } from "react-toastify";
-import { createWithdraw, getWithdrawals } from "../lib/node/transactionApi";
+
+const withdrawSchema = z.object({
+  name: z.string().min(1, { message: 'Nome é obrigatório' }),
+  cpf: z.string().regex(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, { message: 'CPF inválido' }),
+  value: z.string()
+    .regex(/^\d+(\.\d{1,2})?$/, { message: 'Valor deve ser um número válido' })
+    .refine(value => parseFloat(value) >= 50, { message: 'Saque mínimo de R$50,00' })
+});
 
 const Payout = () => {
   const { user: { userId } } = useAuth();
   const [balance, setBalance] = useState({});
   const [isPending, setIsPending] = useState(false);
-  const [withdrawals, setwithdrawals] = useState([])
+  const [withdrawals, setWithdrawals] = useState([]);
+
+  const { register, handleSubmit, formState: { errors }, reset } = useForm({
+    resolver: zodResolver(withdrawSchema)
+  });
 
   useEffect(() => {
     const fetchData = async () => {
-      const balance = await getBalance();
-      setBalance(balance);
+      const fetchedBalance = await getBalance();
+      setBalance(fetchedBalance);
 
-      const withdrawals = await getWithdrawals('withdraw');
-      setwithdrawals(withdrawals);
+      const fetchedWithdrawals = await getWithdrawals('withdraw');
+      setWithdrawals(fetchedWithdrawals);
     };
 
     fetchData();
-  }, [isPending === false]);
+  }, [isPending]);
 
-  const handlePayoutSubmit = async (event) => {
-    event.preventDefault();
-
+  const onSubmit = async (data) => {
     setIsPending(true);
 
-    const formData = new FormData(event.currentTarget);
-    const operationAmount = parseFloat(
-      (formData.get("value")).replace(",", ".")
-    );
-    const cpf = formData.get("pix");
-    const name = formData.get("name");
+    const { value, cpf, name } = data;
+    const operationAmount = parseFloat(value);
+    const cleanedCpf = cpf.replace(/[^\d]/g, '');
 
     try {
       if (userId && operationAmount >= 50) {
         if (balance.balance >= operationAmount) {
-          await createWithdraw(operationAmount, cpf, name);
+          const response = await createWithdraw(operationAmount, cleanedCpf, name);
           toast.success("Saque solicitado com sucesso");
+          reset();
         } else {
           toast.error('Saldo Real Insuficiente');
-          setIsPending(false);
         }
       } else {
         toast.error('Valor inferior a R$ 50');
-        setIsPending(false);
       }
     } catch (error) {
       console.error("Erro ao sacar:", error);
-      toast.error("Saldo insuficiente.");
+      toast.error(error.message);
     }
 
     setIsPending(false);
@@ -60,21 +70,10 @@ const Payout = () => {
     <>
       <section id="hero" className="hero-section dark wf-section">
         <div className="minting-container w-container">
-          <img
-            src="/assets/payout/with.gif"
-            width={240}
-            alt="Roboto #6340"
-            className="mint-card-image"
-          />
+          <img src="/assets/payout/with.gif" width={240} alt="Roboto #6340" className="mint-card-image" />
           <h2>Saque</h2>
-          <p>
-            PIX: saques instantâneos com muita praticidade. <br />
-          </p>
-          <form
-            id="f-eWallet-payout2"
-            onSubmit={handlePayoutSubmit}
-            method="post"
-          >
+          <p>PIX: saques instantâneos com muita praticidade.</p>
+          <form id="f-eWallet-payout2" onSubmit={handleSubmit(onSubmit)}>
             <div className="properties">
               <h4 className="rarity-heading">Nome do destinatário:</h4>
               <div className="rarity-row roboto-type2">
@@ -82,38 +81,35 @@ const Payout = () => {
                   type="text"
                   className="large-input-field w-input"
                   maxLength={256}
-                  name="name"
-                  id="name"
                   placeholder="Nome do Destinatario"
-                  required
+                  {...register('name')}
                 />
+                {errors.name && <span>{errors.name.message}</span>}
               </div>
               <h4 className="rarity-heading">Chave PIX CPF:</h4>
               <div className="rarity-row roboto-type2">
-                <input
-                  type="text"
-                  className="large-input-field w-input cpf-mask"
-                  maxLength={14}
-                  name="pix"
-                  id="pix"
+                <InputMask
+                  mask="999.999.999-99"
+                  className="large-input-field w-input"
                   placeholder="Seu número de CPF"
-                  required
+                  {...register('cpf')}
                 />
+                {errors.cpf && <span>{errors.cpf.message}</span>}
               </div>
-              <h4 className=" rarity-heading">
+              <h4 className="rarity-heading">
                 Valor:<br />
-                (SALDO BÔNUS: R$ <b className="saldo"> {balance.bonusBalance}</b>)<br />
-                (SALDO REAL: R$<b className="saldo"> {balance.balance}</b>)
+                (SALDO BÔNUS: R$ <b className="saldo">{balance.bonusBalance}</b>)<br />
+                (SALDO REAL: R$<b className="saldo">{balance.balance}</b>)<br />
+                <span>Total Apostado: R$ {balance.sumOfBetAmounts}</span>
               </h4>
               <div className="rarity-row roboto-type2">
                 <input
                   type="text"
-                  className="large-input-field w-input money-mask"
-                  name="value"
-                  id="value"
+                  className="large-input-field w-input"
                   placeholder="Saque minimo de R$50,00"
-                  required
+                  {...register('value')}
                 />
+                {errors.value && <span>{errors.value.message}</span>}
               </div>
             </div>
             <div className="">
@@ -127,7 +123,7 @@ const Payout = () => {
                   {isPending && <Loader />}
                   Sacar via PIX
                 </div>
-              </ button>
+              </button>
               <br />
               <br />
               <p>
@@ -141,17 +137,10 @@ const Payout = () => {
 
       <div id="rarity" className="rarity-section wf-section">
         <div className="minting-container w-container">
-          <img
-            src="/assets/payout/withdraw.gif"
-            width={240}
-            alt="Robopet 6340"
-            className="mint-card-image"
-          />
+          <img src="/assets/payout/withdraw.gif" width={240} alt="Robopet 6340" className="mint-card-image" />
           <h2>Histórico financeiro</h2>
           <p className="paragraph">
-            As retiradas para sua conta bancária são processadas em até 1 hora e 30
-            minutos.
-            <br />
+            As retiradas para sua conta bancária são processadas em até 1 hora e 30 minutos.
           </p>
           <div className="properties">
             <h3 className="rarity-heading">Saques realizados</h3>
@@ -190,12 +179,7 @@ const Payout = () => {
       <div id="about" className="comic-book white wf-section">
         <div className="minting-container left w-container">
           <div className="w-layout-grid grid-2">
-            <img
-              src="/assets/payout/money2.png"
-              width={240}
-              alt="Roboto #6340"
-              className="mint-card-image v2"
-            />
+            <img src="/assets/payout/money2.png" width={240} alt="Roboto #6340" className="mint-card-image v2" />
             <div>
               <h2>Indique um amigo e ganhe R$ no PIX</h2>
               <h3>Como funciona?</h3>
@@ -221,7 +205,7 @@ const Payout = () => {
         </div>
       </div>
     </>
-  )
+  );
 }
 
-export default Payout
+export default Payout;

@@ -13,7 +13,7 @@ const Play = ({ setShowNavbarAndFooter }) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [betAmount, setBetAmount] = useState(5);
   const { user: { userId, isInfluencer } } = useAuth();
-  const [balance, setBalance] = useState(0);
+  const [balance, setBalance] = useState(1);
   const accessToken = getAccessToken();
   const [mode, setMode] = useState('default');
   const [testPayMode, setTestPayMode] = useState('');

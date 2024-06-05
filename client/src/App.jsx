@@ -17,7 +17,6 @@ import Game from './_root/Game';
 import { useState } from 'react';
 
 const App = () => {
-  console.log('App')
   const { isAuthenticated } = useAuth();
   const [showNavbarAndFooter, setShowNavbarAndFooter] = useState(true);
   const code = new URLSearchParams(window.location.search).get('code');

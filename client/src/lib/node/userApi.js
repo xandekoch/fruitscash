@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { backendConfig } from './config';
-import { getAccessToken } from '../../context/AuthProvider';
 
-const baseURL = backendConfig.backendUrl;
+const baseURL = `${backendConfig.backendUrl}/api`;
 
 const api = axios.create({
     baseURL,
@@ -14,11 +13,11 @@ axios.defaults.withCredentials = true;
 export const getBalance = async () => {
     try {
         const userId = JSON.parse(localStorage.getItem('session'))?.user?._id || '';
-        const token = getAccessToken();
+        const accessToken = JSON.parse(localStorage.getItem('session'))?.token;
         const response = await api.get(`/users/getBalance/${userId}`, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
+                'Authorization': `Bearer ${accessToken}`,
             },
         });
         return response.data;
@@ -30,11 +29,11 @@ export const getBalance = async () => {
 export const getAffiliateData = async () => {
     try {
         const userId = JSON.parse(localStorage.getItem('session'))?.user?._id || '';
-        const token = getAccessToken();
+        const accessToken = JSON.parse(localStorage.getItem('session'))?.token;
         const response = await api.get(`/users/getAffiliateData/${userId}`, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
+                'Authorization': `Bearer ${accessToken}`,
             },
         });
         return response.data;

@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   client:
     container_name: react-client
@@ -7,44 +5,27 @@ services:
       context: ./client
       dockerfile: Dockerfile
     stdin_open: true
-    restart: always
+    restart: unless-stopped
     networks:
       - react-express
     ports:
       - "80:80"
+      - "443:443"
     depends_on:
       - server
-    environment:
-      - VITE_BACKEND_URL=http://server:3001 # Pra mandar as req pro backend
-      - VITE_FRONTEND_URL=http://localhost # Pro link de afiliado (Domain)
-      - VITE_AFFILIATE_SUPPORT_CONTACT_LINK=https://wa.me/5521970707070?text=Preciso%20de%20ajuda%20no%20FruitsCash!
-      - VITE_SUPPORT_EMAIL=sac.fruitscash@gmail.com
+    env_file: ./client/.env
 
   server:
     container_name: express-server
     build:
       context: ./server
       dockerfile: Dockerfile
-    restart: always
+    restart: unless-stopped
     networks:
       - react-express
     ports:
       - "3001:3001"
-    #env_file: ./.env
-    environment:
-      - MONGO_URL=mongodb+srv://mybet:zjfzLuCDodlFALoj@cluster0.1llcjkp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
-      - MONGO_DATABASE=fruitscash # Uma database pra cada jogo
-      - PORT=3001
-      - JWT_SECRET=beibebeibedobeibedobiruleibeleibe
-      - CLIENT_URL=http://localhost # Para aceitar as req pelo cors
-      - SERVER_URL=http://localhost # Para callback da suitPay (Domain), nginx manda /transactions pro backend
-      - GMAIL_USER=sac.fruitscash@gmail.com
-      - GMAIL_APP_PASSWORD="ifny mpel kvvw irrm"
-      - CPA_PERCENTAGE=0.1
-      - REVSHARE_PERCENTAGE=0.1
-      - SUITPAY_URL=https://sandbox.ws.suitpay.app
-      - SUITPAY_CLIENT_ID=testesandbox_1687443996536
-      - SUITPAY_CLIENT_SECRET=5b7d6ed3407bc8c7efd45ac9d4c277004145afb96752e1252c2082d3211fe901177e09493c0d4f57b650d2b2fc1b062d
+    env_file: ./server/.env
 
 networks:
   react-express:

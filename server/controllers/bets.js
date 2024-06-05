@@ -33,6 +33,7 @@ export const createBet = async (req, res) => {
         // Deduct betAmount from bonusBalance first, then from balance if needed
         if (user.balance >= betAmount) {
             user.balance -= betAmount;
+            user.sumOfBetAmounts += betAmount;
 
         } else if (user.balance === 0) {
             isBonus = 'bonus';
@@ -41,6 +42,7 @@ export const createBet = async (req, res) => {
             isBonus = 'hybrid';
             remainingBetAmount = betAmount - user.balance;
             userBalance = user.balance;
+            user.sumOfBetAmounts += userBalance;
             user.balance = 0;
             user.bonusBalance -= remainingBetAmount;
         }

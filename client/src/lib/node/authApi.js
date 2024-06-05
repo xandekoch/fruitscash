@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { backendConfig } from './config';
 
-const baseURL = backendConfig.backendUrl;
+const baseURL = `${backendConfig.backendUrl}/api`;
 
 const api = axios.create({
     baseURL,

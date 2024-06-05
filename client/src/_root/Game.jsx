@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { Unity, useUnityContext } from "react-unity-webgl";
+import { useAuth } from "../context/AuthProvider";
 
 const Game = ({ betAmount, mode }) => {
+  const { user } = useAuth();
   const [isLandscape, setIsLandscape] = useState(
     window.innerWidth > window.innerHeight
   );
@@ -31,22 +33,25 @@ const Game = ({ betAmount, mode }) => {
     if (unityProvider) {
       sendMessage("Game Manager", "SetGoal", betAmount);
       sendMessage("Spawner", "SetMode", mode);
+      if (user.isInfluencer) {
+        sendMessage("Spawner", "setIsInfluencer", true);
+      }
     }
   }, [unityProvider, sendMessage]);
 
   return (
-    <div style={{display: "flex", flexDirection: "column"}}>
-    {!isLandscape && <h2 style={{color: "white", fontSize: "18px", textAlign: "center"}}>Vire o celular para uma melhor experiência</h2>}
+    <div style={{ display: "flex", flexDirection: "column" }}>
+      {!isLandscape && <h2 style={{ color: "white", fontSize: "18px", textAlign: "center" }}>Vire o celular para uma melhor experiência</h2>}
 
-    <Unity
-      unityProvider={unityProvider}
-      className="unity-canvas"
-      style={{
-        width: isLandscape ? `${100 / aspectRatio}vh` : "100%", // Largura proporcional na orientação paisagem, largura 100% na orientação retrato
-        height: isLandscape ? "100%" : `${aspectRatio * 100}vw`, // Altura 100% na orientação paisagem, altura proporcional na orientação retrato
-        objectFit: "contain" // Manter a proporção de 16:9
-      }}
-    />
+      <Unity
+        unityProvider={unityProvider}
+        className="unity-canvas"
+        style={{
+          width: isLandscape ? `${100 / aspectRatio}vh` : "100%", // Largura proporcional na orientação paisagem, largura 100% na orientação retrato
+          height: isLandscape ? "100%" : `${aspectRatio * 100}vw`, // Altura 100% na orientação paisagem, altura proporcional na orientação retrato
+          objectFit: "contain" // Manter a proporção de 16:9
+        }}
+      />
     </div>
   );
 }

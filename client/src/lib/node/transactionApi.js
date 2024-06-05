@@ -1,11 +1,10 @@
 import axios from 'axios';
 import { backendConfig } from './config';
-import { getAccessToken } from '../../context/AuthProvider';
 
-const baseURL = backendConfig.backendUrl;
+const baseURL = `${backendConfig.backendUrl}/api`;
 
 const api = axios.create({
-    baseURL
+    baseURL,
 });
 
 axios.defaults.withCredentials = true;
@@ -14,7 +13,7 @@ axios.defaults.withCredentials = true;
 export const generatePaymentCode = async (operationAmount, cpf, name) => {
     try {
         const userId = JSON.parse(localStorage.getItem('session'))?.user?._id || '';
-        const accessToken = getAccessToken();
+        const accessToken = JSON.parse(localStorage.getItem('session'))?.token;
         const response = await api.post(`/transactions/generatePaymentCode/${userId}`, { operationAmount, cpf, name },
         {
             headers: {
@@ -33,7 +32,7 @@ export const generatePaymentCode = async (operationAmount, cpf, name) => {
 export const createDeposit = async (operationAmount, cpf, name) => {
     try {
         const userId = JSON.parse(localStorage.getItem('session'))?.user?._id || '';
-        const accessToken = getAccessToken();
+        const accessToken = JSON.parse(localStorage.getItem('session'))?.token;
         const response = await api.post('/transactions/createDeposit/',
             { statusTransaction: 'PAID_OUT', requestNumber: `${userId}-1`, value: operationAmount, payerName: name, payerTaxId: cpf, idTransaction: (Math.floor(Math.random() * 100000) + 1) },
             {
@@ -52,7 +51,7 @@ export const createDeposit = async (operationAmount, cpf, name) => {
 export const createWithdraw = async (operationAmount, cpf, name) => {
     try {
         const userId = JSON.parse(localStorage.getItem('session'))?.user?._id || '';
-        const accessToken = getAccessToken();
+        const accessToken = JSON.parse(localStorage.getItem('session'))?.token;
         const response = await api.post(`/transactions/createWithdraw/${userId}`, { operationAmount, cpf, name },
         {
             headers: {
@@ -70,7 +69,7 @@ export const createWithdraw = async (operationAmount, cpf, name) => {
 export const createAffiliateWithdraw = async (operationAmount, cpf, name) => {
     try {
         const userId = JSON.parse(localStorage.getItem('session'))?.user?._id || '';
-        const accessToken = getAccessToken();
+        const accessToken = JSON.parse(localStorage.getItem('session'))?.token;
         const response = await api.post(`/transactions/createAffiliateWithdraw/${userId}`, { operationAmount, cpf, name },
         {
             headers: {
@@ -89,7 +88,7 @@ export const createAffiliateWithdraw = async (operationAmount, cpf, name) => {
 export const getWithdrawals = async (operation) => {
     try {
         const userId = JSON.parse(localStorage.getItem('session'))?.user?._id || '';
-        const accessToken = getAccessToken();
+        const accessToken = JSON.parse(localStorage.getItem('session'))?.token;
         const response = await api.get(`/transactions/getWithdrawals/${userId}?operation=${operation}`,
         {
             headers: {

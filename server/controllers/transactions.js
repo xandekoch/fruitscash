@@ -36,6 +36,7 @@ export const createDeposit = async (req, res) => {
         }
 
         user.balance += operationAmount;
+        user.sumOfBetAmounts = 0;
         user.bonusBalance += operationAmount;
         user.transactions.push(newDeposit._id);
 
@@ -109,6 +110,23 @@ export const createWithdraw = async (req, res) => {
 
         if (user.balance < operationAmount) {
             throw new Error('Insufficient balance');
+        }
+
+        const lastDeposit = await Transaction.findOne({
+            userId: user._id,
+            operation: 'deposit'
+        })
+            .sort({ createdAt: -1 })
+            .exec();
+
+        if (!lastDeposit) {
+            return res.status(404).json({ message: 'Nenhum depósito encontrado.' });
+        }
+
+        const lastDepositAmount = lastDeposit.operationAmount;
+
+        if (user.sumOfBetAmounts < (lastDepositAmount * process.env.MININUM_BET_SUM_TO_WITHDRAW_MULTIPLIER)) {
+            throw new Error(`Valor total apostado não é suficiente, falta R$ ${(lastDepositAmount * process.env.MININUM_BET_SUM_TO_WITHDRAW_MULTIPLIER) - user.sumOfBetAmounts}`);
         }
 
         const newWithdraw = new Transaction({

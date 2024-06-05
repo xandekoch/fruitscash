@@ -6,7 +6,7 @@ export const getBalance = async (req, res) => {
     try {
         const { userId } = req.params;
 
-        const user = await User.findById(userId).select('balance bonusBalance cpaBalance revShareBalance');
+        const user = await User.findById(userId).select('balance bonusBalance cpaBalance revShareBalance sumOfBetAmounts');
 
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
@@ -17,6 +17,7 @@ export const getBalance = async (req, res) => {
             bonusBalance: user.bonusBalance,
             cpaBalance: user.cpaBalance,
             revShareBalance: user.revShareBalance,
+            sumOfBetAmounts: user.sumOfBetAmounts,
         });
     } catch (err) {
         res.status(500).json({ error: err.message });

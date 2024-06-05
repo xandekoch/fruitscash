@@ -5,12 +5,10 @@ import cors from "cors";
 import dotenv from "dotenv";
 import helmet from "helmet";
 import morgan from "morgan";
-import adminRoutes from "./routes/admin.js";
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
 import betRoutes from "./routes/bets.js";
 import transactionRoutes from "./routes/transactions.js";
-import affiliateOperationRoutes from "./routes/affiliateOperations.js";
 
 /* CONFIGURATIONS */
 dotenv.config();
@@ -33,7 +31,7 @@ const allowedOrigins = [
 ];
 
 app.use(cors({
-    origin: allowedOrigins,
+    origin: '*',
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     credentials: true,
     optionsSuccessStatus: 200
@@ -41,12 +39,14 @@ app.use(cors({
 
 
 /* ROUTES */
-app.use("/admin", adminRoutes);
-app.use("/auth", authRoutes);
-app.use("/users", userRoutes);
-app.use("/bets", betRoutes);
-app.use("/transactions", transactionRoutes);
-app.use("/affiliateOperations", affiliateOperationRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/bets", betRoutes);
+app.use("/api/transactions", transactionRoutes);
+
+app.get('/', (req, res) => {
+    res.send('Frutinha');
+});
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 6001;

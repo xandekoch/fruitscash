@@ -1,4 +1,3 @@
-# Etapa de build
 FROM node:alpine as build
 
 WORKDIR /app
@@ -17,3 +16,8 @@ COPY --from=build /app/nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
+
+# RUN npm install
+# COPY . . 
+# EXPOSE 80
+# CMD ["npm", "run", "dev"]

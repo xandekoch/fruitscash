@@ -26,6 +26,12 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: '',
     },
+    sumOfBetAmounts: {
+        type: Number,
+        default: 0,
+        get: v => parseFloat(v.toFixed(2)),
+        set: v => parseFloat(v.toFixed(2))
+    },
     balance: {
         type: Number,
         default: 0,
@@ -41,7 +47,7 @@ const UserSchema = new mongoose.Schema({
     isComissionEnabled: {
         type: Boolean,
         default: true,
-    },t
+    },
     cpaBalance: {
         type: Number,
         default: 0,

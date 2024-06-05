@@ -122,6 +122,7 @@ const Navbar = () => {
                   <NavLink
                     to="/deposit"
                     className="menu-button w-nav-dep nav w-button"
+                    style={{background: '#ffc107', color: 'black'}}
                   >
                     DEPOSITAR
                   </NavLink>
