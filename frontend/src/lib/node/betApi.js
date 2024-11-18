@@ -44,3 +44,12 @@ export const updateBet = async (betId, score) => {
         throw new Error(error.response.data.error || 'Erro ao cadastrar usuário');
     }
 };
+
+export const getBet = async (betId) => {
+    try {
+        const response = await api.get(`/bets/getBet/${betId}`);
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response.data.error || 'Erro ao buscar usuário');
+    }
+};

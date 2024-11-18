@@ -11,7 +11,6 @@ import Affiliate from './_root/Affiliate';
 import Payout from './_root/Payout';
 import PayoutAffiliate from './_root/PayoutAffiliate';
 import Deposit from './_root/Deposit';
-import '/public/assets/page.css';
 import { useAuth } from './context/AuthProvider';
 import Game from './_root/Game';
 import { useState, useEffect } from 'react';
