@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 
 const allowedOrigins = [
     process.env.CLIENT_URL,
-    'http://localhost:3000',
+    'http://localhost:5173',
     'http://localhost:80',
     'http://localhost:443',
     'https://162.243.162.250',
